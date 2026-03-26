@@ -19,6 +19,7 @@ import CertificadosPage from '@/pages/treinamentos/certificados'
 import IndicadoresPage from '@/pages/analytics/indicadores'
 import RelatoriosPage from '@/pages/analytics/relatorios'
 import { DashboardLayout } from '@/layouts/dashboard-layout/DashboardLayout'
+import { ToastProvider } from '@/components/ui/Toast'
 
 function App() {
   const [activePage, setActivePage] = useState('command-center')
@@ -75,9 +76,11 @@ function App() {
   }
 
   return (
-    <DashboardLayout activePage={activePage} onPageChange={setActivePage}>
-      {renderPage()}
-    </DashboardLayout>
+    <ToastProvider>
+      <DashboardLayout activePage={activePage} onPageChange={setActivePage}>
+        {renderPage()}
+      </DashboardLayout>
+    </ToastProvider>
   )
 }
 

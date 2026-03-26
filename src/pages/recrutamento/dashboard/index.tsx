@@ -14,7 +14,7 @@ import {
   Pie,
   Cell
 } from "recharts";
-
+import { UserPlus, Search as SearchIcon, Users as UsersIcon, CheckCircle2 } from "lucide-react";
 
 const COLORS = ["#8b5cf6", "#a78bfa", "#c4b5fd", "#ddd6fe", "#ede9fe"];
 
@@ -86,6 +86,20 @@ export default function RecrutamentoDashboard() {
         </Card>
       </div>
 
+      <div className="p-8 bg-slate-900 rounded-3xl text-white my-8">
+        <h3 className="text-xl font-bold mb-6 text-center">Jornada de Contratação</h3>
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 max-w-4xl mx-auto">
+          <JourneyStep icon={UserPlus} title="1. Atração" desc="Captação e Banco" />
+          <div className="hidden md:block h-px bg-slate-700 flex-1 mx-4" />
+          <JourneyStep icon={SearchIcon} title="2. Triagem" desc="Fit Cultural e Técnico" active />
+          <div className="hidden md:block h-px bg-slate-700 flex-1 mx-4" />
+          <JourneyStep icon={UsersIcon} title="3. Entrevistas" desc="Gestor + RH" />
+          <div className="hidden md:block h-px bg-slate-700 flex-1 mx-4" />
+          <JourneyStep icon={CheckCircle2} title="4. Contratação" desc="Integração Direta" highlight />
+        </div>
+      </div>
+
+
       <Card>
         <CardHeader>
           <CardTitle>Últimas Vagas Abertas</CardTitle>
@@ -139,5 +153,17 @@ function MetricCard({ title, value, icon: Icon, trend, color }: any) {
         </div>
       </CardContent>
     </Card>
+  );
+}
+
+function JourneyStep({ icon: Icon, title, desc, active, highlight }: any) {
+  return (
+    <div className="flex flex-col items-center text-center max-w-[140px]">
+      <div className={`p-4 rounded-full mb-3 ${highlight ? 'bg-primary text-white shadow-lg shadow-primary/30' : active ? 'bg-slate-800 text-primary' : 'bg-slate-800 text-slate-400'}`}>
+        <Icon size={24} />
+      </div>
+      <h4 className={`font-bold text-sm ${highlight ? 'text-primary' : 'text-slate-200'}`}>{title}</h4>
+      <p className="text-[11px] text-slate-500 mt-1">{desc}</p>
+    </div>
   );
 }

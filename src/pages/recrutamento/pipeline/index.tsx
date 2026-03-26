@@ -14,6 +14,8 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 
 import { mockPipelineCandidatos } from "@/data/mock/mockRecrutamento";
+import { useToast } from "@/components/ui/Toast";
+
 
 const stages = [
   { id: "inscritos", title: "Inscritos" },
@@ -27,9 +29,18 @@ const stages = [
 
 export default function RecruitmentPipeline() {
   const [selectedCandidate, setSelectedCandidate] = useState<any>(null);
+  const { success, info } = useToast();
 
   const getCandidatesByStage = (stageId: string) => {
     return mockPipelineCandidatos.filter(c => c.etapa === stageId);
+  };
+
+  const handleHire = () => {
+    success(
+      "Admissão Iniciada", 
+      `Os dados de ${selectedCandidate.nome} foram enviados para o módulo de Admissões.`
+    );
+    setSelectedCandidate(null);
   };
 
   return (
@@ -175,11 +186,30 @@ export default function RecruitmentPipeline() {
                 </div>
 
                 <div className="p-6 bg-slate-900 rounded-2xl text-white">
-                  <h4 className="font-bold mb-2">Observações do RH</h4>
-                  <p className="text-slate-300 text-sm italic mb-4">"Candidato demonstrou forte conhecimento técnico durante a triagem inicial. Boa comunicação e alinhamento cultural."</p>
-                  <button className="w-full py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
-                    Agendar Entrevista
-                  </button>
+                  <h4 className="font-bold mb-2">
+                    {selectedCandidate.etapa === 'aprovado' ? 'Ação Necessária' : 'Observações do RH'}
+                  </h4>
+                  <p className="text-slate-300 text-sm italic mb-4">
+                    {selectedCandidate.etapa === 'aprovado' 
+                      ? "O candidato foi aprovado em todas as etapas. Inicie o processo de admissão para coletar documentos e gerar contrato."
+                      : '"Candidato demonstrou forte conhecimento técnico durante a triagem inicial. Boa comunicação e alinhamento cultural."'}
+                  </p>
+                  
+                  {selectedCandidate.etapa === 'aprovado' ? (
+                    <button 
+                      onClick={handleHire}
+                      className="w-full py-3 bg-emerald-500 text-white rounded-xl font-bold hover:bg-emerald-600 transition-colors shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2"
+                    >
+                      Iniciar Admissão
+                    </button>
+                  ) : (
+                    <button 
+                      onClick={() => info("Ação Temporária", "Avanço de etapa simulado na demonstração.")}
+                      className="w-full py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+                    >
+                      Agendar Entrevista
+                    </button>
+                  )}
                 </div>
               </div>
             </motion.div>

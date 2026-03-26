@@ -1,13 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { 
-  Calendar, 
   AlertTriangle, 
   CheckCircle2, 
   Clock, 
   Search, 
   Filter,
   UserCheck,
-  XCircle,
   RefreshCcw,
   Zap
 } from "lucide-react";

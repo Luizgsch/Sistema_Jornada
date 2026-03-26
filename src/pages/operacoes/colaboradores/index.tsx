@@ -2,29 +2,32 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/Card";
 import { 
   Users, 
-  Search, 
-  Filter, 
   MoreHorizontal, 
   Eye, 
   Edit, 
   ArrowRightLeft, 
-  UserMinus,
-  Mail,
-  Phone,
   MapPin,
-  Briefcase,
   Calendar,
   ShieldCheck,
   Smartphone,
   Info,
-  X
+  X,
+  GraduationCap, 
+  Award
 } from "lucide-react";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { mockOperacoesColaboradores } from "@/data/mock/mockOperacoes";
 import { motion, AnimatePresence } from "framer-motion";
+import { useToast } from "@/components/ui/Toast";
+
+import { PageHeader } from "@/components/ui/PageHeader";
+import { FiltersBar } from "@/components/ui/FiltersBar";
+import { Modal } from "@/components/ui/Modal";
 
 export default function ColaboradoresPage() {
   const [selectedColab, setSelectedColab] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { success, info } = useToast();
 
   const stats = {
     total: mockOperacoesColaboradores.length,
@@ -34,38 +37,24 @@ export default function ColaboradoresPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Gestão de Colaboradores</h1>
-          <p className="text-muted-foreground mt-1">Controle centralizado de headcount e dados profissionais ativos.</p>
-        </div>
-      </div>
+    <div className="h-full flex flex-col space-y-6">
+      <PageHeader
+        title="Colaboradores"
+        description="Gestão completa do quadro de funcionários. Acompanhe dados cadastrais, cargo, documentação e histórico dentro da empresa."
+        actionLabel="Novo Colaborador"
+        onAction={() => setIsModalOpen(true)}
+      />
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard title="Total Ativos" value={stats.total} icon={Users} color="text-primary" />
         <StatCard title="Tecnologia" value={stats.tecnologia} icon={Smartphone} color="text-blue-500" />
         <StatCard title="Temporários" value={stats.temporarios} icon={Calendar} color="text-amber-500" />
         <StatCard title="Efetivos (CLT)" value={stats.clt} icon={ShieldCheck} color="text-emerald-500" />
       </div>
 
-      <Card>
-        <div className="p-6 border-b flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <input 
-              type="text" 
-              placeholder="Buscar por nome, matrícula ou cargo..." 
-              className="w-full pl-10 h-10 rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <button className="inline-flex items-center gap-2 h-10 px-4 border rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors">
-              <Filter size={16} />
-              Filtrar
-            </button>
-          </div>
-        </div>
+      <FiltersBar searchPlaceholder="Buscar colaborador por nome, cargo ou matrícula..." />
+
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm whitespace-nowrap">
             <thead className="bg-slate-50 border-b">
@@ -121,7 +110,7 @@ export default function ColaboradoresPage() {
             </tbody>
           </table>
         </div>
-      </Card>
+      </div>
 
       {/* Employee Profile Drawer */}
       <AnimatePresence>
@@ -199,6 +188,38 @@ export default function ColaboradoresPage() {
                    </div>
                 </Section>
 
+                <Section title="Evolução Corporativa (Treinamentos)">
+                  <div className="p-5 border rounded-2xl bg-slate-50 relative overflow-hidden group">
+                     <div className="absolute -right-4 -top-4 text-slate-200 group-hover:text-primary/10 transition-colors">
+                        <GraduationCap size={100} />
+                     </div>
+                     <div className="relative z-10 flex flex-col gap-4">
+                        <div className="flex items-center justify-between">
+                           <div>
+                              <h4 className="font-bold text-slate-800 flex items-center gap-2">
+                                <Award size={18} className="text-primary" />
+                                Nível de Capacitação: Avançado
+                              </h4>
+                              <p className="text-xs text-slate-500 mt-1">Trilha de Liderança 2026</p>
+                           </div>
+                           <div className="text-right">
+                              <span className="text-2xl font-black text-slate-900">85%</span>
+                              <p className="text-[10px] uppercase font-bold text-slate-400 mt-0.5">Concluído</p>
+                           </div>
+                        </div>
+                        <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                           <div className="h-full bg-primary rounded-full transition-all duration-1000" style={{ width: '85%' }} />
+                        </div>
+                        <button 
+                          onClick={() => info("Redirecionando", `Acessando histórico escolar de ${selectedColab.nome}`)}
+                          className="mt-2 text-xs font-bold text-primary hover:text-primary/80 transition-colors flex items-center justify-center border border-primary/20 bg-primary/5 py-2 rounded-lg"
+                        >
+                          Ver Histórico Completo em Treinamentos
+                        </button>
+                     </div>
+                  </div>
+                </Section>
+
                 <Section title="Histórico de Movimentações">
                   <div className="space-y-4">
                     {selectedColab.historico.map((h: any, i: number) => (
@@ -221,19 +242,76 @@ export default function ColaboradoresPage() {
               </div>
 
               <div className="p-6 border-t bg-slate-50 flex items-center gap-3">
-                 <button className="flex-1 inline-flex items-center justify-center gap-2 h-12 bg-white border border-slate-200 rounded-xl font-bold hover:bg-slate-50 transition-colors">
+                 <button 
+                  onClick={() => info("Modo de Edição", `Editando os dados de ${selectedColab.nome}`)}
+                  className="flex-1 inline-flex items-center justify-center gap-2 h-12 bg-white border border-slate-200 rounded-xl font-bold hover:bg-slate-50 transition-colors"
+                 >
                     <Edit size={18} />
                     Editar Dados
                  </button>
-                 <button className="flex-1 inline-flex items-center justify-center gap-2 h-12 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
+                 <button 
+                  onClick={() => {
+                    success("Movimentação Registrada", "A solicitação foi enviada para aprovação do RH.");
+                    setSelectedColab(null);
+                  }}
+                  className="flex-1 inline-flex items-center justify-center gap-2 h-12 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+                 >
                     <ArrowRightLeft size={18} />
                     Registrar Movimentação
                  </button>
               </div>
+
             </motion.div>
           </>
         )}
       </AnimatePresence>
+
+      <Modal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)}
+        title="Novo Colaborador"
+        description="Preencha as informações básicas para registrar um novo colaborador."
+        footer={
+          <>
+            <button 
+              onClick={() => setIsModalOpen(false)}
+              className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-bold text-sm transition-colors"
+            >
+              Cancelar
+            </button>
+            <button 
+              onClick={() => {
+                success("Colaborador Registrado", "O perfil foi criado e os acessos liberados.");
+                setIsModalOpen(false);
+              }}
+              className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg font-bold text-sm transition-colors shadow-lg shadow-primary/20"
+            >
+              Salvar Registro
+            </button>
+          </>
+        }
+      >
+        <div className="space-y-4">
+           <div>
+             <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Nome Completo</label>
+             <input type="text" className="w-full h-10 border border-slate-200 rounded-lg px-3 focus:ring-2 focus:ring-primary/20 outline-none" placeholder="Ex: João da Silva" />
+           </div>
+           <div className="grid grid-cols-2 gap-4">
+             <div>
+               <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Cargo</label>
+               <input type="text" className="w-full h-10 border border-slate-200 rounded-lg px-3 focus:ring-2 focus:ring-primary/20 outline-none" placeholder="Ex: Desenvolvedor Senior" />
+             </div>
+             <div>
+               <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Setor</label>
+               <input type="text" className="w-full h-10 border border-slate-200 rounded-lg px-3 focus:ring-2 focus:ring-primary/20 outline-none" placeholder="Ex: Tecnologia" />
+             </div>
+           </div>
+           <div>
+             <label className="block text-xs font-bold text-slate-700 uppercase mb-1">E-mail Corporativo</label>
+             <input type="email" className="w-full h-10 border border-slate-200 rounded-lg px-3 focus:ring-2 focus:ring-primary/20 outline-none" placeholder="nome@empresa.com" />
+           </div>
+        </div>
+      </Modal>
     </div>
   );
 }

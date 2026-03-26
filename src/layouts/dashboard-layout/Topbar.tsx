@@ -6,12 +6,19 @@ interface TopbarProps {
 }
 
 export function Topbar({ onMenuClick }: TopbarProps) {
+  const currentDate = new Intl.DateTimeFormat('pt-BR', { 
+    weekday: 'long', 
+    day: 'numeric', 
+    month: 'long' 
+  }).format(new Date());
+
   return (
     <motion.header 
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       className="h-16 border-b border-border bg-white/80 backdrop-blur-md sticky top-0 z-40 flex items-center justify-between px-4 md:px-8"
     >
+
       <div className="flex items-center space-x-4">
         <button 
           onClick={onMenuClick}
@@ -40,6 +47,10 @@ export function Topbar({ onMenuClick }: TopbarProps) {
           <Bell size={20} />
           <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-white"></span>
         </button>
+        
+        <div className="hidden lg:flex items-center text-[13px] font-medium text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full capitalize">
+          {currentDate}
+        </div>
         
         <div className="flex items-center space-x-3 pl-2 md:pl-4 border-l border-border cursor-pointer group">
           <div className="hidden sm:flex flex-col items-end">

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/Card";
 
 import { 
   CheckCircle2, 
