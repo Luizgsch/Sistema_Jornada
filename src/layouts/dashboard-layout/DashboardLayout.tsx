@@ -6,9 +6,11 @@ import { motion, AnimatePresence } from "framer-motion";
 
 interface DashboardLayoutProps {
   children: ReactNode;
+  activePage?: string;
+  onPageChange?: (pageId: string) => void;
 }
 
-export function DashboardLayout({ children }: DashboardLayoutProps) {
+export function DashboardLayout({ children, activePage, onPageChange }: DashboardLayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -31,7 +33,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed left-0 top-0 bottom-0 w-64 bg-slate-950 z-[70] lg:hidden"
             >
-              <Sidebar mobile onClose={() => setIsMobileMenuOpen(false)} />
+              <Sidebar 
+                mobile 
+                activePage={activePage} 
+                onPageChange={onPageChange} 
+                onClose={() => setIsMobileMenuOpen(false)} 
+              />
             </motion.div>
           </>
         )}
@@ -39,8 +46,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
       {/* Desktop Sidebar (Fixed) */}
       <div className="hidden lg:flex fixed left-0 top-0 bottom-0 pointer-events-none">
-        <Sidebar className="pointer-events-auto" />
+        <Sidebar 
+          className="pointer-events-auto" 
+          activePage={activePage} 
+          onPageChange={onPageChange} 
+        />
       </div>
+
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col lg:ml-64 w-full transition-all duration-300 min-w-0">

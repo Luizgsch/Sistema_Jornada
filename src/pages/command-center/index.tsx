@@ -16,8 +16,10 @@ import { motion } from "framer-motion";
 
 export default function HRCommandCenter() {
   return (
-    <DashboardLayout>
+    <div className="space-y-8">
       {/* Header Section */}
+
+
       <div className="flex flex-col space-y-2">
         <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">RH Command Center</h1>
         <p className="text-muted-foreground">Painel estratégico de recrutamento e indicadores de headcount.</p>
@@ -66,6 +68,7 @@ export default function HRCommandCenter() {
           Iniciar Nova Triagem
         </button>
       </motion.div>
-    </DashboardLayout>
+    </div>
   );
 }
+
