@@ -2,7 +2,6 @@ import {
   Users, 
   LayoutDashboard, 
   PieChart,
-  LogOut,
   ChevronLeft,
   ChevronRight,
   UserPlus,
@@ -31,10 +30,11 @@ const menuItems: MenuItem[] = [
       { id: "recrutamento-dashboard", label: "Dashboard" },
       { id: "vagas", label: "Vagas" },
       { id: "pipeline", label: "Pipeline" },
+      { id: "triagem-ia", label: "Triagem com IA" },
       { id: "candidatos", label: "Banco de Candidatos" },
       { id: "indicacoes", label: "Indicações" },
+      { id: "whatsapp", label: "WhatsApp Bot" },
     ]
-
   },
   { 
     id: "admissoes", 
@@ -157,37 +157,37 @@ export function Sidebar({ activePage = "command-center", onPageChange, mobile, o
                     : "text-slate-400 hover:text-white hover:bg-slate-900"
                 )}
               >
-                <div className="flex items-center">
-                  <item.icon className={cn("w-5 h-5", (!collapsed || mobile) && "mr-3")} />
-                  {(!collapsed || mobile) && (
-                    <span className="font-medium text-sm">{item.label}</span>
-                  )}
+                <div className="flex items-center gap-3">
+                  <item.icon size={20} className={isActive ? "text-primary-foreground" : "text-slate-500"} />
+                  <span className="font-medium">{item.label}</span>
                 </div>
-                {item.subItems && (!collapsed || mobile) && (
-                  <ChevronDown 
-                    size={14} 
-                    className={cn("transition-transform duration-200", isExpanded && "rotate-180")} 
-                  />
+                {item.subItems && (
+                  <motion.div
+                    animate={{ rotate: isExpanded ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ChevronDown size={16} />
+                  </motion.div>
                 )}
               </button>
 
               <AnimatePresence>
-                {item.subItems && isExpanded && (!collapsed || mobile) && (
+                {item.subItems && isExpanded && (
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.2 }}
-                    className="overflow-hidden pl-11 space-y-1"
+                    className="overflow-hidden"
                   >
-                    {item.subItems.map(subItem => (
+                    {item.subItems.map((subItem) => (
                       <button
                         key={subItem.id}
                         onClick={() => handleItemClick(subItem.id)}
                         className={cn(
-                          "flex items-center w-full p-2 text-xs font-medium rounded-md transition-all",
+                          "flex items-center gap-3 w-full p-2.5 pl-11 rounded-lg text-sm transition-all",
                           activePage === subItem.id
-                            ? "text-primary bg-primary/10"
+                            ? "bg-primary/10 text-primary font-medium"
                             : "text-slate-400 hover:text-white hover:bg-slate-900"
                         )}
                       >
@@ -202,22 +202,17 @@ export function Sidebar({ activePage = "command-center", onPageChange, mobile, o
         })}
       </nav>
 
-      <div className="p-4 border-t border-slate-800">
-        <button className="flex items-center w-full p-3 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-900 transition-all">
-          <LogOut className={cn("w-5 h-5", (!collapsed || mobile) && "mr-3")} />
-          {(!collapsed || mobile) && <span className="font-medium text-sm">Sair</span>}
-        </button>
-      </div>
-
       {!mobile && (
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="absolute -right-3 top-20 bg-slate-900 border border-slate-700 text-slate-400 rounded-full p-1 hover:text-white transition-colors"
-        >
-          {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-        </button>
+        <div className="p-4 border-t border-slate-800">
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="flex items-center justify-between w-full p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all"
+          >
+            <span className="text-sm font-medium">{collapsed ? "Expandir" : "Recolher"}</span>
+            {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+          </button>
+        </div>
       )}
     </motion.aside>
   );
 }
-

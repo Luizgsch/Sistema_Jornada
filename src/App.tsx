@@ -7,6 +7,8 @@ import MatriculasPage from '@/pages/admissoes/matriculas'
 import RecrutamentoDashboard from '@/pages/recrutamento/dashboard'
 import GestaoVagas from '@/pages/recrutamento/vagas'
 import RecruitmentPipeline from '@/pages/recrutamento/pipeline'
+import TriagemIAPage from '@/pages/recrutamento/triagem-ia'
+import WhatsAppBotPage from '@/pages/recrutamento/whatsapp'
 import BancoCandidatos from '@/pages/recrutamento/candidatos'
 import IndicacoesPage from '@/pages/recrutamento/indicacoes'
 import ColaboradoresPage from '@/pages/operacoes/colaboradores'
@@ -34,12 +36,15 @@ function App() {
         return <GestaoVagas />;
       case 'pipeline':
         return <RecruitmentPipeline />;
+      case 'triagem-ia':
+        return <TriagemIAPage />;
+      case 'whatsapp':
+        return <WhatsAppBotPage />;
       case 'candidatos':
         return <BancoCandidatos />;
       case 'indicacoes':
         return <IndicacoesPage />;
       case 'dashboard-admissoes':
-
         return <AdmissoesDashboard />;
       case 'documentos':
         return <DocumentosAdmissionais />;
@@ -77,13 +82,14 @@ function App() {
 
   return (
     <ToastProvider>
-      <DashboardLayout activePage={activePage} onPageChange={setActivePage}>
+      <DashboardLayout 
+        activePage={activePage} 
+        onPageChange={setActivePage}
+      >
         {renderPage()}
       </DashboardLayout>
     </ToastProvider>
   )
 }
-
-
 
 export default App

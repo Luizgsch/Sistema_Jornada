@@ -66,4 +66,3 @@ export function DashboardLayout({ children, activePage, onPageChange }: Dashboar
     </div>
   );
 }
-
