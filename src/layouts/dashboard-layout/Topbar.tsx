@@ -1,11 +1,14 @@
-import { Search, Bell, User, ChevronDown, HelpCircle, Menu } from "lucide-react";
+import { Search, Bell, User, ChevronDown, HelpCircle, Menu, LogOut } from "lucide-react";
 import { motion } from "framer-motion";
+import type { Usuario } from "@/data/mock/mockLogin";
 
 interface TopbarProps {
   onMenuClick: () => void;
+  usuario?: Usuario | null;
+  onLogout?: () => void;
 }
 
-export function Topbar({ onMenuClick }: TopbarProps) {
+export function Topbar({ onMenuClick, usuario, onLogout }: TopbarProps) {
   const currentDate = new Intl.DateTimeFormat('pt-BR', { 
     weekday: 'long', 
     day: 'numeric', 
@@ -54,16 +57,24 @@ export function Topbar({ onMenuClick }: TopbarProps) {
         
         <div className="flex items-center space-x-3 pl-2 md:pl-4 border-l border-border cursor-pointer group">
           <div className="hidden sm:flex flex-col items-end">
-            <span className="text-sm font-bold leading-none">Luiz Silva</span>
-            <span className="text-[10px] font-medium text-muted-foreground">Diretor de RH</span>
+            <span className="text-sm font-bold leading-none">{usuario?.nome || 'Usuário'}</span>
+            <span className="text-[10px] font-medium text-muted-foreground capitalize">{usuario?.tipo || 'Guest'}</span>
           </div>
           <div className="h-8 w-8 md:h-9 md:w-9 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20 group-hover:bg-primary/20 transition-colors">
             <User size={18} />
           </div>
+          {onLogout && (
+            <button 
+              onClick={onLogout}
+              className="p-2 text-slate-400 hover:text-rose-500 transition-colors"
+              title="Sair"
+            >
+              <LogOut size={18} />
+            </button>
+          )}
           <ChevronDown size={14} className="text-muted-foreground hidden xs:block" />
         </div>
       </div>
     </motion.header>
   );
 }
-

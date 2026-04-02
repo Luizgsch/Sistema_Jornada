@@ -3,14 +3,31 @@ import { useState } from "react";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 import { motion, AnimatePresence } from "framer-motion";
+import type { Usuario, SistemaAcesso } from "@/data/mock/mockLogin";
+
+type SistemaAtual = 'hr-core' | 'dho' | 'servicos-gerais';
 
 interface DashboardLayoutProps {
   children: ReactNode;
   activePage?: string;
   onPageChange?: (pageId: string) => void;
+  sistemaAtual?: SistemaAtual;
+  onSistemaChange?: (sistema: SistemaAtual) => void;
+  sistemasDisponiveis?: SistemaAcesso[];
+  usuario?: Usuario | null;
+  onLogout?: () => void;
 }
 
-export function DashboardLayout({ children, activePage, onPageChange }: DashboardLayoutProps) {
+export function DashboardLayout({ 
+  children, 
+  activePage, 
+  onPageChange, 
+  sistemaAtual, 
+  onSistemaChange,
+  sistemasDisponiveis,
+  usuario,
+  onLogout
+}: DashboardLayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -31,13 +48,16 @@ export function DashboardLayout({ children, activePage, onPageChange }: Dashboar
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed left-0 top-0 bottom-0 w-64 bg-slate-950 z-[70] lg:hidden"
+              className="fixed left-0 top-0 bottom-0 w-72 bg-slate-950 z-[70] lg:hidden"
             >
               <Sidebar 
                 mobile 
                 activePage={activePage} 
                 onPageChange={onPageChange} 
-                onClose={() => setIsMobileMenuOpen(false)} 
+                onClose={() => setIsMobileMenuOpen(false)}
+                sistemaAtual={sistemaAtual}
+                onSistemaChange={onSistemaChange}
+                sistemasDisponiveis={sistemasDisponiveis}
               />
             </motion.div>
           </>
@@ -49,14 +69,20 @@ export function DashboardLayout({ children, activePage, onPageChange }: Dashboar
         <Sidebar 
           className="pointer-events-auto" 
           activePage={activePage} 
-          onPageChange={onPageChange} 
+          onPageChange={onPageChange}
+          sistemaAtual={sistemaAtual}
+          onSistemaChange={onSistemaChange}
+          sistemasDisponiveis={sistemasDisponiveis}
         />
       </div>
 
-
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col lg:ml-64 w-full transition-all duration-300 min-w-0">
-        <Topbar onMenuClick={() => setIsMobileMenuOpen(true)} />
+      <div className="flex-1 flex flex-col lg:ml-72 w-full transition-all duration-300 min-w-0">
+        <Topbar 
+          onMenuClick={() => setIsMobileMenuOpen(true)} 
+          usuario={usuario}
+          onLogout={onLogout}
+        />
         <main className="flex-1 p-4 md:p-8">
           <div className="max-w-7xl mx-auto space-y-8">
             {children}

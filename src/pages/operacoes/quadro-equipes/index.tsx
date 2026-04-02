@@ -1,7 +1,8 @@
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import { LayoutGrid, Filter, User, UserPlus, Clock, Briefcase } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
-import { mockQuadroEquipes, TURNOS, SETORES, FuncionarioScale } from '@/data/mock/mockQuadroEquipes';
+import { mockQuadroEquipes, TURNOS, SETORES } from '@/data/mock/mockQuadroEquipes';
+import type { FuncionarioScale } from '@/data/mock/mockQuadroEquipes';
 import { cn } from '@/utils/cn';
 
 export default function QuadroEquipesPage() {

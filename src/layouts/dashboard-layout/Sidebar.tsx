@@ -7,11 +7,23 @@ import {
   UserPlus,
   Briefcase,
   GraduationCap,
-  ChevronDown
+  ChevronDown,
+  Building2,
+  Wrench,
+  FileText,
+  GitBranch,
+  FileSignature,
+  CheckSquare,
+  ClipboardList,
+  Hammer,
+  Calendar,
+  Package,
+  BarChart2
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "../../utils/cn";
 import { motion, AnimatePresence } from "framer-motion";
+import type { SistemaAcesso } from "@/data/mock/mockLogin";
 
 interface MenuItem {
   id: string;
@@ -20,7 +32,7 @@ interface MenuItem {
   subItems?: { id: string; label: string }[];
 }
 
-const menuItems: MenuItem[] = [
+const menuItemsHRCore: MenuItem[] = [
   { id: "command-center", icon: LayoutDashboard, label: "Command Center" },
   { 
     id: "recrutamento", 
@@ -79,17 +91,124 @@ const menuItems: MenuItem[] = [
   },
 ];
 
+const menuItemsDHO: MenuItem[] = [
+  { id: "dho-dashboard", icon: Building2, label: "Dashboard" },
+  { 
+    id: "dho-documentos", 
+    icon: FileText, 
+    label: "Documentos",
+    subItems: [
+      { id: "todos-documentos", label: "Todos os Documentos" },
+      { id: "pendentes", label: "Pendentes" },
+      { id: "aprovados", label: "Aprovados" },
+    ]
+  },
+  { 
+    id: "dho-workflows", 
+    icon: GitBranch, 
+    label: "Workflows",
+    subItems: [
+      { id: "em-andamento", label: "Em Andamento" },
+      { id: "concluidos", label: "Concluídos" },
+    ]
+  },
+  { 
+    id: "dho-templates", 
+    icon: FileSignature, 
+    label: "Modelos",
+    subItems: [
+      { id: "contratos", label: "Contratos" },
+      { id: "politicas", label: "Políticas" },
+    ]
+  },
+  { 
+    id: "dho-aprovacoes", 
+    icon: CheckSquare, 
+    label: "Aprovações",
+    subItems: [
+      { id: "minhas-aprovacoes", label: "Minhas Aprovações" },
+      { id: "historico", label: "Histórico" },
+    ]
+  },
+];
+
+const menuItemsServicosGerais: MenuItem[] = [
+  { id: "sg-dashboard", icon: Wrench, label: "Dashboard" },
+  { 
+    id: "sg-solicitacoes", 
+    icon: ClipboardList, 
+    label: "Solicitações",
+    subItems: [
+      { id: "nova-solicitacao", label: "Nova Solicitação" },
+      { id: "todas-solicitacoes", label: "Todas" },
+      { id: "minhas-solicitacoes", label: "Minhas" },
+    ]
+  },
+  { 
+    id: "sg-manutencao", 
+    icon: Hammer, 
+    label: "Manutenção",
+    subItems: [
+      { id: "predial", label: "Predial" },
+      { id: "eletrica", label: "Elétrica" },
+      { id: "ar-condicionado", label: "Ar Condicionado" },
+    ]
+  },
+  { 
+    id: "sg-agenda", 
+    icon: Calendar, 
+    label: "Agenda Serviços",
+    subItems: [
+      { id: "semanal", label: "Semanal" },
+      { id: "mensal", label: "Mensal" },
+    ]
+  },
+  { 
+    id: "sg-estoque", 
+    icon: Package, 
+    label: "Estoque",
+    subItems: [
+      { id: "itens", label: "Itens" },
+      { id: "solicitacoes-reposicao", label: "Reposição" },
+    ]
+  },
+  { 
+    id: "sg-relatorios", 
+    icon: BarChart2, 
+    label: "Relatórios",
+    subItems: [
+      { id: "custos", label: "Custos" },
+      { id: "tempo-medio", label: "Tempo Médio" },
+    ]
+  },
+];
+
+type SistemaAtual = 'hr-core' | 'dho' | 'servicos-gerais';
+
 interface SidebarProps {
   activePage?: string;
   onPageChange?: (pageId: string) => void;
   mobile?: boolean;
   onClose?: () => void;
   className?: string;
+  sistemaAtual?: SistemaAtual;
+  onSistemaChange?: (sistema: SistemaAtual) => void;
+  sistemasDisponiveis?: SistemaAcesso[];
 }
 
-export function Sidebar({ activePage = "command-center", onPageChange, mobile, onClose, className }: SidebarProps) {
+export function Sidebar({ 
+  activePage = "command-center", 
+  onPageChange, 
+  mobile, 
+  onClose, 
+  className,
+  sistemaAtual = 'hr-core',
+  onSistemaChange,
+  sistemasDisponiveis = []
+}: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
+  const [menuSeletorAberto, setMenuSeletorAberto] = useState(false);
 
   const toggleExpand = (id: string) => {
     setExpandedItems(prev => 
@@ -102,18 +221,84 @@ export function Sidebar({ activePage = "command-center", onPageChange, mobile, o
     if (mobile && onClose) onClose();
   };
 
+  const menuItems = sistemaAtual === 'hr-core' ? menuItemsHRCore : 
+                    sistemaAtual === 'dho' ? menuItemsDHO : 
+                    menuItemsServicosGerais;
+
+  const sistemaLabel = sistemaAtual === 'hr-core' ? 'HR Core' : 
+                       sistemaAtual === 'dho' ? 'DHO' : 
+                       'Serviços Gerais';
+
+  const toggleSistema = (novoSistema: SistemaAtual) => {
+    if (onSistemaChange) {
+      onSistemaChange(novoSistema);
+    }
+    setMenuSeletorAberto(false);
+    if (onPageChange) {
+      onPageChange(sistemaAtual === 'hr-core' ? 'command-center' : 
+                   sistemaAtual === 'dho' ? 'dho-dashboard' : 'sg-dashboard');
+    }
+  };
+
   return (
     <motion.aside
-      initial={mobile ? { x: 0 } : { x: -250 }}
+      initial={mobile ? { x: 0 } : { x: -280 }}
       animate={{ x: 0 }}
       className={cn(
         "h-full bg-slate-950 text-white transition-all duration-300 z-50 flex flex-col",
         !mobile && "fixed left-0 top-0",
-        collapsed && !mobile ? "w-20" : "w-64",
+        collapsed && !mobile ? "w-20" : "w-72",
         className
       )}
     >
-      <div className="flex items-center justify-between p-6 h-16 border-b border-slate-800">
+      {/* Seletor de Sistema */}
+      <div className="p-4 border-b border-slate-800">
+        <div className="relative">
+          <button 
+            onClick={() => setMenuSeletorAberto(!menuSeletorAberto)}
+            className="flex items-center justify-between w-full p-3 bg-slate-800/50 hover:bg-slate-800 rounded-xl border border-slate-700 transition-all"
+          >
+            <div className="flex items-center gap-3">
+              {sistemaAtual === 'hr-core' && <LayoutDashboard className="text-primary" size={20} />}
+              {sistemaAtual === 'dho' && <Building2 className="text-blue-400" size={20} />}
+              {sistemaAtual === 'servicos-gerais' && <Wrench className="text-amber-400" size={20} />}
+              <span className="font-bold text-white">{sistemaLabel}</span>
+            </div>
+            <ChevronDown className={cn("text-slate-400 transition-transform", menuSeletorAberto && "rotate-180")} size={18} />
+          </button>
+          
+          {menuSeletorAberto && sistemasDisponiveis.length > 1 && (
+            <div className="absolute top-full left-0 right-0 mt-2 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl z-50 overflow-hidden">
+              <div className="p-3 border-b border-slate-700">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Selecione o Sistema</p>
+              </div>
+              <div className="p-2">
+                {sistemasDisponiveis.map((sistema) => (
+                  <button
+                    key={sistema.id}
+                    onClick={() => toggleSistema(sistema.id as SistemaAtual)}
+                    className={cn(
+                      "flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-left transition-colors",
+                      sistemaAtual === sistema.id 
+                        ? "bg-primary/20 text-primary" 
+                        : "text-slate-300 hover:bg-slate-700"
+                    )}
+                  >
+                    <sistema.icon size={18} />
+                    <div>
+                      <p className="font-medium">{sistema.label}</p>
+                      <p className="text-xs text-slate-500">{sistema.descricao}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Logo e título */}
+      <div className="flex items-center justify-between px-6 py-4 h-16 border-b border-slate-800">
         {(!collapsed || mobile) && (
           <motion.div 
             initial={{ opacity: 0 }}
@@ -123,7 +308,7 @@ export function Sidebar({ activePage = "command-center", onPageChange, mobile, o
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center font-bold text-lg">
               R
             </div>
-            <span className="font-bold text-xl tracking-tight text-white">HR Core</span>
+            <span className="font-bold text-xl tracking-tight text-white">{sistemaLabel}</span>
           </motion.div>
         )}
         {collapsed && !mobile && (
@@ -133,6 +318,7 @@ export function Sidebar({ activePage = "command-center", onPageChange, mobile, o
         )}
       </div>
 
+      {/* Menu de navegação */}
       <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
         {menuItems.map((item) => {
           const isExpanded = expandedItems.includes(item.id);
@@ -158,7 +344,7 @@ export function Sidebar({ activePage = "command-center", onPageChange, mobile, o
                 )}
               >
                 <div className="flex items-center gap-3">
-                  <item.icon size={20} className={isActive ? "text-primary-foreground" : "text-slate-500"} />
+                  <item.icon size={20} className={isActive ? "text-inherit" : "text-slate-500"} />
                   <span className="font-medium">{item.label}</span>
                 </div>
                 {item.subItems && (
@@ -202,6 +388,7 @@ export function Sidebar({ activePage = "command-center", onPageChange, mobile, o
         })}
       </nav>
 
+      {/* Botão recolher */}
       {!mobile && (
         <div className="p-4 border-t border-slate-800">
           <button

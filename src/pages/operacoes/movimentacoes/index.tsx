@@ -47,7 +47,7 @@ export default function MovimentacoesPage() {
          <div className="absolute left-10 sm:left-14 top-10 bottom-10 w-px bg-slate-200" />
          
          <div className="space-y-12">
-           {mockMovimentacoes.map((mov, i) => (
+            {mockMovimentacoes.map((mov) => (
              <div key={mov.id} className="relative flex items-start gap-6 group">
                 <div className="absolute left-2 sm:left-6 w-8 h-8 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center -translate-x-1/2 mt-1 z-10 group-hover:scale-110 group-hover:border-primary transition-all">
                    <Clock size={14} className="text-slate-400 group-hover:text-primary transition-colors" />

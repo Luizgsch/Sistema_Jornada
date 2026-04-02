@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
+import LoginPage from '@/pages/login'
 import HRCommandCenter from '@/pages/command-center'
 import AdmissoesDashboard from '@/pages/admissoes/dashboard'
 import DocumentosAdmissionais from '@/pages/admissoes/documentos'
@@ -20,13 +21,48 @@ import CursosPage from '@/pages/treinamentos/cursos'
 import CertificadosPage from '@/pages/treinamentos/certificados'
 import IndicadoresPage from '@/pages/analytics/indicadores'
 import RelatoriosPage from '@/pages/analytics/relatorios'
+import DHOPage from '@/pages/dho'
+import ServicosGeraisPage from '@/pages/servicos-gerais'
 import { DashboardLayout } from '@/layouts/dashboard-layout/DashboardLayout'
 import { ToastProvider } from '@/components/ui/Toast'
+import { getSistemasPorTipo, type Usuario } from '@/data/mock/mockLogin'
+
+type SistemaAtual = 'hr-core' | 'dho' | 'servicos-gerais';
 
 function App() {
-  const [activePage, setActivePage] = useState('command-center')
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [usuario, setUsuario] = useState<Usuario | null>(null);
+  const [activePage, setActivePage] = useState('command-center');
+  const [sistemaAtual, setSistemaAtual] = useState<SistemaAtual>('hr-core');
+
+  const handleLogin = (user: Usuario, sistemaInicial: string) => {
+    setUsuario(user);
+    setSistemaAtual(sistemaInicial as SistemaAtual);
+    setIsLoggedIn(true);
+    setActivePage('command-center');
+  };
+
+  const sistemasDisponiveis = useMemo(() => {
+    if (!usuario) return [];
+    return getSistemasPorTipo(usuario.tipo);
+  }, [usuario]);
+
+  if (!isLoggedIn) {
+    return (
+      <ToastProvider>
+        <LoginPage onLogin={handleLogin} />
+      </ToastProvider>
+    );
+  }
 
   const renderPage = () => {
+    if (sistemaAtual === 'dho') {
+      return <DHOPage />;
+    }
+    if (sistemaAtual === 'servicos-gerais') {
+      return <ServicosGeraisPage />;
+    }
+
     switch (activePage) {
       case 'command-center':
         return <HRCommandCenter />;
@@ -78,13 +114,18 @@ function App() {
           </div>
         );
     }
-  }
+  };
 
   return (
     <ToastProvider>
       <DashboardLayout 
         activePage={activePage} 
         onPageChange={setActivePage}
+        sistemaAtual={sistemaAtual}
+        onSistemaChange={setSistemaAtual}
+        sistemasDisponiveis={sistemasDisponiveis}
+        usuario={usuario}
+        onLogout={() => setIsLoggedIn(false)}
       >
         {renderPage()}
       </DashboardLayout>

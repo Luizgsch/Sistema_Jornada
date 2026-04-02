@@ -83,13 +83,13 @@ export default function HeadcountPage() {
                   paddingAngle={5}
                   dataKey="value"
                 >
-                  {mockHeadcountDistribucao.map((entry, index) => (
+                  {mockHeadcountDistribucao.map((_, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip 
                   contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                  formatter={(value: number) => [`${value} colaboradores`, 'Ativos']}
+                  formatter={(value) => [`${value} colaboradores`, 'Ativos']}
                 />
                 <Legend verticalAlign="bottom" height={36}/>
               </PieChart>
