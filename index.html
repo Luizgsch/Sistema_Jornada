@@ -1,14 +1,15 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HR Command Center - Dashboard</title>
+  <meta name="description" content="Sistema integrado Posigraf — RH, DHO e Serviços Gerais (protótipo)." />
+  <title>Posigraf — Sistema integrado</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -16,11 +17,11 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'sans-serif'],
+            sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
           },
           colors: {
             primary: {
-              DEFAULT: '#2563EB', // Blue 600
+              DEFAULT: '#0d9488',
               foreground: '#ffffff',
             },
             secondary: {
@@ -57,7 +58,7 @@
       --card-foreground: 224 71.4% 4.1%;
       --popover: 0 0% 100%;
       --popover-foreground: 224 71.4% 4.1%;
-      --primary: 262.1 83.3% 57.8%;
+      --primary: 173 58% 39%;
       --primary-foreground: 210 20% 98%;
       --secondary: 210 40% 96.1%;
       --secondary-foreground: 222.2 47.4% 11.2%;
@@ -69,14 +70,14 @@
       --destructive-foreground: 210 20% 98%;
       --border: 214.3 31.8% 91.4%;
       --input: 214.3 31.8% 91.4%;
-      --ring: 262.1 83.3% 57.8%;
+      --ring: 173 58% 39%;
       --radius: 0.75rem;
     }
 
       body {
         background-color: #F8FAFC;
         margin: 0;
-        font-family: 'Inter', sans-serif;
+        font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
         color: #1E293B;
         /* Premium Background Gradient (Subtle) */
         background-image: radial-gradient(at 0% 0%, hsla(217,100%,70%,0.03) 0, transparent 40%), 

@@ -1,19 +1,26 @@
 import { Search, Bell, User, ChevronDown, HelpCircle, Menu, LogOut } from "lucide-react";
 import { motion } from "framer-motion";
 import type { Usuario } from "@/data/mock/mockLogin";
+import type { SistemaAtual } from "@/auth/roles";
+import { getAmbienteBadge } from "@/auth/roles";
+import { PosigrafLogo } from "@/components/brand/PosigrafLogo";
 
 interface TopbarProps {
   onMenuClick: () => void;
   usuario?: Usuario | null;
   onLogout?: () => void;
+  sistemaAtual?: SistemaAtual;
 }
 
-export function Topbar({ onMenuClick, usuario, onLogout }: TopbarProps) {
+export function Topbar({ onMenuClick, usuario, onLogout, sistemaAtual = 'hr-core' }: TopbarProps) {
   const currentDate = new Intl.DateTimeFormat('pt-BR', { 
     weekday: 'long', 
     day: 'numeric', 
     month: 'long' 
   }).format(new Date());
+
+  const ambiente =
+    usuario && sistemaAtual ? getAmbienteBadge(sistemaAtual, usuario.tipo) : null;
 
   return (
     <motion.header 
@@ -22,15 +29,19 @@ export function Topbar({ onMenuClick, usuario, onLogout }: TopbarProps) {
       className="h-16 border-b border-border bg-white/80 backdrop-blur-md sticky top-0 z-40 flex items-center justify-between px-4 md:px-8"
     >
 
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 min-w-0">
         <button 
           onClick={onMenuClick}
           className="p-2 -ml-2 rounded-lg lg:hidden text-slate-600 hover:bg-slate-100 transition-colors"
         >
           <Menu size={24} />
         </button>
+
+        <div className="hidden lg:flex items-center pr-4 mr-1 border-r border-border shrink-0">
+          <PosigrafLogo variant="compact" className="opacity-95" />
+        </div>
         
-        <div className="flex-1 max-w-xl hidden md:block">
+        <div className="flex-1 max-w-xl hidden md:block min-w-0">
           <div className="relative group">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
             <input
@@ -43,6 +54,13 @@ export function Topbar({ onMenuClick, usuario, onLogout }: TopbarProps) {
       </div>
 
       <div className="flex items-center space-x-2 md:space-x-6">
+        {ambiente && (
+          <span
+            className={`hidden md:inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-wide shadow-sm ${ambiente.className}`}
+          >
+            {ambiente.label}
+          </span>
+        )}
         <button className="hidden sm:flex p-2 rounded-full text-muted-foreground hover:bg-muted transition-colors relative">
           <HelpCircle size={20} />
         </button>

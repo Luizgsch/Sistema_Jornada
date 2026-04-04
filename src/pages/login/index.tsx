@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/Card';
 import { usuariosMock, getSistemasPorTipo, type Usuario } from '@/data/mock/mockLogin';
 import { LogIn, Users, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { PosigrafLogo } from '@/components/brand/PosigrafLogo';
 
 interface LoginPageProps {
   onLogin: (usuario: Usuario, sistemaInicial: string) => void;
@@ -30,18 +31,26 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
 
   if (!selectedUser) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+      <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden bg-slate-950">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-90"
+          style={{
+            background:
+              'radial-gradient(ellipse 80% 60% at 20% 0%, rgba(13,148,136,0.35), transparent 55%), radial-gradient(ellipse 70% 50% at 100% 100%, rgba(15,23,42,0.9), transparent 50%)',
+          }}
+        />
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md"
+          className="w-full max-w-md relative z-10"
         >
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl font-black text-white">R</span>
+            <div className="flex justify-center mb-5">
+              <PosigrafLogo variant="full" inverted className="scale-110" />
             </div>
-            <h1 className="text-3xl font-bold text-white">HR Core</h1>
-            <p className="text-slate-400 mt-2">Selecione seu perfil para continuar</p>
+            <p className="text-teal-300/90 text-xs font-semibold uppercase tracking-[0.2em]">Grupo Positivo · Curitiba</p>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white mt-3 tracking-tight">Sistema integrado</h1>
+            <p className="text-slate-400 mt-2 text-sm">RH, DHO e Serviços Gerais — selecione seu perfil para continuar</p>
           </div>
 
           <Card className="bg-slate-800/50 border-slate-700">
@@ -80,18 +89,28 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden bg-slate-950">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-90"
+        style={{
+          background:
+            'radial-gradient(ellipse 80% 60% at 20% 0%, rgba(13,148,136,0.35), transparent 55%), radial-gradient(ellipse 70% 50% at 100% 100%, rgba(15,23,42,0.9), transparent 50%)',
+        }}
+      />
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
+        className="w-full max-w-md relative z-10"
       >
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span className="text-2xl font-black text-white">{selectedUser.nome.charAt(0)}</span>
+          <div className="flex justify-center mb-4">
+            <div className="h-14 w-14 rounded-2xl bg-teal-500/20 border border-teal-500/30 flex items-center justify-center text-xl font-black text-teal-200">
+              {selectedUser.nome.charAt(0)}
+            </div>
           </div>
           <h2 className="text-xl font-bold text-white">{selectedUser.nome}</h2>
-          <p className="text-slate-400 capitalize">{selectedUser.tipo} - {selectedUser.setor}</p>
+          <p className="text-slate-400 capitalize text-sm mt-1">{selectedUser.tipo} · {selectedUser.setor}</p>
+          <p className="text-slate-500 text-xs mt-3">Escolha o módulo de trabalho</p>
         </div>
 
         <Card className="bg-slate-800/50 border-slate-700">

@@ -30,22 +30,24 @@ export const getSistemasPorTipo = (tipo: TipoUsuario): SistemaAcesso[] => {
     case 'admin':
     case 'gestor':
       return [
-        { id: 'hr-core', label: 'HR Core', descricao: 'Gestão de Pessoas', icon: LayoutDashboard },
-        { id: 'dho', label: 'DHO', descricao: 'Documentos e Workflows', icon: Building2 },
-        { id: 'servicos-gerais', label: 'Serviços Gerais', descricao: 'Suporte e Facilities', icon: Wrench },
+        { id: 'hr-core', label: 'HR Core', descricao: 'Recrutamento e operações RH', icon: LayoutDashboard },
+        { id: 'dho', label: 'DHO', descricao: 'T&D, comunicação interna e consultoria', icon: Building2 },
+        { id: 'servicos-gerais', label: 'Serviços Gerais', descricao: 'NFs, Attos, benefícios e infraestrutura', icon: Wrench },
       ];
     case 'rh':
       return [
-        { id: 'hr-core', label: 'HR Core', descricao: 'Gestão de Pessoas', icon: LayoutDashboard },
+        { id: 'hr-core', label: 'HR Core', descricao: 'Recrutamento e operações RH', icon: LayoutDashboard },
+        { id: 'dho', label: 'DHO', descricao: 'T&D e comunicação interna', icon: Building2 },
       ];
     case 'logistica':
       return [
-        { id: 'dho', label: 'DHO', descricao: 'Gestão Documental', icon: Building2 },
-        { id: 'servicos-gerais', label: 'Serviços Gerais', descricao: 'Suporte e Facilities', icon: Wrench },
+        { id: 'dho', label: 'DHO', descricao: 'Solicitações de treinamento e consultoria', icon: Building2 },
+        { id: 'servicos-gerais', label: 'Serviços Gerais', descricao: 'Facilities, refeitório e benefícios', icon: Wrench },
       ];
     case 'financeiro':
       return [
-        { id: 'dho', label: 'DHO', descricao: 'Gestão Documental', icon: Building2 },
+        { id: 'dho', label: 'DHO', descricao: 'Solicitações de treinamento e consultoria', icon: Building2 },
+        { id: 'servicos-gerais', label: 'Serviços Gerais', descricao: 'NFs, faturamento Elo/Attos e compras', icon: Wrench },
       ];
     default:
       return [];

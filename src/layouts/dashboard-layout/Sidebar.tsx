@@ -10,20 +10,30 @@ import {
   ChevronDown,
   Building2,
   Wrench,
-  FileText,
-  GitBranch,
-  FileSignature,
-  CheckSquare,
+  GitMerge,
+  Route,
+  Inbox,
+  Megaphone,
+  FileWarning,
+  Car,
+  Grid3x3,
+  ShoppingCart,
+  UtensilsCrossed,
+  ClipboardCheck,
+  Smile,
   ClipboardList,
-  Hammer,
-  Calendar,
-  Package,
-  BarChart2
+  Coffee,
+  Ticket,
+  Handshake,
+  MessageSquare,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { cn } from "../../utils/cn";
 import { motion, AnimatePresence } from "framer-motion";
 import type { SistemaAcesso } from "@/data/mock/mockLogin";
+import { useAuth } from "@/auth/AuthContext";
+import { DHO_PAGE_GESTOR, canAccessSGPage, isDHOLimitedProfile } from "@/auth/roles";
+import { PosigrafLogo } from "@/components/brand/PosigrafLogo";
 
 interface MenuItem {
   id: string;
@@ -65,11 +75,16 @@ const menuItemsHRCore: MenuItem[] = [
     label: "Operações RH",
     subItems: [
       { id: "colaboradores", label: "Colaboradores" },
+      { id: "headcount", label: "Headcount & vagas" },
+      { id: "quadro-equipes", label: "Quadro de equipes" },
       { id: "temporarios", label: "Temporários" },
       { id: "uniformes", label: "Uniformes" },
       { id: "movimentacoes", label: "Movimentações" },
+      { id: "desligamentos", label: "Desligamentos" },
+      { id: "descricao-cargos", label: "Descrição de cargos" },
     ]
   },
+  { id: "comunicacao-interna", icon: MessageSquare, label: "Comunicação centralizada" },
   { 
     id: "treinamentos", 
     icon: GraduationCap, 
@@ -92,95 +107,51 @@ const menuItemsHRCore: MenuItem[] = [
 ];
 
 const menuItemsDHO: MenuItem[] = [
-  { id: "dho-dashboard", icon: Building2, label: "Dashboard" },
-  { 
-    id: "dho-documentos", 
-    icon: FileText, 
-    label: "Documentos",
-    subItems: [
-      { id: "todos-documentos", label: "Todos os Documentos" },
-      { id: "pendentes", label: "Pendentes" },
-      { id: "aprovados", label: "Aprovados" },
-    ]
+  { id: "dho-dashboard", icon: LayoutDashboard, label: "Dashboard T&D" },
+  {
+    id: DHO_PAGE_GESTOR,
+    icon: Handshake,
+    label: "Solicitações ao DHO (transversal)",
   },
-  { 
-    id: "dho-workflows", 
-    icon: GitBranch, 
-    label: "Workflows",
+  {
+    id: "dho-treinamentos",
+    icon: GraduationCap,
+    label: "Treinamentos",
     subItems: [
-      { id: "em-andamento", label: "Em Andamento" },
-      { id: "concluidos", label: "Concluídos" },
-    ]
+      { id: "dho-presenca", label: "Presença digital (QR)" },
+      { id: "dho-lancamento-lote", label: "Lançamento em lote" },
+    ],
   },
-  { 
-    id: "dho-templates", 
-    icon: FileSignature, 
-    label: "Modelos",
+  { id: "dho-trilhas-cargo", icon: Route, label: "Trilhas por cargo" },
+  { id: "dho-portal-gestor", icon: Inbox, label: "Portal do gestor" },
+  {
+    id: "dho-com-interna",
+    icon: Megaphone,
+    label: "Comunicação interna",
     subItems: [
-      { id: "contratos", label: "Contratos" },
-      { id: "politicas", label: "Políticas" },
-    ]
-  },
-  { 
-    id: "dho-aprovacoes", 
-    icon: CheckSquare, 
-    label: "Aprovações",
-    subItems: [
-      { id: "minhas-aprovacoes", label: "Minhas Aprovações" },
-      { id: "historico", label: "Histórico" },
-    ]
+      { id: "dho-comunicados", label: "Comunicados T&D" },
+      { id: "dho-consultoria", label: "Consultoria interna" },
+    ],
   },
 ];
 
-const menuItemsServicosGerais: MenuItem[] = [
-  { id: "sg-dashboard", icon: Wrench, label: "Dashboard" },
-  { 
-    id: "sg-solicitacoes", 
-    icon: ClipboardList, 
-    label: "Solicitações",
-    subItems: [
-      { id: "nova-solicitacao", label: "Nova Solicitação" },
-      { id: "todas-solicitacoes", label: "Todas" },
-      { id: "minhas-solicitacoes", label: "Minhas" },
-    ]
-  },
-  { 
-    id: "sg-manutencao", 
-    icon: Hammer, 
-    label: "Manutenção",
-    subItems: [
-      { id: "predial", label: "Predial" },
-      { id: "eletrica", label: "Elétrica" },
-      { id: "ar-condicionado", label: "Ar Condicionado" },
-    ]
-  },
-  { 
-    id: "sg-agenda", 
-    icon: Calendar, 
-    label: "Agenda Serviços",
-    subItems: [
-      { id: "semanal", label: "Semanal" },
-      { id: "mensal", label: "Mensal" },
-    ]
-  },
-  { 
-    id: "sg-estoque", 
-    icon: Package, 
-    label: "Estoque",
-    subItems: [
-      { id: "itens", label: "Itens" },
-      { id: "solicitacoes-reposicao", label: "Reposição" },
-    ]
-  },
-  { 
-    id: "sg-relatorios", 
-    icon: BarChart2, 
-    label: "Relatórios",
-    subItems: [
-      { id: "custos", label: "Custos" },
-      { id: "tempo-medio", label: "Tempo Médio" },
-    ]
-  },
+const menuItemsServicosGeraisBase: MenuItem[] = [
+  { id: "sg-dashboard", icon: LayoutDashboard, label: "Dashboard" },
+  { id: "sg-notas-fiscais", icon: FileWarning, label: "Notas fiscais" },
+  { id: "sg-conciliacao-acessos", icon: GitMerge, label: "Conciliação (Elo · Attos)" },
+  { id: "sg-beneficios", icon: Car, label: "VT × Estacionamento" },
+  { id: "sg-armarios", icon: Grid3x3, label: "Armários vestiário" },
+  { id: "sg-compras-insumos", icon: ShoppingCart, label: "Compras insumos" },
+  { id: "sg-faturamento-attos", icon: UtensilsCrossed, label: "Faturamento Attos" },
+  { id: "sg-fechamento-attos", icon: ClipboardCheck, label: "Fechamento Attos" },
+  { id: "sg-satisfacao-attos", icon: Smile, label: "Satisfação refeição" },
+  { id: "sg-chamados-manusis", icon: ClipboardList, label: "Chamados (Manusis)" },
+  { id: "sg-cafe-abastecimento", icon: Coffee, label: "Sociedade do Café" },
+  { id: "sg-voucher-natal", icon: Ticket, label: "Voucher Natal" },
+];
+
+const menuItemsDHOLimited: MenuItem[] = [
+  { id: DHO_PAGE_GESTOR, icon: Handshake, label: "Solicitações ao DHO" },
 ];
 
 type SistemaAtual = 'hr-core' | 'dho' | 'servicos-gerais';
@@ -206,6 +177,7 @@ export function Sidebar({
   onSistemaChange,
   sistemasDisponiveis = []
 }: SidebarProps) {
+  const { usuario, getFirstAllowedPage } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
   const [menuSeletorAberto, setMenuSeletorAberto] = useState(false);
@@ -221,9 +193,33 @@ export function Sidebar({
     if (mobile && onClose) onClose();
   };
 
-  const menuItems = sistemaAtual === 'hr-core' ? menuItemsHRCore : 
-                    sistemaAtual === 'dho' ? menuItemsDHO : 
-                    menuItemsServicosGerais;
+  const menuServicosGerais = useMemo(
+    () => menuItemsServicosGeraisBase.filter((item) => canAccessSGPage(usuario.tipo, item.id)),
+    [usuario.tipo]
+  );
+
+  const menuDHO = useMemo(
+    () => (isDHOLimitedProfile(usuario.tipo) ? menuItemsDHOLimited : menuItemsDHO),
+    [usuario.tipo]
+  );
+
+  const menuItems = useMemo(
+    () =>
+      sistemaAtual === 'hr-core' ? menuItemsHRCore : sistemaAtual === 'dho' ? menuDHO : menuServicosGerais,
+    [sistemaAtual, menuDHO, menuServicosGerais]
+  );
+
+  useEffect(() => {
+    const parentIds: string[] = [];
+    for (const item of menuItems) {
+      if (item.subItems?.some((s) => s.id === activePage)) {
+        parentIds.push(item.id);
+      }
+    }
+    if (parentIds.length > 0) {
+      setExpandedItems((prev) => Array.from(new Set([...prev, ...parentIds])));
+    }
+  }, [activePage, menuItems]);
 
   const sistemaLabel = sistemaAtual === 'hr-core' ? 'HR Core' : 
                        sistemaAtual === 'dho' ? 'DHO' : 
@@ -235,8 +231,7 @@ export function Sidebar({
     }
     setMenuSeletorAberto(false);
     if (onPageChange) {
-      onPageChange(sistemaAtual === 'hr-core' ? 'command-center' : 
-                   sistemaAtual === 'dho' ? 'dho-dashboard' : 'sg-dashboard');
+      onPageChange(getFirstAllowedPage(novoSistema));
     }
   };
 
@@ -297,23 +292,23 @@ export function Sidebar({
         </div>
       </div>
 
-      {/* Logo e título */}
-      <div className="flex items-center justify-between px-6 py-4 h-16 border-b border-slate-800">
+      {/* Marca + módulo ativo */}
+      <div className="flex items-center justify-between px-4 sm:px-6 py-4 min-h-[4.5rem] border-b border-slate-800">
         {(!collapsed || mobile) && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex items-center space-x-2"
+            className="flex flex-col gap-1.5 min-w-0 w-full"
           >
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center font-bold text-lg">
-              R
-            </div>
-            <span className="font-bold text-xl tracking-tight text-white">{sistemaLabel}</span>
+            <PosigrafLogo variant="full" inverted className="min-w-0" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-teal-400/90 truncate">
+              {sistemaLabel}
+            </span>
           </motion.div>
         )}
         {collapsed && !mobile && (
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center font-bold text-lg mx-auto">
-            R
+          <div className="flex justify-center w-full">
+            <PosigrafLogo variant="compact" inverted />
           </div>
         )}
       </div>

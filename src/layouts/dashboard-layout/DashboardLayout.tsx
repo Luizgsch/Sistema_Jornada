@@ -82,6 +82,7 @@ export function DashboardLayout({
           onMenuClick={() => setIsMobileMenuOpen(true)} 
           usuario={usuario}
           onLogout={onLogout}
+          sistemaAtual={sistemaAtual}
         />
         <main className="flex-1 p-4 md:p-8">
           <div className="max-w-7xl mx-auto space-y-8">
