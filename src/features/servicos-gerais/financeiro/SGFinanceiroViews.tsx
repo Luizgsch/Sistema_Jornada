@@ -1,12 +1,12 @@
-import { Card, CardContent, CardHeader } from '@/components/ui/Card';
-import { KpiCard } from '@/components/dashboard/KpiCard';
+import { Card, CardContent, CardHeader } from '@/shared/ui/Card';
+import { KpiCard } from '@/shared/components/dashboard/KpiCard';
 import {
   mockNotasFiscais,
   mockConciliacaoAcessos,
   mockComprasMensais,
   mockAttosFaturamento,
   type KanbanNfColuna,
-} from '@/data/mock/mockServicosGerais';
+} from '@/infrastructure/mock/mockServicosGerais';
 import { GitMerge, ShoppingCart, UtensilsCrossed } from 'lucide-react';
 
 const colunasNf: { id: KanbanNfColuna; label: string; alerta?: boolean }[] = [

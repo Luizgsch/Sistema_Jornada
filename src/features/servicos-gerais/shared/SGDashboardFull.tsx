@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader } from '@/components/ui/Card';
-import { KpiCard } from '@/components/dashboard/KpiCard';
+import { Card, CardContent, CardHeader } from '@/shared/ui/Card';
+import { KpiCard } from '@/shared/components/dashboard/KpiCard';
 import {
   mockNotasFiscais,
   mockConciliacaoAcessos,
@@ -9,7 +9,7 @@ import {
   mockChamadosManusis,
   mockCafeAbastecimento,
   mockVouchersNatal,
-} from '@/data/mock/mockServicosGerais';
+} from '@/infrastructure/mock/mockServicosGerais';
 import { FileWarning, GitMerge, Coffee, ClipboardList } from 'lucide-react';
 
 export function SGDashboardFullView() {

@@ -36,11 +36,18 @@
 - **IMPORTANTE:** O código deve ser apenas Front-end (Vite/React), simulando as integrações que no futuro serão Back-end.
 
 ## 6. RBAC (protótipo implementado)
-- **Permissões:** `src/auth/roles.ts` — matriz por `TipoUsuario` (admin, gestor, rh, financeiro, logistica).
-- **Estado do usuário:** `src/auth/AuthContext.tsx` + `AuthProvider` após o login em `App.tsx`.
-- **Serviços Gerais por área:** `src/features/servicos-gerais/financeiro/` e `src/features/servicos-gerais/logistica/` (painéis e telas específicas); visão completa em `shared/`.
+- **Permissões:** `src/domain/auth/roles.ts` — matriz por `TipoUsuario` (admin, gestor, rh, financeiro, logistica).
+- **Estado do usuário:** `src/features/auth/AuthContext.tsx` + `AuthProvider` após o login em `src/app/App.tsx`.
+- **Serviços Gerais por área:** `src/features/servicos-gerais/financeiro/` e `src/features/servicos-gerais/logistica/` (painéis e telas específicas); visão completa em `src/features/servicos-gerais/shared/`.
 - **DHO transversal (gestor):** rota lógica `dho-gestor` — formulários de solicitação de treinamento e consultoria para perfis financeiro e logística.
-- **UI:** sidebar filtra itens por perfil; topbar exibe badge de ambiente (azul = Financeiro, verde = Logística) em Serviços Gerais; acesso indevido mostra `src/pages/AccessDenied.tsx`.
+- **UI:** sidebar filtra itens por perfil; topbar exibe badge de ambiente (azul = Financeiro, verde = Logística) em Serviços Gerais; acesso indevido em `src/features/access-denied/AccessDeniedPage.tsx`.
+
+## 7. Estrutura do código (clean architecture — front-end)
+- **`src/app/`** — composição raiz (`App.tsx`, `main.tsx`, entrada no Vite em `index.html`).
+- **`src/domain/`** — regras puras (ex.: `domain/auth/roles.ts` — permissões sem UI).
+- **`src/infrastructure/`** — detalhes externos ao domínio (ex.: `infrastructure/mock/` — dados e `mockLogin`).
+- **`src/shared/`** — UI genérica, utilitários e tipos compartilhados (`shared/ui/`, `shared/lib/`, `shared/types/`, `shared/components/`).
+- **`src/features/`** — módulos verticais: `auth`, `navigation`, `layout`, `login`, `access-denied`, `dho`, `servicos-gerais`, `hr/` (recrutamento, admissões, operações, treinamentos, analytics, comunicação).
 
 # Role: Senior Software Architect (RBAC & Frontend Security)
 # Context: Refactoring Access Levels for "Sistema Integrado Posigraf"

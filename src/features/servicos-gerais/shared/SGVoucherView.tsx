@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader } from '@/components/ui/Card';
-import { mockVouchersNatal } from '@/data/mock/mockServicosGerais';
+import { Card, CardContent, CardHeader } from '@/shared/ui/Card';
+import { mockVouchersNatal } from '@/infrastructure/mock/mockServicosGerais';
 import { Ticket, QrCode } from 'lucide-react';
 import { useState } from 'react';
 
