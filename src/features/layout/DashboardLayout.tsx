@@ -9,7 +9,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { Usuario, SistemaAcesso } from "@/infrastructure/mock/mockLogin";
 import type { SistemaAtual } from "@/domain/auth/roles";
 import { useToast } from "@/shared/ui/Toast";
-import { BotOverlay } from "@/shared/components/automation/BotOverlay";
 
 const ALERT_COUNT = 6;
 
@@ -139,7 +138,7 @@ export function DashboardLayout({
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col lg:ml-72 w-full transition-all duration-300 min-w-0">
+      <div className="flex-1 flex flex-col lg:ml-72 w-full transition-[margin] duration-300 min-w-0">
         <Topbar 
           onMenuClick={() => setIsMobileMenuOpen(true)} 
           usuario={usuario}
@@ -174,8 +173,6 @@ export function DashboardLayout({
         onClose={() => setIsNotificationsOpen(false)}
       />
 
-      {/* Bot Overlay — fixed chat widget */}
-      <BotOverlay />
     </div>
   );
 }

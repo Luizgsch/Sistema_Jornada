@@ -26,13 +26,11 @@ export function PosigrafLogo({ variant = 'full', className, inverted }: Posigraf
       >
         <rect width="40" height="40" rx="10" fill={inverted ? 'rgba(255,255,255,0.08)' : '#f1f5f9'} />
         <path
-          d="M12 28V12h7.2c3.3 0 5.6 2.1 5.6 5.1 0 2.05-1 3.65-2.75 4.45L25.2 28h-3.55l-2.5-5.65h-4.45V28H12zm6.95-8.35c1.45 0 2.35-.85 2.35-2.15 0-1.35-.9-2.2-2.4-2.2h-3.35v4.35h3.4z"
+          d="M11 28V12h7.2c3.3 0 5.6 2.1 5.6 5.1 0 2.05-1 3.65-2.75 4.45L24.2 28h-3.55l-2.5-5.65h-4.45V28H11zm6.95-8.35c1.45 0 2.35-.85 2.35-2.15 0-1.35-.9-2.2-2.4-2.2h-3.35v4.35h3.4z"
           fill={fg}
         />
-        {/* capital I with serifs — centered at x≈28, balanced margins */}
-        <rect x="26" y="12" width="4" height="2" rx="0.4" fill={accent} />
-        <rect x="27.5" y="14" width="1" height="12" rx="0.4" fill={accent} />
-        <rect x="26" y="26" width="4" height="2" rx="0.4" fill={accent} />
+        {/* I — solid bar, vertically aligned with R, horizontally centered */}
+        <rect x="26" y="12" width="3" height="16" rx="1" fill={accent} />
       </svg>
       {variant === 'full' && (
         <div className="flex flex-col leading-tight min-w-0">

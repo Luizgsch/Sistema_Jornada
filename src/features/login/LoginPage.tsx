@@ -54,12 +54,13 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
           className="w-full max-w-md relative z-10"
         >
           <div className="text-center mb-8">
-            <div className="flex justify-center mb-5">
-              <PosigrafLogo variant="full" className="dark:hidden" />
-              <PosigrafLogo variant="full" inverted className="hidden dark:block" />
+            <div className="flex justify-center mb-3">
+              <PosigrafLogo variant="compact" className="dark:hidden" />
+              <PosigrafLogo variant="compact" inverted className="hidden dark:block" />
             </div>
-            <p className="text-teal-600 dark:text-teal-300/90 text-xs font-semibold uppercase tracking-[0.2em]">Grupo Positivo · Curitiba</p>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-800 dark:text-white mt-3 tracking-tight">Sistema integrado</h1>
+            <p className="font-extrabold tracking-tight text-lg text-zinc-800 dark:text-white">Posigraf</p>
+            <p className="text-teal-600 dark:text-teal-300/90 text-xs font-semibold uppercase tracking-[0.2em] mt-1">Grupo Positivo · Curitiba</p>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-800 dark:text-white mt-4 tracking-tight">Sistema integrado</h1>
             <p className="text-zinc-500 mt-2 text-sm">RH, DHO e Serviços Gerais — selecione seu perfil para continuar</p>
           </div>
 
@@ -145,7 +146,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
         })()}
 
         <Card className="border-zinc-200 dark:border-[#27272a]">
-          <CardContent className="p-6">
+          <CardContent className="p-6 pt-6 sm:pt-6">
             <div className="flex items-center gap-3 mb-6">
               <Users className="text-primary" size={20} />
               <span className="font-bold text-zinc-800 dark:text-white">Selecione o Sistema</span>

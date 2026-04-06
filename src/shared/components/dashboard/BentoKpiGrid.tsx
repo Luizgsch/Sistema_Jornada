@@ -93,7 +93,7 @@ function BentoCard({
         "bg-white dark:bg-zinc-900",
         "border-zinc-100 dark:border-zinc-800",
         "shadow-sm dark:shadow-none",
-        "transition-all duration-300 ease-out",
+        "transition-[background-color,border-color,box-shadow,transform] duration-300 ease-out",
         "hover:scale-[1.02] hover:shadow-md",
         "hover:border-indigo-300/60 dark:hover:border-indigo-500/40",
         alert && "ring-2 ring-rose-500/40 dark:ring-rose-500/30",
