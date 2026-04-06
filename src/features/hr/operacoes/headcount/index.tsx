@@ -14,7 +14,7 @@ export default function HeadcountPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Headcount Organizacional</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-[#e7e5e4] dark:text-white">Headcount Organizacional</h1>
           <p className="text-muted-foreground mt-1">Gestão de colaboradores ativos, controle de vagas e organograma.</p>
         </div>
       </div>
@@ -26,7 +26,7 @@ export default function HeadcountPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Total de Colaboradores</p>
-                <h3 className="text-3xl font-bold mt-1 text-slate-900">{totalAtivos}</h3>
+                <h3 className="text-3xl font-bold mt-1 text-[#e7e5e4]">{totalAtivos}</h3>
               </div>
               <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                 <Users size={24} />
@@ -40,7 +40,7 @@ export default function HeadcountPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Vagas em Aberto</p>
-                <h3 className="text-3xl font-bold mt-1 text-slate-900">{totalDisponiveis}</h3>
+                <h3 className="text-3xl font-bold mt-1 text-[#e7e5e4]">{totalDisponiveis}</h3>
               </div>
               <div className="h-12 w-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600">
                 <Search size={24} />
@@ -54,7 +54,7 @@ export default function HeadcountPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Departamentos</p>
-                <h3 className="text-3xl font-bold mt-1 text-slate-900">{mockHeadcountTable.length}</h3>
+                <h3 className="text-3xl font-bold mt-1 text-[#e7e5e4]">{mockHeadcountTable.length}</h3>
               </div>
               <div className="h-12 w-12 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-600">
                 <Building2 size={24} />
@@ -98,8 +98,8 @@ export default function HeadcountPage() {
         </Card>
 
         {/* Organograma Simples */}
-        <Card className="flex flex-col h-full overflow-hidden bg-slate-50/50">
-          <CardHeader className="bg-white border-b border-slate-100 pb-4">
+        <Card className="flex flex-col h-full overflow-hidden bg-zinc-800/20">
+          <CardHeader className="bg-[#18181b] border-b border-[#27272a] pb-4">
             <CardTitle className="text-lg font-bold flex items-center gap-2">
               <Network className="text-primary" size={20} />
               Organograma Resumido
@@ -107,30 +107,30 @@ export default function HeadcountPage() {
           </CardHeader>
           <CardContent className="p-6 flex-1 flex flex-col items-center justify-center overflow-auto gap-6">
             {/* Diretoria */}
-            <div className="bg-slate-900 text-white p-4 rounded-xl text-center shadow-md w-64 border border-slate-800 z-10 relative">
+            <div className="bg-[#09090b] text-white p-4 rounded-xl text-center  w-64 border border-[#27272a] z-10 relative">
               <h4 className="font-bold text-lg">{mockOrgChart.diretoria.nome}</h4>
-              <p className="text-slate-400 text-sm mt-1">{mockOrgChart.diretoria.headcount} membros</p>
+              <p className="text-zinc-600 text-sm mt-1">{mockOrgChart.diretoria.headcount} membros</p>
               
               {/* Conector Vertical */}
-              <div className="absolute w-0.5 h-6 bg-slate-300 left-1/2 -ml-[1px] -bottom-6" />
+              <div className="absolute w-0.5 h-6 bg-zinc-600 left-1/2 -ml-[1px] -bottom-6" />
             </div>
 
             {/* Conector Horizontal Principal */}
-            <div className="w-[80%] max-w-[800px] h-0.5 bg-slate-300 relative">
-              <div className="absolute w-0.5 h-6 bg-slate-300 left-[10%] top-0" />
-              <div className="absolute w-0.5 h-6 bg-slate-300 left-[36.6%] top-0" />
-              <div className="absolute w-0.5 h-6 bg-slate-300 left-[63.3%] top-0" />
-              <div className="absolute w-0.5 h-6 bg-slate-300 left-[90%] top-0" />
+            <div className="w-[80%] max-w-[800px] h-0.5 bg-zinc-600 relative">
+              <div className="absolute w-0.5 h-6 bg-zinc-600 left-[10%] top-0" />
+              <div className="absolute w-0.5 h-6 bg-zinc-600 left-[36.6%] top-0" />
+              <div className="absolute w-0.5 h-6 bg-zinc-600 left-[63.3%] top-0" />
+              <div className="absolute w-0.5 h-6 bg-zinc-600 left-[90%] top-0" />
             </div>
             
             {/* Setores */}
             <div className="flex w-full justify-between max-w-[900px]">
               {mockOrgChart.diretoria.setores.map((setor, index) => (
-                <div key={index} className="bg-white border border-slate-200 p-4 rounded-xl text-center shadow-sm w-[22%] sm:w-[23%] flex flex-col transition-all hover:-translate-y-1 hover:shadow-md cursor-default">
-                  <h5 className="font-bold text-slate-800 text-[13px] leading-tight mb-2 h-10 flex items-center justify-center">{setor.nome}</h5>
+                <div key={index} className="bg-[#18181b] border border-[#27272a] p-4 rounded-xl text-center  w-[22%] sm:w-[23%] flex flex-col transition-all hover:-translate-y-1 hover: cursor-default">
+                  <h5 className="font-bold text-zinc-200 text-[13px] leading-tight mb-2 h-10 flex items-center justify-center">{setor.nome}</h5>
                   <div className="mt-auto">
                     <span className="inline-block bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded-md mb-1">{setor.lider}</span>
-                    <p className="text-slate-500 text-xs">{setor.headcount} pessoas</p>
+                    <p className="text-zinc-500 text-xs">{setor.headcount} pessoas</p>
                   </div>
                 </div>
               ))}
@@ -142,14 +142,14 @@ export default function HeadcountPage() {
       {/* Table Section */}
       <div className="space-y-4">
         <h3 className="text-xl font-bold tracking-tight mt-6">Detalhamento de Vagas Operacionais</h3>
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="bg-[#18181b] rounded-xl  border border-[#27272a] overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
-              <thead className="text-xs text-slate-500 bg-slate-50 uppercase border-b border-slate-200">
+              <thead className="text-xs text-zinc-500 bg-[#09090b] uppercase border-b border-[#27272a]">
                 <tr>
                   <th className="px-6 py-4 font-semibold">Setor</th>
                   <th className="px-6 py-4 font-semibold text-center text-blue-600">Ativos</th>
-                  <th className="px-6 py-4 font-semibold text-center text-slate-600">Vagas Aprovadas</th>
+                  <th className="px-6 py-4 font-semibold text-center text-zinc-400">Vagas Aprovadas</th>
                   <th className="px-6 py-4 font-semibold text-center text-emerald-600">Vagas Ocupadas</th>
                   <th className="px-6 py-4 font-semibold text-center text-amber-600">Vagas Disponíveis</th>
                   <th className="px-6 py-4 font-semibold text-center">Status</th>
@@ -171,10 +171,10 @@ export default function HeadcountPage() {
                   }
 
                   return (
-                    <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
-                      <td className="px-6 py-4 font-semibold text-slate-900">{item.setor}</td>
+                    <tr key={idx} className="border-b border-[#27272a] hover:bg-zinc-800/20 transition-colors">
+                      <td className="px-6 py-4 font-semibold text-[#e7e5e4]">{item.setor}</td>
                       <td className="px-6 py-4 text-center font-bold text-blue-600">{item.ativos}</td>
-                      <td className="px-6 py-4 text-center text-slate-600 font-medium">{item.aprovadas}</td>
+                      <td className="px-6 py-4 text-center text-zinc-400 font-medium">{item.aprovadas}</td>
                       <td className="px-6 py-4 text-center text-emerald-600 font-medium">{item.ocupadas}</td>
                       <td className="px-6 py-4 text-center">
                         {item.disponiveis > 0 ? (
@@ -182,14 +182,14 @@ export default function HeadcountPage() {
                               {item.disponiveis}
                             </span>
                           ) : (
-                            <span className="text-slate-400 font-medium">0</span>
+                            <span className="text-zinc-600 font-medium">0</span>
                         )}
                       </td>
                       <td className="px-6 py-4 text-center">
                         <span className={`px-2.5 py-1 text-xs font-semibold rounded-full ${statusColor}`}>
                           {statusText}
                         </span>
-                        <div className="w-full bg-slate-100 rounded-full h-1.5 mt-2">
+                        <div className="w-full bg-zinc-800 rounded-full h-1.5 mt-2">
                           <div 
                             className="bg-primary h-1.5 rounded-full" 
                             style={{ width: `${Math.min(percentOcupado, 100)}%` }}

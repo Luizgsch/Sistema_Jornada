@@ -23,17 +23,64 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
-function badgeClass(ok: boolean) {
-  return ok
-    ? 'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800'
-    : 'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-rose-100 text-rose-800';
+function QrBadge({ ok }: { ok: boolean }) {
+  return (
+    <span
+      className={
+        ok
+          ? 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+          : 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20'
+      }
+    >
+      {ok ? 'OK' : 'Pendente'}
+    </span>
+  );
+}
+
+function StatusPill({ status }: { status: string }) {
+  const map: Record<string, string> = {
+    concluido:                 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+    'em-andamento':            'bg-blue-500/10 text-blue-400 border-blue-500/20',
+    planejado:                 'bg-zinc-800 text-zinc-400 border-zinc-700',
+    ok:                        'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+    vencendo:                  'bg-amber-500/10 text-amber-400 border-amber-500/20',
+    pendente:                  'bg-red-500/10 text-red-400 border-red-500/20',
+    novo:                      'bg-blue-500/10 text-blue-400 border-blue-500/20',
+    'em-andamento-consultoria':'bg-amber-500/10 text-amber-400 border-amber-500/20',
+    ativo:                     'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+    encerrado:                 'bg-zinc-800 text-zinc-500 border-zinc-700',
+    alta:                      'bg-red-500/10 text-red-400 border-red-500/20',
+    media:                     'bg-amber-500/10 text-amber-400 border-amber-500/20',
+    baixa:                     'bg-zinc-800 text-zinc-400 border-zinc-700',
+  };
+  const labels: Record<string, string> = {
+    concluido: 'Concluído',
+    'em-andamento': 'Em andamento',
+    planejado: 'Planejado',
+    ok: 'Em dia',
+    vencendo: 'Vencendo',
+    pendente: 'Pendente',
+    novo: 'Novo',
+    ativo: 'Ativo',
+    encerrado: 'Encerrado',
+    alta: 'Alta',
+    media: 'Média',
+    baixa: 'Baixa',
+  };
+  const color = map[status] ?? 'bg-zinc-800 text-zinc-400 border-zinc-700';
+  const label = labels[status] ?? status;
+  return (
+    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${color}`}>
+      {label}
+    </span>
+  );
 }
 
 export function DashboardTDView() {
   const pctMeta = Math.min(100, Math.round((mockKpiTD.horaHomemMes / mockKpiTD.horaHomemMeta) * 100));
   return (
-    <div className="space-y-6">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="space-y-8">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <KpiCard
           label="Hora-homem de treinamento (mês)"
           value={`${mockKpiTD.horaHomemMes.toLocaleString('pt-BR')} h`}
@@ -51,46 +98,49 @@ export function DashboardTDView() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <Card className="border-none shadow-sm lg:col-span-2">
+        <Card className="lg:col-span-2">
           <CardHeader className="pb-2">
-            <h3 className="font-bold text-lg text-slate-900">Consolidação automática (simulação)</h3>
-            <p className="text-sm text-muted-foreground">
-              Indicador calculado a partir de presenças digitais e lançamentos em lote — elimina somas manuais em planilhas.
+            <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4]">Consolidação automática (simulação)</h3>
+            <p className="text-sm text-zinc-500 leading-relaxed">
+              Indicador calculado a partir de presenças digitais e lançamentos em lote.
             </p>
           </CardHeader>
           <CardContent>
-            <div className="h-48 rounded-xl bg-gradient-to-br from-blue-50 to-slate-50 border border-slate-200 flex items-end gap-2 p-4">
+            <div className="h-44 rounded-xl bg-[#09090b] border border-[#27272a] flex items-end gap-1.5 p-4">
               {[42, 55, 48, 62, 58, 71, 68, 74, 80, 85, 78, 88].map((h, i) => (
                 <div key={i} className="flex-1 flex flex-col justify-end items-center gap-2">
-                  <div className="w-full bg-primary/80 rounded-t-md transition-all" style={{ height: `${h}%` }} />
-                  <span className="text-[10px] text-slate-400">{i + 1}</span>
+                  <div
+                    className="w-full rounded-t-sm transition-all"
+                    style={{ height: `${h}%`, backgroundColor: 'rgba(13,148,136,0.6)' }}
+                  />
+                  <span className="text-[10px] text-zinc-600">{i + 1}</span>
                 </div>
               ))}
             </div>
-            <p className="text-xs text-muted-foreground mt-3 flex items-center gap-2">
-              <CheckCircle2 className="text-emerald-500 shrink-0" size={14} />
+            <p className="text-xs text-zinc-600 mt-3 flex items-center gap-2">
+              <CheckCircle2 className="text-emerald-500 shrink-0" size={13} />
               Dados mockados para demonstração — integração futura com folha e LMS.
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-none shadow-sm">
+        <Card>
           <CardHeader className="pb-2">
-            <h3 className="font-bold text-lg text-slate-900">Alertas T&D</h3>
+            <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4]">Alertas T&D</h3>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
-            <div className="flex gap-3 p-3 rounded-lg bg-amber-50 border border-amber-100">
-              <AlertCircle className="text-amber-600 shrink-0" size={18} />
+            <div className="flex gap-3 p-3 rounded-lg bg-amber-500/5 border border-amber-500/15">
+              <AlertCircle className="text-amber-400 shrink-0 mt-0.5" size={16} />
               <div>
-                <p className="font-semibold text-slate-800">Reciclagens vencendo</p>
-                <p className="text-slate-600 text-xs mt-0.5">14 colaboradores com NR-12 a vencer em 45 dias.</p>
+                <p className="font-semibold text-[#e7e5e4] text-sm">Reciclagens vencendo</p>
+                <p className="text-zinc-500 text-xs mt-0.5">14 colaboradores com NR-12 a vencer em 45 dias.</p>
               </div>
             </div>
-            <div className="flex gap-3 p-3 rounded-lg bg-blue-50 border border-blue-100">
-              <Inbox className="text-blue-600 shrink-0" size={18} />
+            <div className="flex gap-3 p-3 rounded-lg bg-blue-500/5 border border-blue-500/15">
+              <Inbox className="text-blue-400 shrink-0 mt-0.5" size={16} />
               <div>
-                <p className="font-semibold text-slate-800">Fila de solicitações</p>
-                <p className="text-slate-600 text-xs mt-0.5">6 pedidos de gestores aguardando priorização.</p>
+                <p className="font-semibold text-[#e7e5e4] text-sm">Fila de solicitações</p>
+                <p className="text-zinc-500 text-xs mt-0.5">6 pedidos de gestores aguardando priorização.</p>
               </div>
             </div>
           </CardContent>
@@ -102,23 +152,23 @@ export function DashboardTDView() {
 
 export function PresencaDigitalView() {
   return (
-    <Card className="border-none shadow-sm">
-      <CardHeader className="border-b border-slate-100">
+    <Card>
+      <CardHeader className="border-b border-[#27272a]">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h3 className="font-bold text-lg flex items-center gap-2">
-              <QrCode className="text-blue-500" size={22} />
+            <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4] flex items-center gap-2">
+              <QrCode className="text-blue-400" size={20} />
               Presença digital & checklist
             </h3>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-sm text-zinc-500 mt-1">
               Substitui listas em papel: QR no local + conferência rápida no tablet.
             </p>
           </div>
           <button
             type="button"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium"
           >
-            <QrCode size={16} />
+            <QrCode size={15} />
             Gerar QR do treinamento
           </button>
         </div>
@@ -126,53 +176,43 @@ export function PresencaDigitalView() {
       <CardContent className="p-0">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="bg-slate-50 border-y border-slate-200 text-muted-foreground font-medium text-xs uppercase tracking-wider">
+            <thead className="bg-[#09090b] text-zinc-500 font-medium text-xs uppercase tracking-widest">
               <tr>
-                <th className="py-3 px-6">Treinamento</th>
-                <th className="py-3 px-6">Data / Local</th>
-                <th className="py-3 px-6 text-center">Previstos</th>
-                <th className="py-3 px-6 text-center">Via QR</th>
-                <th className="py-3 px-6 text-center">Checklist</th>
-                <th className="py-3 px-6">Status</th>
+                <th className="py-4 px-6 border-b border-[#27272a]">Treinamento</th>
+                <th className="py-4 px-6 border-b border-[#27272a]">Data / Local</th>
+                <th className="py-4 px-6 border-b border-[#27272a] text-center">Previstos</th>
+                <th className="py-4 px-6 border-b border-[#27272a] text-center">Via QR</th>
+                <th className="py-4 px-6 border-b border-[#27272a] text-center">Checklist</th>
+                <th className="py-4 px-6 border-b border-[#27272a]">Status</th>
               </tr>
             </thead>
             <tbody>
               {mockTreinamentosPresenca.map((t) => (
-                <tr key={t.id} className="border-b hover:bg-slate-50/60">
-                  <td className="py-4 px-6">
-                    <p className="font-semibold text-slate-900">{t.titulo}</p>
-                    <p className="text-xs text-muted-foreground">{t.id}</p>
+                <tr key={t.id} className="hover:bg-zinc-800/30 transition-colors">
+                  <td className="py-4 px-6 border-b border-[#27272a]">
+                    <p className="font-semibold text-[#e7e5e4]">{t.titulo}</p>
+                    <p className="text-xs text-zinc-600 mt-0.5">{t.id}</p>
                   </td>
-                  <td className="py-4 px-6 text-slate-600">
+                  <td className="py-4 px-6 border-b border-[#27272a] text-zinc-400">
                     {t.data}
                     <br />
-                    <span className="text-xs text-muted-foreground">{t.local}</span>
+                    <span className="text-xs text-zinc-600">{t.local}</span>
                   </td>
-                  <td className="py-4 px-6 text-center font-medium">{t.previstos}</td>
-                  <td className="py-4 px-6 text-center">
-                    <span className={badgeClass(t.confirmadosQr >= t.previstos - 5)}>{t.confirmadosQr}</span>
+                  <td className="py-4 px-6 border-b border-[#27272a] text-center font-semibold text-[#e7e5e4]">{t.previstos}</td>
+                  <td className="py-4 px-6 border-b border-[#27272a] text-center">
+                    <QrBadge ok={t.confirmadosQr >= t.previstos - 5} />
                   </td>
-                  <td className="py-4 px-6 text-center">
+                  <td className="py-4 px-6 border-b border-[#27272a] text-center">
                     {t.checklistPendente === 0 ? (
-                      <span className="inline-flex items-center gap-1 text-emerald-700 text-xs font-medium">
-                        <ListChecks size={14} /> OK
+                      <span className="inline-flex items-center gap-1 text-emerald-400 text-xs font-semibold">
+                        <ListChecks size={13} /> OK
                       </span>
                     ) : (
-                      <span className="text-rose-700 text-xs font-medium">{t.checklistPendente} pend.</span>
+                      <span className="text-xs font-semibold neon-error-sm">{t.checklistPendente} pend.</span>
                     )}
                   </td>
-                  <td className="py-4 px-6">
-                    <span
-                      className={`text-xs font-semibold px-2 py-1 rounded-md ${
-                        t.status === 'concluido'
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : t.status === 'em-andamento'
-                            ? 'bg-blue-100 text-blue-800'
-                            : 'bg-slate-100 text-slate-700'
-                      }`}
-                    >
-                      {t.status === 'concluido' ? 'Concluído' : t.status === 'em-andamento' ? 'Em andamento' : 'Planejado'}
-                    </span>
+                  <td className="py-4 px-6 border-b border-[#27272a]">
+                    <StatusPill status={t.status} />
                   </td>
                 </tr>
               ))}
@@ -187,62 +227,60 @@ export function PresencaDigitalView() {
 export function LancamentoLoteView() {
   return (
     <div className="space-y-6">
-      <Card className="border-none shadow-sm border-dashed border-2 border-slate-200">
-        <CardContent className="p-8 flex flex-col md:flex-row items-center gap-6">
-          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
-            <Upload className="text-primary" size={28} />
-          </div>
-          <div className="flex-1 text-center md:text-left">
-            <h3 className="font-bold text-lg text-slate-900">Importar planilha de conclusões</h3>
-            <p className="text-sm text-muted-foreground mt-1">
-              Arraste um .xlsx exportado do checklist ou do fornecedor — o sistema valida duplicidades antes do lançamento em lote.
-            </p>
-          </div>
-          <button
-            type="button"
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 text-white rounded-lg text-sm font-medium"
-          >
-            <FileSpreadsheet size={18} />
-            Selecionar arquivo
-          </button>
-        </CardContent>
-      </Card>
+      <div className="bg-[#18181b] rounded-xl border border-dashed border-[#27272a] p-8 flex flex-col md:flex-row items-center gap-6">
+        <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
+          <Upload className="text-primary" size={26} />
+        </div>
+        <div className="flex-1 text-center md:text-left">
+          <h3 className="font-semibold text-[#e7e5e4] tracking-tighter">Importar planilha de conclusões</h3>
+          <p className="text-sm text-zinc-500 mt-1">
+            Arraste um .xlsx exportado do checklist ou do fornecedor — o sistema valida duplicidades antes do lançamento em lote.
+          </p>
+        </div>
+        <button
+          type="button"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#27272a] text-[#e7e5e4] hover:bg-zinc-700 rounded-lg text-sm font-medium transition-colors shrink-0"
+        >
+          <FileSpreadsheet size={16} />
+          Selecionar arquivo
+        </button>
+      </div>
 
-      <Card className="border-none shadow-sm">
-        <CardHeader className="border-b">
-          <h3 className="font-bold text-lg">Pré-visualização — lançamento em lote</h3>
-          <p className="text-sm text-muted-foreground">{mockLotePendente.length} registros prontos para confirmar</p>
+      <Card>
+        <CardHeader className="border-b border-[#27272a] pb-4">
+          <h3 className="font-semibold text-[#e7e5e4] tracking-tighter">Pré-visualização — lançamento em lote</h3>
+          <p className="text-sm text-zinc-500">{mockLotePendente.length} registros prontos para confirmar</p>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
-              <thead className="bg-slate-50 border-b text-xs uppercase text-muted-foreground font-medium">
+              <thead className="bg-[#09090b] border-b border-[#27272a] text-xs uppercase text-zinc-500 font-medium tracking-widest">
                 <tr>
-                  <th className="py-3 px-6">Matrícula</th>
-                  <th className="py-3 px-6">Colaborador</th>
-                  <th className="py-3 px-6">Curso</th>
-                  <th className="py-3 px-6 text-center">Horas</th>
-                  <th className="py-3 px-6">Origem</th>
+                  <th className="py-4 px-6">Matrícula</th>
+                  <th className="py-4 px-6">Colaborador</th>
+                  <th className="py-4 px-6">Curso</th>
+                  <th className="py-4 px-6 text-center">Horas</th>
+                  <th className="py-4 px-6">Origem</th>
                 </tr>
               </thead>
               <tbody>
                 {mockLotePendente.map((row, i) => (
-                  <tr key={i} className="border-b hover:bg-slate-50/50">
-                    <td className="py-3 px-6 font-mono text-xs">{row.matricula}</td>
-                    <td className="py-3 px-6 font-medium">{row.nome}</td>
-                    <td className="py-3 px-6 text-slate-600">{row.curso}</td>
-                    <td className="py-3 px-6 text-center">{row.horas}</td>
-                    <td className="py-3 px-6 text-xs text-muted-foreground">{row.origem}</td>
+                  <tr key={i} className="hover:bg-zinc-800/30 transition-colors">
+                    <td className="py-4 px-6 border-b border-[#27272a] font-mono text-xs text-zinc-600">{row.matricula}</td>
+                    <td className="py-4 px-6 border-b border-[#27272a] font-semibold text-[#e7e5e4]">{row.nome}</td>
+                    <td className="py-4 px-6 border-b border-[#27272a] text-zinc-400">{row.curso}</td>
+                    <td className="py-4 px-6 border-b border-[#27272a] text-center font-bold text-[#e7e5e4]">{row.horas}</td>
+                    <td className="py-4 px-6 border-b border-[#27272a] text-xs text-zinc-600">{row.origem}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div className="p-4 border-t flex flex-wrap gap-2 justify-end">
-            <button type="button" className="px-4 py-2 border rounded-lg text-sm font-medium hover:bg-slate-50">
+          <div className="p-4 border-t border-[#27272a] flex flex-wrap gap-2 justify-end">
+            <button type="button" className="px-4 py-2 border border-[#27272a] rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">
               Descartar
             </button>
-            <button type="button" className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium">
+            <button type="button" className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">
               Confirmar lote no histórico T&D
             </button>
           </div>
@@ -257,23 +295,23 @@ export function TrilhasCargoView() {
   const row = mockTrilhasPorCargo[cargoIdx];
   return (
     <div className="space-y-6">
-      <Card className="border-none shadow-sm">
+      <Card>
         <CardContent className="p-6 flex flex-col md:flex-row md:items-center gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-blue-500/15 flex items-center justify-center">
-              <Route className="text-blue-600" size={24} />
+            <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
+              <Route className="text-blue-400" size={22} />
             </div>
             <div>
-              <h3 className="font-bold text-lg">Trilha automática por cargo</h3>
-              <p className="text-sm text-muted-foreground">
-                Simula “movimentou → sistema exige cursos obrigatórios e reciclagens”.
+              <h3 className="font-semibold text-[#e7e5e4] tracking-tighter">Trilha automática por cargo</h3>
+              <p className="text-sm text-zinc-500">
+                Simula "movimentou → sistema exige cursos obrigatórios e reciclagens".
               </p>
             </div>
           </div>
           <div className="md:ml-auto w-full md:w-72">
-            <label className="text-xs font-bold text-slate-500 uppercase">Cargo alvo</label>
+            <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Cargo alvo</label>
             <select
-              className="mt-1 w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
+              className="mt-1 w-full h-10 rounded-lg border border-[#27272a] bg-[#09090b] px-3 text-sm text-[#e7e5e4] focus:outline-none focus:border-zinc-600"
               value={cargoIdx}
               onChange={(e) => setCargoIdx(Number(e.target.value))}
             >
@@ -287,46 +325,37 @@ export function TrilhasCargoView() {
         </CardContent>
       </Card>
 
-      <Card className="border-none shadow-sm">
-        <CardHeader className="border-b flex flex-row items-center justify-between">
-          <div>
-            <h3 className="font-bold">Cursos obrigatórios — {row.cargo}</h3>
-            <p className="text-sm text-muted-foreground mt-1">
-              Pendentes pós-movimentação interna:{' '}
-              <span className="font-semibold text-amber-700">{row.pendentesPosMovimentacao}</span>
-            </p>
-          </div>
+      <Card>
+        <CardHeader className="border-b border-[#27272a] pb-4">
+          <h3 className="font-semibold text-[#e7e5e4] tracking-tighter">Cursos obrigatórios — {row.cargo}</h3>
+          <p className="text-sm text-zinc-500 mt-1">
+            Pendentes pós-movimentação interna:{' '}
+            <span className="font-semibold text-amber-400">{row.pendentesPosMovimentacao}</span>
+          </p>
         </CardHeader>
         <CardContent className="p-0">
           <table className="w-full text-sm">
-            <thead className="bg-slate-50 border-b text-xs uppercase text-muted-foreground">
+            <thead className="bg-[#09090b] text-zinc-500 text-xs uppercase tracking-widest">
               <tr>
-                <th className="py-3 px-6">Código</th>
-                <th className="py-3 px-6">Curso</th>
-                <th className="py-3 px-6 text-center">CH</th>
-                <th className="py-3 px-6 text-center">Reciclagem</th>
-                <th className="py-3 px-6">Status</th>
+                <th className="py-4 px-6 border-b border-[#27272a]">Código</th>
+                <th className="py-4 px-6 border-b border-[#27272a]">Curso</th>
+                <th className="py-4 px-6 border-b border-[#27272a] text-center">CH</th>
+                <th className="py-4 px-6 border-b border-[#27272a] text-center">Reciclagem</th>
+                <th className="py-4 px-6 border-b border-[#27272a]">Status</th>
               </tr>
             </thead>
             <tbody>
               {row.cursosObrigatorios.map((c) => (
-                <tr key={c.codigo} className="border-b hover:bg-slate-50/50">
-                  <td className="py-3 px-6 font-mono text-xs">{c.codigo}</td>
-                  <td className="py-3 px-6 font-medium">{c.nome}</td>
-                  <td className="py-3 px-6 text-center">{c.cargaHoraria}h</td>
-                  <td className="py-3 px-6 text-center text-muted-foreground">{c.reciclagemMeses} meses</td>
-                  <td className="py-3 px-6">
-                    <span
-                      className={`text-xs font-semibold px-2 py-1 rounded-md ${
-                        c.status === 'ok'
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : c.status === 'vencendo'
-                            ? 'bg-amber-100 text-amber-800'
-                            : 'bg-rose-100 text-rose-800'
-                      }`}
-                    >
-                      {c.status === 'ok' ? 'Em dia' : c.status === 'vencendo' ? 'Vencendo' : 'Pendente'}
-                    </span>
+                <tr
+                  key={c.codigo}
+                  className="hover:bg-zinc-800/30 transition-colors"
+                >
+                  <td className="py-3 px-6 border-b border-[#27272a] font-mono text-xs text-zinc-600">{c.codigo}</td>
+                  <td className="py-3 px-6 border-b border-[#27272a] font-semibold text-[#e7e5e4]">{c.nome}</td>
+                  <td className="py-3 px-6 border-b border-[#27272a] text-center text-zinc-400">{c.cargaHoraria}h</td>
+                  <td className="py-3 px-6 border-b border-[#27272a] text-center text-zinc-600 text-xs">{c.reciclagemMeses} meses</td>
+                  <td className="py-3 px-6 border-b border-[#27272a]">
+                    <StatusPill status={c.status} />
                   </td>
                 </tr>
               ))}
@@ -340,60 +369,52 @@ export function TrilhasCargoView() {
 
 export function PortalGestorView() {
   return (
-    <Card className="border-none shadow-sm">
-      <CardHeader className="border-b flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h3 className="font-bold text-lg flex items-center gap-2">
-            <Inbox className="text-blue-500" size={22} />
-            Solicitações de treinamento (gestores)
-          </h3>
-          <p className="text-sm text-muted-foreground mt-1">Protocolo, fila, priorização e histórico — fim do pedido por WhatsApp solto.</p>
+    <Card>
+      <CardHeader className="border-b border-[#27272a] pb-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4] flex items-center gap-2">
+              <Inbox className="text-blue-400" size={20} />
+              Solicitações de treinamento (gestores)
+            </h3>
+            <p className="text-sm text-zinc-500 mt-1">Protocolo, fila, priorização e histórico.</p>
+          </div>
+          <button type="button" className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium shrink-0 hover:bg-primary/90 transition-colors">
+            Nova solicitação
+          </button>
         </div>
-        <button type="button" className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium shrink-0">
-          Nova solicitação (gestor)
-        </button>
       </CardHeader>
       <CardContent className="p-0">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
-            <thead className="bg-slate-50 border-b text-xs uppercase text-muted-foreground font-medium">
+            <thead className="bg-[#09090b] border-b border-[#27272a] text-xs uppercase text-zinc-500 font-medium tracking-widest">
               <tr>
-                <th className="py-3 px-6">Protocolo</th>
-                <th className="py-3 px-6">Solicitante / Setor</th>
-                <th className="py-3 px-6">Tema</th>
-                <th className="py-3 px-6">Prioridade</th>
-                <th className="py-3 px-6 text-center">Fila</th>
-                <th className="py-3 px-6">Status</th>
+                <th className="py-4 px-6">Protocolo</th>
+                <th className="py-4 px-6">Solicitante / Setor</th>
+                <th className="py-4 px-6">Tema</th>
+                <th className="py-4 px-6">Prioridade</th>
+                <th className="py-4 px-6 text-center">Fila</th>
+                <th className="py-4 px-6">Status</th>
               </tr>
             </thead>
             <tbody>
               {mockSolicitacoesTreinamentoGestor.map((s) => (
-                <tr key={s.id} className="border-b hover:bg-slate-50/50">
-                  <td className="py-3 px-6">
-                    <span className="font-mono text-xs font-semibold">{s.protocolo}</span>
-                    <p className="text-xs text-muted-foreground">{s.dataAbertura}</p>
+                <tr key={s.id} className="hover:bg-zinc-800/30 transition-colors">
+                  <td className="py-3 px-6 border-b border-[#27272a]">
+                    <span className="font-mono text-xs font-semibold text-zinc-400">{s.protocolo}</span>
+                    <p className="text-xs text-zinc-600 mt-0.5">{s.dataAbertura}</p>
                   </td>
-                  <td className="py-3 px-6">
-                    <p className="font-medium">{s.solicitante}</p>
-                    <p className="text-xs text-slate-500">{s.setor}</p>
+                  <td className="py-3 px-6 border-b border-[#27272a]">
+                    <p className="font-semibold text-[#e7e5e4]">{s.solicitante}</p>
+                    <p className="text-xs text-zinc-600">{s.setor}</p>
                   </td>
-                  <td className="py-3 px-6 text-slate-700 max-w-xs">{s.tema}</td>
-                  <td className="py-3 px-6">
-                    <span
-                      className={`text-xs font-semibold px-2 py-1 rounded-md ${
-                        s.prioridade === 'alta'
-                          ? 'bg-rose-100 text-rose-800'
-                          : s.prioridade === 'media'
-                            ? 'bg-amber-100 text-amber-800'
-                            : 'bg-slate-100 text-slate-700'
-                      }`}
-                    >
-                      {s.prioridade}
-                    </span>
+                  <td className="py-3 px-6 border-b border-[#27272a] text-zinc-400 max-w-xs text-sm">{s.tema}</td>
+                  <td className="py-3 px-6 border-b border-[#27272a]">
+                    <StatusPill status={s.prioridade} />
                   </td>
-                  <td className="py-3 px-6 text-center font-bold text-slate-800">{s.posicaoFila || '—'}</td>
-                  <td className="py-3 px-6">
-                    <span className="text-xs font-medium px-2 py-1 rounded-md bg-blue-50 text-blue-800 capitalize">{s.status.replace('-', ' ')}</span>
+                  <td className="py-3 px-6 border-b border-[#27272a] text-center font-bold text-[#e7e5e4]">{s.posicaoFila || '—'}</td>
+                  <td className="py-3 px-6 border-b border-[#27272a]">
+                    <StatusPill status={s.status} />
                   </td>
                 </tr>
               ))}
@@ -407,47 +428,41 @@ export function PortalGestorView() {
 
 export function ComunicadosTDView() {
   return (
-    <Card className="border-none shadow-sm">
-      <CardHeader className="border-b flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h3 className="font-bold text-lg flex items-center gap-2">
-            <Megaphone className="text-violet-500" size={22} />
-            Comunicados & chamadas (T&D)
-          </h3>
-          <p className="text-sm text-muted-foreground mt-1">Divulgação, confirmação de presença e acompanhamento em um só fluxo.</p>
+    <Card>
+      <CardHeader className="border-b border-[#27272a] pb-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4] flex items-center gap-2">
+              <Megaphone className="text-violet-400" size={20} />
+              Comunicados & chamadas (T&D)
+            </h3>
+            <p className="text-sm text-zinc-500 mt-1">Divulgação, confirmação de presença e acompanhamento em um só fluxo.</p>
+          </div>
+          <button type="button" className="px-4 py-2 border border-[#27272a] rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">
+            Novo comunicado
+          </button>
         </div>
-        <button type="button" className="px-4 py-2 border rounded-lg text-sm font-medium hover:bg-slate-50">
-          Novo comunicado
-        </button>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="divide-y">
+        <div>
           {mockComunicadosTD.map((c) => (
-            <div key={c.id} className="p-6 flex flex-col lg:flex-row lg:items-center gap-4 hover:bg-slate-50/40">
+            <div key={c.id} className="px-6 py-4 border-b border-[#27272a] flex flex-col lg:flex-row lg:items-center gap-4 hover:bg-zinc-800/30 transition-colors last:border-b-0">
               <div className="flex-1">
-                <p className="font-semibold text-slate-900">{c.titulo}</p>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="font-semibold text-[#e7e5e4]">{c.titulo}</p>
+                <p className="text-xs text-zinc-600 mt-0.5">
                   {c.publicoAlvo} · Enviado em {c.enviadoEm}
                 </p>
               </div>
-              <div className="flex flex-wrap gap-4 text-sm">
+              <div className="flex flex-wrap items-center gap-6 text-sm">
                 <div>
-                  <p className="text-xs text-slate-500 uppercase font-bold">Confirmações</p>
-                  <p className="font-bold text-slate-800">{c.confirmacoes}</p>
+                  <p className="text-xs text-zinc-600 uppercase font-medium tracking-widest">Confirmações</p>
+                  <p className="font-bold text-[#e7e5e4] text-lg">{c.confirmacoes}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500 uppercase font-bold">Prazo</p>
-                  <p className="font-medium text-slate-700">{c.prazoConfirmacao}</p>
+                  <p className="text-xs text-zinc-600 uppercase font-medium tracking-widest">Prazo</p>
+                  <p className="font-medium text-zinc-400 text-sm">{c.prazoConfirmacao}</p>
                 </div>
-                <div>
-                  <span
-                    className={`text-xs font-semibold px-2 py-1 rounded-md ${
-                      c.status === 'ativo' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'
-                    }`}
-                  >
-                    {c.status === 'ativo' ? 'Ativo' : 'Encerrado'}
-                  </span>
-                </div>
+                <StatusPill status={c.status} />
               </div>
             </div>
           ))}
@@ -457,28 +472,27 @@ export function ComunicadosTDView() {
   );
 }
 
-/** Visão transversal para Financeiro e Logística: apenas solicitar treinamento e abrir consultoria. */
 export function DHOGestorTransversalView() {
   const [temaTreino, setTemaTreino] = useState('');
   const [demandaConsultoria, setDemandaConsultoria] = useState('');
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
-      <Card className="border-none shadow-sm border-blue-200/60 bg-gradient-to-br from-blue-50/80 to-white">
-        <CardHeader className="border-b border-blue-100">
-          <h3 className="font-bold text-lg flex items-center gap-2">
-            <Inbox className="text-blue-600" size={22} />
+      <Card>
+        <CardHeader className="border-b border-[#27272a] pb-4">
+          <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4] flex items-center gap-2">
+            <Inbox className="text-blue-400" size={20} />
             Solicitar treinamento ao DHO
           </h3>
-          <p className="text-sm text-muted-foreground mt-1">
-            Protocolo único, fila e priorização — substitui pedidos informais por canais paralelos.
+          <p className="text-sm text-zinc-500 mt-1">
+            Protocolo único, fila e priorização — substitui pedidos informais.
           </p>
         </CardHeader>
         <CardContent className="space-y-4 pt-6">
           <div>
-            <label className="text-xs font-bold text-slate-500 uppercase">Tema / necessidade</label>
+            <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Tema / necessidade</label>
             <textarea
-              className="mt-1.5 w-full min-h-[100px] rounded-lg border border-input bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20"
+              className="mt-1.5 w-full min-h-[100px] rounded-lg border border-[#27272a] bg-[#09090b] px-3 py-2 text-sm text-[#e7e5e4] placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600"
               placeholder="Ex.: NR-35 para equipe de manutenção, 12 pessoas, preferência noite..."
               value={temaTreino}
               onChange={(e) => setTemaTreino(e.target.value)}
@@ -486,16 +500,16 @@ export function DHOGestorTransversalView() {
           </div>
           <div className="grid sm:grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-bold text-slate-500 uppercase">Público-alvo</label>
+              <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Público-alvo</label>
               <input
                 type="text"
-                className="mt-1.5 w-full h-10 rounded-lg border border-input bg-background px-3 text-sm"
+                className="mt-1.5 w-full h-10 rounded-lg border border-[#27272a] bg-[#09090b] px-3 text-sm text-[#e7e5e4] placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600"
                 placeholder="Setor ou equipe"
               />
             </div>
             <div>
-              <label className="text-xs font-bold text-slate-500 uppercase">Urgência</label>
-              <select className="mt-1.5 w-full h-10 rounded-lg border border-input bg-background px-3 text-sm">
+              <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Urgência</label>
+              <select className="mt-1.5 w-full h-10 rounded-lg border border-[#27272a] bg-[#09090b] px-3 text-sm text-[#e7e5e4] focus:outline-none focus:border-zinc-600">
                 <option>Normal</option>
                 <option>Média</option>
                 <option>Alta</option>
@@ -504,58 +518,58 @@ export function DHOGestorTransversalView() {
           </div>
           <button
             type="button"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-semibold shadow-sm"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary/90 transition-colors"
           >
             Enviar solicitação
           </button>
-          <p className="text-xs text-muted-foreground flex items-start gap-2">
-            <CheckCircle2 className="text-emerald-500 shrink-0 mt-0.5" size={14} />
-            Demonstração: nenhum dado é gravado. Em produção, o protocolo apareceria na fila do DHO.
+          <p className="text-xs text-zinc-600 flex items-start gap-2">
+            <CheckCircle2 className="text-emerald-500 shrink-0 mt-0.5" size={13} />
+            Demonstração: nenhum dado é gravado.
           </p>
         </CardContent>
       </Card>
 
-      <Card className="border-none shadow-sm border-teal-200/60 bg-gradient-to-br from-teal-50/80 to-white">
-        <CardHeader className="border-b border-teal-100">
-          <h3 className="font-bold text-lg flex items-center gap-2">
-            <Headphones className="text-teal-600" size={22} />
+      <Card>
+        <CardHeader className="border-b border-[#27272a] pb-4">
+          <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4] flex items-center gap-2">
+            <Headphones className="text-teal-400" size={20} />
             Abrir chamado de consultoria
           </h3>
-          <p className="text-sm text-muted-foreground mt-1">
-            Mediação e demandas comportamentais com responsável definido e prazo — rastreio centralizado.
+          <p className="text-sm text-zinc-500 mt-1">
+            Mediação e demandas comportamentais com responsável definido e prazo.
           </p>
         </CardHeader>
         <CardContent className="space-y-4 pt-6">
           <div>
-            <label className="text-xs font-bold text-slate-500 uppercase">Resumo da demanda</label>
+            <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Resumo da demanda</label>
             <textarea
-              className="mt-1.5 w-full min-h-[100px] rounded-lg border border-input bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20"
+              className="mt-1.5 w-full min-h-[100px] rounded-lg border border-[#27272a] bg-[#09090b] px-3 py-2 text-sm text-[#e7e5e4] placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600"
               placeholder="Descreva o contexto, envolvidos e o que já foi tentado..."
               value={demandaConsultoria}
               onChange={(e) => setDemandaConsultoria(e.target.value)}
             />
           </div>
           <div>
-            <label className="text-xs font-bold text-slate-500 uppercase">Canal anterior (se houver)</label>
+            <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Canal anterior (se houver)</label>
             <input
               type="text"
-              className="mt-1.5 w-full h-10 rounded-lg border border-input bg-background px-3 text-sm"
+              className="mt-1.5 w-full h-10 rounded-lg border border-[#27272a] bg-[#09090b] px-3 text-sm text-[#e7e5e4] placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600"
               placeholder="WhatsApp, e-mail, conversa informal..."
             />
           </div>
           <button
             type="button"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-teal-700 text-white rounded-xl text-sm font-semibold shadow-sm hover:bg-teal-800 transition-colors"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-teal-600 text-white rounded-xl text-sm font-semibold hover:bg-teal-500 transition-colors"
           >
             Abrir chamado
           </button>
-          <div className="rounded-lg bg-slate-50 border border-slate-100 p-3 text-xs text-slate-600">
-            <p className="font-semibold text-slate-800 mb-2">Últimas demandas (mock)</p>
+          <div className="rounded-lg bg-[#09090b] border border-[#27272a] p-3 text-xs text-zinc-500">
+            <p className="font-semibold text-zinc-300 mb-2">Últimas demandas (mock)</p>
             <ul className="space-y-1">
               {mockConsultoriaInterna.slice(0, 2).map((c) => (
                 <li key={c.id}>
-                  <span className="font-medium text-slate-800">{c.titulo}</span>
-                  <span className="text-muted-foreground"> — {c.status === 'novo' ? 'Novo' : 'Em andamento'}</span>
+                  <span className="font-medium text-zinc-400">{c.titulo}</span>
+                  <span className="text-zinc-600"> — {c.status === 'novo' ? 'Novo' : 'Em andamento'}</span>
                 </li>
               ))}
             </ul>
@@ -568,50 +582,46 @@ export function DHOGestorTransversalView() {
 
 export function ConsultoriaInternaView() {
   return (
-    <Card className="border-none shadow-sm">
-      <CardHeader className="border-b flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h3 className="font-bold text-lg flex items-center gap-2">
-            <Headphones className="text-teal-600" size={22} />
-            Consultoria interna & mediação
-          </h3>
-          <p className="text-sm text-muted-foreground mt-1">
-            Registro formal com histórico, responsável e prazo — substitui filas em WhatsApp/Teams soltos.
-          </p>
+    <Card>
+      <CardHeader className="border-b border-[#27272a] pb-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4] flex items-center gap-2">
+              <Headphones className="text-teal-400" size={20} />
+              Consultoria interna & mediação
+            </h3>
+            <p className="text-sm text-zinc-500 mt-1">
+              Registro formal com histórico, responsável e prazo.
+            </p>
+          </div>
+          <button type="button" className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">
+            Abrir solicitação
+          </button>
         </div>
-        <button type="button" className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium">
-          Abrir solicitação
-        </button>
       </CardHeader>
       <CardContent className="p-0">
         <table className="w-full text-sm">
-          <thead className="bg-slate-50 border-b text-xs uppercase text-muted-foreground">
+          <thead className="bg-[#09090b] text-zinc-500 text-xs uppercase tracking-widest">
             <tr>
-              <th className="py-3 px-6">Demanda</th>
-              <th className="py-3 px-6">Canal anterior</th>
-              <th className="py-3 px-6">Responsável</th>
-              <th className="py-3 px-6">Prazo</th>
-              <th className="py-3 px-6">Status</th>
+              <th className="py-4 px-6 border-b border-[#27272a]">Demanda</th>
+              <th className="py-4 px-6 border-b border-[#27272a]">Canal anterior</th>
+              <th className="py-4 px-6 border-b border-[#27272a]">Responsável</th>
+              <th className="py-4 px-6 border-b border-[#27272a]">Prazo</th>
+              <th className="py-4 px-6 border-b border-[#27272a]">Status</th>
             </tr>
           </thead>
           <tbody>
             {mockConsultoriaInterna.map((c) => (
-              <tr key={c.id} className="border-b hover:bg-slate-50/50">
-                <td className="py-4 px-6">
-                  <p className="font-medium text-slate-900">{c.titulo}</p>
-                  <p className="text-xs text-muted-foreground">{c.solicitante}</p>
+              <tr key={c.id} className="hover:bg-zinc-800/30 transition-colors">
+                <td className="py-4 px-6 border-b border-[#27272a]">
+                  <p className="font-semibold text-[#e7e5e4]">{c.titulo}</p>
+                  <p className="text-xs text-zinc-600 mt-0.5">{c.solicitante}</p>
                 </td>
-                <td className="py-4 px-6 text-slate-600">{c.canalAnterior}</td>
-                <td className="py-4 px-6 text-slate-700">{c.responsavel}</td>
-                <td className="py-4 px-6 font-mono text-xs">{c.prazo}</td>
-                <td className="py-4 px-6">
-                  <span
-                    className={`text-xs font-semibold px-2 py-1 rounded-md ${
-                      c.status === 'novo' ? 'bg-blue-100 text-blue-800' : 'bg-amber-100 text-amber-800'
-                    }`}
-                  >
-                    {c.status === 'novo' ? 'Novo' : 'Em andamento'}
-                  </span>
+                <td className="py-4 px-6 border-b border-[#27272a] text-zinc-600 text-xs">{c.canalAnterior}</td>
+                <td className="py-4 px-6 border-b border-[#27272a] text-zinc-400">{c.responsavel}</td>
+                <td className="py-4 px-6 border-b border-[#27272a] font-mono text-xs text-zinc-600">{c.prazo}</td>
+                <td className="py-4 px-6 border-b border-[#27272a]">
+                  <StatusPill status={c.status} />
                 </td>
               </tr>
             ))}

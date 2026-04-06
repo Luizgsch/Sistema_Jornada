@@ -80,7 +80,15 @@ export function canAccessSGPage(tipo: TipoUsuario, page: string): boolean {
   return false;
 }
 
-export function canAccessHRCorePage(_tipo: TipoUsuario, _page: string): boolean {
+/** Pages only accessible to admin/gestor roles within HR Core. */
+const HR_ADMIN_ONLY_PAGES = new Set([
+  'relatorios',
+]);
+
+export function canAccessHRCorePage(tipo: TipoUsuario, page: string): boolean {
+  if (HR_ADMIN_ONLY_PAGES.has(page)) {
+    return tipo === 'admin' || tipo === 'gestor';
+  }
   return true;
 }
 

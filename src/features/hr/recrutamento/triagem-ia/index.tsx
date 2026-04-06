@@ -99,7 +99,7 @@ export default function TriagemIAPage() {
         <div className="flex items-center gap-2">
           <button 
             onClick={() => setShowUpload(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors "
           >
             <Upload size={18} />
             Enviar Currículos
@@ -108,53 +108,53 @@ export default function TriagemIAPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">
-        <Card className="border-none shadow-sm">
+        <Card className="border-none ">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-slate-50 text-primary">
+              <div className="p-3 rounded-2xl bg-[#09090b] text-primary">
                 <FileText size={24} />
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Recebidos</p>
+                <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider">Total Recebidos</p>
                 <h4 className="text-2xl font-black">{mockCurriculos.length}</h4>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm">
+        <Card className="border-none ">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-slate-50 text-emerald-500">
+              <div className="p-3 rounded-2xl bg-[#09090b] text-emerald-500">
                 <CheckCircle size={24} />
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Alta Compatibilidade</p>
+                <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider">Alta Compatibilidade</p>
                 <h4 className="text-2xl font-black">{mockCurriculos.filter(c => c.score >= 80).length}</h4>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm">
+        <Card className="border-none ">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-slate-50 text-amber-500">
+              <div className="p-3 rounded-2xl bg-[#09090b] text-amber-500">
                 <Brain size={24} />
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Parciais</p>
+                <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider">Parciais</p>
                 <h4 className="text-2xl font-black">{mockCurriculos.filter(c => c.score >= 60 && c.score < 80).length}</h4>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm">
+        <Card className="border-none ">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-slate-50 text-rose-500">
+              <div className="p-3 rounded-2xl bg-[#09090b] text-rose-500">
                 <XCircle size={24} />
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Baixa Compatibilidade</p>
+                <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider">Baixa Compatibilidade</p>
                 <h4 className="text-2xl font-black">{mockCurriculos.filter(c => c.score < 60).length}</h4>
               </div>
             </div>
@@ -170,7 +170,7 @@ export default function TriagemIAPage() {
         <select 
           value={vagaSelecionada}
           onChange={(e) => setVagaSelecionada(e.target.value)}
-          className="h-10 px-4 rounded-lg border border-input bg-white font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 w-full sm:w-auto min-w-[200px]"
+          className="h-10 px-4 rounded-lg border border-input bg-[#18181b] font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 w-full sm:w-auto min-w-[200px]"
         >
           <option value="VAG-001">Dev Backend Senior - VAG-001</option>
           <option value="VAG-002">Analista de Dados Pleno - VAG-002</option>
@@ -190,11 +190,11 @@ export default function TriagemIAPage() {
               />
             </div>
             <div className="flex items-center gap-2">
-              <button className="inline-flex items-center gap-2 h-10 px-3 border border-input rounded-md text-sm font-medium hover:bg-slate-50">
+              <button className="inline-flex items-center gap-2 h-10 px-3 border border-input rounded-md text-sm font-medium hover:bg-[#09090b]">
                 <Zap size={16} />
                 Processar Todos
               </button>
-              <button className="inline-flex items-center gap-2 h-10 px-3 border border-input rounded-md text-sm font-medium hover:bg-slate-50">
+              <button className="inline-flex items-center gap-2 h-10 px-3 border border-input rounded-md text-sm font-medium hover:bg-[#09090b]">
                 <Download size={16} />
                 Exportar
               </button>
@@ -204,7 +204,7 @@ export default function TriagemIAPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm whitespace-nowrap">
-              <thead className="bg-slate-50 border-y border-slate-200">
+              <thead className="bg-[#09090b] border-y border-[#27272a]">
                 <tr className="text-muted-foreground font-medium">
                   <th className="py-3 px-6">Candidato</th>
                   <th className="py-3 px-6">Currículo</th>
@@ -217,23 +217,23 @@ export default function TriagemIAPage() {
               </thead>
               <tbody>
                 {mockCurriculos.map((curriculo) => (
-                  <tr key={curriculo.id} className="border-b transition-colors hover:bg-slate-50/50 group">
+                  <tr key={curriculo.id} className="border-b transition-colors hover:bg-zinc-800/20 group">
                     <td className="py-4 px-6">
                       <div className="flex flex-col">
-                        <span className="font-bold text-slate-900">{curriculo.nome}</span>
+                        <span className="font-bold text-[#e7e5e4]">{curriculo.nome}</span>
                         <span className="text-[11px] text-muted-foreground">{curriculo.experiencia} • {curriculo.formacao}</span>
                       </div>
                     </td>
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-2">
-                        <FileText size={14} className="text-slate-400" />
+                        <FileText size={14} className="text-zinc-600" />
                         <span className="text-xs">{curriculo.cargo}</span>
                       </div>
                     </td>
                     <td className="py-4 px-6 font-mono text-xs text-primary">{curriculo.vagaId}</td>
                     <td className="py-4 px-6 text-center">
                       <div className="flex items-center justify-center gap-2">
-                        <div className={`w-12 h-2 rounded-full bg-slate-200 overflow-hidden`}>
+                        <div className={`w-12 h-2 rounded-full bg-zinc-700 overflow-hidden`}>
                           <div 
                             className={`h-full ${getScoreBg(curriculo.score)}`} 
                             style={{ width: `${curriculo.score}%` }}
@@ -259,7 +259,7 @@ export default function TriagemIAPage() {
                     <td className="py-4 px-6 text-center">
                       <button 
                         onClick={() => setSelectedCurriculo(curriculo)}
-                        className="p-2 hover:bg-slate-100 rounded-lg text-slate-600 transition-colors"
+                        className="p-2 hover:bg-zinc-800 rounded-lg text-zinc-400 transition-colors"
                         title="Ver Detalhes"
                       >
                         <Eye size={16} />
@@ -281,17 +281,17 @@ export default function TriagemIAPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedCurriculo(null)}
-              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             />
             <motion.div 
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-3xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+              className="relative w-full max-w-3xl bg-[#18181b] rounded-2xl  overflow-hidden flex flex-col max-h-[90vh]"
             >
-              <div className="p-6 border-b flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-50">
+              <div className="p-6 border-b flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#09090b]">
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-slate-900 rounded-2xl flex items-center justify-center text-white text-xl font-bold shrink-0">
+                  <div className="w-14 h-14 bg-[#09090b] rounded-2xl flex items-center justify-center text-white text-xl font-bold shrink-0">
                     {selectedCurriculo.nome.split(' ').map((n: string) => n[0]).join('')}
                   </div>
                   <div>
@@ -299,17 +299,17 @@ export default function TriagemIAPage() {
                     <p className="text-sm text-muted-foreground">{selectedCurriculo.cargo}</p>
                   </div>
                 </div>
-                <button onClick={() => setSelectedCurriculo(null)} className="p-2 hover:bg-slate-200 rounded-full transition-colors self-end sm:self-auto">
+                <button onClick={() => setSelectedCurriculo(null)} className="p-2 hover:bg-zinc-700 rounded-full transition-colors self-end sm:self-auto">
                   <Upload className="rotate-45" size={20} />
                 </button>
               </div>
               
               <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl">
+                <div className="flex items-center justify-between p-4 bg-[#09090b] rounded-xl">
                   <div className="flex items-center gap-3">
                     <Brain size={24} className="text-primary" />
                     <div>
-                      <p className="text-sm font-bold text-slate-600">Score de Compatibilidade</p>
+                      <p className="text-sm font-bold text-zinc-400">Score de Compatibilidade</p>
                       <p className="text-xs text-muted-foreground">Baseado em competências e requisitos</p>
                     </div>
                   </div>
@@ -353,8 +353,8 @@ export default function TriagemIAPage() {
                   </div>
                 </div>
 
-                <div className="p-4 bg-slate-50 rounded-xl overflow-x-auto">
-                  <h4 className="text-sm font-bold text-slate-700 mb-3">Informações do Candidato</h4>
+                <div className="p-4 bg-[#09090b] rounded-xl overflow-x-auto">
+                  <h4 className="text-sm font-bold text-zinc-300 mb-3">Informações do Candidato</h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 text-sm min-w-[200px]">
                     <div>
                       <span className="text-muted-foreground">E-mail:</span>
@@ -376,14 +376,14 @@ export default function TriagemIAPage() {
                 </div>
               </div>
 
-              <div className="p-6 border-t bg-slate-50 flex justify-end gap-3">
+              <div className="p-6 border-t bg-[#09090b] flex justify-end gap-3">
                 <button 
                   onClick={() => setSelectedCurriculo(null)}
-                  className="px-6 py-2 border rounded-xl font-bold hover:bg-white transition-colors"
+                  className="px-6 py-2 border rounded-xl font-bold hover:bg-[#18181b] transition-colors"
                 >
                   Fechar
                 </button>
-                <button className="px-6 py-2 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20">
+                <button className="px-6 py-2 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all  ">
                   Avançar para Entrevista
                 </button>
               </div>
@@ -400,44 +400,44 @@ export default function TriagemIAPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowUpload(false)}
-              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             />
             <motion.div 
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden"
+              className="relative w-full max-w-md bg-[#18181b] rounded-2xl  overflow-hidden"
             >
-              <div className="p-6 border-b bg-slate-50">
+              <div className="p-6 border-b bg-[#09090b]">
                 <h2 className="text-xl font-bold">Enviar Currículos</h2>
                 <p className="text-sm text-muted-foreground">Selecione uma vaga para análise</p>
               </div>
               
               <div className="p-6 space-y-4">
                 <div>
-                  <label className="text-xs font-bold text-slate-500 uppercase">Vaga Target</label>
-                  <select className="w-full mt-1 h-11 px-4 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20 bg-white">
+                  <label className="text-xs font-bold text-zinc-500 uppercase">Vaga Target</label>
+                  <select className="w-full mt-1 h-11 px-4 rounded-xl border border-[#27272a] focus:outline-none focus:ring-2 focus:ring-primary/20 bg-[#18181b]">
                     <option>Dev Backend Senior - VAG-001</option>
                     <option>Analista de Dados Pleno - VAG-002</option>
                   </select>
                 </div>
                 
-                <div className="border-2 border-dashed border-slate-200 rounded-xl p-8 text-center hover:border-primary/50 transition-colors cursor-pointer">
-                  <Upload size={40} className="mx-auto text-slate-400 mb-4" />
-                  <p className="font-medium text-slate-700">Clique ou arraste arquivos aqui</p>
+                <div className="border-2 border-dashed border-[#27272a] rounded-xl p-8 text-center hover:border-primary/50 transition-colors cursor-pointer">
+                  <Upload size={40} className="mx-auto text-zinc-600 mb-4" />
+                  <p className="font-medium text-zinc-300">Clique ou arraste arquivos aqui</p>
                   <p className="text-sm text-muted-foreground mt-1">PDF, DOC ou DOCX (max 5MB)</p>
                 </div>
 
-                <div className="text-sm text-muted-foreground bg-slate-50 p-3 rounded-lg">
+                <div className="text-sm text-muted-foreground bg-[#09090b] p-3 rounded-lg">
                   <Brain size={14} className="inline mr-2" />
                   A IA analisará automaticamente competências, experiência e formação.
                 </div>
               </div>
 
-              <div className="p-6 border-t bg-slate-50 flex justify-end gap-3">
+              <div className="p-6 border-t bg-[#09090b] flex justify-end gap-3">
                 <button 
                   onClick={() => setShowUpload(false)}
-                  className="px-6 py-2 border rounded-xl font-bold hover:bg-white transition-colors"
+                  className="px-6 py-2 border rounded-xl font-bold hover:bg-[#18181b] transition-colors"
                 >
                   Cancelar
                 </button>

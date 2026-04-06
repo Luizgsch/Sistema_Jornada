@@ -40,7 +40,7 @@ export default function CertificadosPage() {
           <h1 className="text-3xl font-bold tracking-tight">Gestão de Certificados</h1>
           <p className="text-muted-foreground mt-1">Acompanhamento e rastreamento de qualificações profissionais.</p>
         </div>
-        <button className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors shadow-sm">
+        <button className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors ">
           <Plus size={18} />
           Registrar Certificado
         </button>
@@ -64,7 +64,7 @@ export default function CertificadosPage() {
                 className="w-full pl-9 h-9 text-sm rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-primary/50"
               />
             </div>
-            <button className="h-9 px-3 border rounded-md text-sm font-medium hover:bg-slate-50 flex items-center gap-2">
+            <button className="h-9 px-3 border rounded-md text-sm font-medium hover:bg-[#09090b] flex items-center gap-2">
               <Filter size={14} />
               Filtros
             </button>
@@ -73,7 +73,7 @@ export default function CertificadosPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm whitespace-nowrap">
-              <thead className="bg-slate-50 border-b">
+              <thead className="bg-[#09090b] border-b">
                 <tr className="text-muted-foreground font-medium text-[11px] uppercase tracking-wider">
                   <th className="py-4 px-6">Colaborador</th>
                   <th className="py-4 px-6">Curso / Certificação</th>
@@ -85,17 +85,17 @@ export default function CertificadosPage() {
               </thead>
               <tbody>
                 {mockCertificados.map((cert) => (
-                  <tr key={cert.id} className="border-b hover:bg-slate-50/50 transition-colors group">
+                  <tr key={cert.id} className="border-b hover:bg-zinc-800/20 transition-colors group">
                     <td className="py-4 px-6">
                       <div className="flex flex-col">
-                        <span className="font-bold text-slate-900">{cert.colaborador}</span>
-                        <span className="text-[10px] font-mono text-slate-500">{cert.matricula} • {cert.setor}</span>
+                        <span className="font-bold text-[#e7e5e4]">{cert.colaborador}</span>
+                        <span className="text-[10px] font-mono text-zinc-500">{cert.matricula} • {cert.setor}</span>
                       </div>
                     </td>
-                    <td className="py-4 px-6 font-medium text-slate-800">{cert.curso}</td>
-                    <td className="py-4 px-6 text-center text-slate-500">{cert.conclusao}</td>
+                    <td className="py-4 px-6 font-medium text-zinc-200">{cert.curso}</td>
+                    <td className="py-4 px-6 text-center text-zinc-500">{cert.conclusao}</td>
                     <td className="py-4 px-6 text-center">
-                       <span className={`font-medium ${cert.status === 'vencendo' ? 'text-amber-600' : cert.status === 'vencido' ? 'text-rose-600' : 'text-slate-600'}`}>
+                       <span className={`font-medium ${cert.status === 'vencendo' ? 'text-amber-600' : cert.status === 'vencido' ? 'text-rose-600' : 'text-zinc-400'}`}>
                          {cert.validade}
                        </span>
                     </td>
@@ -130,16 +130,16 @@ export default function CertificadosPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedColab(null)}
-              className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100]"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100]"
             />
             <motion.div 
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 bottom-0 w-full max-w-xl bg-white shadow-2xl z-[110] flex flex-col"
+              className="fixed right-0 top-0 bottom-0 w-full max-w-xl bg-[#18181b]  z-[110] flex flex-col"
             >
-              <div className="p-8 border-b bg-slate-900 text-white flex items-start justify-between">
+              <div className="p-8 border-b bg-[#09090b] text-white flex items-start justify-between">
                 <div>
                   <h2 className="text-2xl font-bold flex items-center gap-3">
                     <GraduationCap className="text-primary" size={28} />
@@ -151,26 +151,26 @@ export default function CertificadosPage() {
                     </div>
                     <div>
                        <p className="font-bold text-lg leading-tight">{selectedColab.nome}</p>
-                       <p className="text-xs text-slate-400 font-mono mt-0.5">{selectedColab.matricula} • {selectedColab.setor}</p>
+                       <p className="text-xs text-zinc-600 font-mono mt-0.5">{selectedColab.matricula} • {selectedColab.setor}</p>
                     </div>
                   </div>
                 </div>
-                <button onClick={() => setSelectedColab(null)} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                <button onClick={() => setSelectedColab(null)} className="p-2 hover:bg-[#18181b]/10 rounded-full transition-colors">
                   <X size={24} />
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-8 space-y-8 bg-slate-50/50">
+              <div className="flex-1 overflow-y-auto p-8 space-y-8 bg-zinc-800/20">
                 <Section title="Certificados Obtidos">
                   <div className="space-y-3">
                     {selectedColab.certificados.map((cert: any, i: number) => (
-                      <div key={i} className="flex items-center gap-4 p-4 rounded-xl border bg-white shadow-sm">
+                      <div key={i} className="flex items-center gap-4 p-4 rounded-xl border bg-[#18181b] ">
                          <div className={`p-3 rounded-xl flex-shrink-0 ${cert.status === 'vencido' ? 'bg-rose-50 text-rose-500' : 'bg-emerald-50 text-emerald-500'}`}>
                            {cert.status === 'vencido' ? <XOctagon size={24} /> : <Award size={24} />}
                          </div>
                          <div className="flex-1">
-                            <h4 className="font-bold text-sm text-slate-900">{cert.curso}</h4>
-                            <div className="flex items-center gap-4 mt-1 text-xs text-slate-500">
+                            <h4 className="font-bold text-sm text-[#e7e5e4]">{cert.curso}</h4>
+                            <div className="flex items-center gap-4 mt-1 text-xs text-zinc-500">
                                <span className="flex items-center gap-1"><Calendar size={12} /> Concluído: {cert.conclusao}</span>
                                <span className="flex items-center gap-1"><AlertTriangle size={12} /> Validade: {cert.validade}</span>
                             </div>
@@ -202,12 +202,12 @@ export default function CertificadosPage() {
                 <Section title="Histórico de Cursos">
                   <div className="space-y-3">
                     {selectedColab.cursos.map((curso: any, i: number) => (
-                      <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-white border border-slate-100">
+                      <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-[#18181b] border border-[#27272a]">
                          <div className="flex items-center gap-3">
                             <CheckCircle2 size={16} className="text-emerald-500" />
-                            <span className="text-sm font-medium text-slate-700">{curso.nome}</span>
+                            <span className="text-sm font-medium text-zinc-300">{curso.nome}</span>
                          </div>
-                         <span className="text-xs text-slate-400">{curso.duracao}</span>
+                         <span className="text-xs text-zinc-600">{curso.duracao}</span>
                       </div>
                     ))}
                   </div>
@@ -223,15 +223,15 @@ export default function CertificadosPage() {
 
 function MetricCard({ title, value, icon: Icon, color }: any) {
   return (
-    <Card className="border-none shadow-sm h-full">
+    <Card className="border-none  h-full">
       <CardContent className="pt-6">
         <div className="flex items-center gap-4">
-           <div className={`p-3 rounded-2xl bg-slate-50 ${color}`}>
+           <div className={`p-3 rounded-2xl bg-[#09090b] ${color}`}>
              <Icon size={24} />
            </div>
            <div>
               <p className="text-xs font-bold text-muted-foreground uppercase">{title}</p>
-              <h4 className="text-2xl font-bold text-slate-900">{value}</h4>
+              <h4 className="text-2xl font-bold text-[#e7e5e4]">{value}</h4>
            </div>
         </div>
       </CardContent>
@@ -242,7 +242,7 @@ function MetricCard({ title, value, icon: Icon, color }: any) {
 function Section({ title, children }: any) {
   return (
     <div className="space-y-4">
-      <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 border-b pb-2">{title}</h3>
+      <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-600 border-b pb-2">{title}</h3>
       {children}
     </div>
   );

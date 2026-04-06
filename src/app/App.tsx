@@ -35,6 +35,7 @@ import { PageNavProvider } from '@/features/navigation/PageNavContext'
 import { getSistemasPorTipo, type Usuario } from '@/infrastructure/mock/mockLogin'
 import { AuthProvider, useAuth } from '@/features/auth/AuthContext'
 import { type SistemaAtual, getFirstAllowedPage } from '@/domain/auth/roles'
+import { ThemeProvider } from '@/features/theme/ThemeContext'
 
 type LoggedInAppProps = {
   activePage: string;
@@ -173,13 +174,16 @@ function App() {
 
   if (!isLoggedIn || !usuario) {
     return (
-      <ToastProvider>
-        <LoginPage onLogin={handleLogin} />
-      </ToastProvider>
+      <ThemeProvider>
+        <ToastProvider>
+          <LoginPage onLogin={handleLogin} />
+        </ToastProvider>
+      </ThemeProvider>
     );
   }
 
   return (
+    <ThemeProvider>
     <ToastProvider>
       <AuthProvider usuario={usuario}>
         <LoggedInApp
@@ -195,6 +199,7 @@ function App() {
         />
       </AuthProvider>
     </ToastProvider>
+    </ThemeProvider>
   );
 }
 

@@ -39,7 +39,7 @@ export default function UniformesPage() {
                 className="w-full pl-9 h-9 text-sm rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-primary"
               />
             </div>
-            <button className="inline-flex items-center gap-2 h-9 px-3 border rounded-md text-sm font-medium hover:bg-slate-50">
+            <button className="inline-flex items-center gap-2 h-9 px-3 border rounded-md text-sm font-medium hover:bg-[#09090b]">
               <Filter size={14} />
               Filtrar
             </button>
@@ -48,7 +48,7 @@ export default function UniformesPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm whitespace-nowrap">
-              <thead className="bg-slate-50 border-b">
+              <thead className="bg-[#09090b] border-b">
                 <tr className="text-muted-foreground font-medium text-[10px] uppercase tracking-wider">
                   <th className="py-4 px-6">Colaborador</th>
                   <th className="py-4 px-6 text-center">Camisa</th>
@@ -60,27 +60,27 @@ export default function UniformesPage() {
               </thead>
               <tbody>
                 {mockOperacoesColaboradores.map((colab) => (
-                  <tr key={colab.matricula} className="border-b hover:bg-slate-50/50 transition-colors">
+                  <tr key={colab.matricula} className="border-b hover:bg-zinc-800/20 transition-colors">
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400">
+                        <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center text-zinc-600">
                           <Shirt size={16} />
                         </div>
                         <div className="flex flex-col">
-                           <span className="font-bold text-slate-900">{colab.nome}</span>
-                           <span className="text-[10px] text-slate-500">{colab.setor}</span>
+                           <span className="font-bold text-[#e7e5e4]">{colab.nome}</span>
+                           <span className="text-[10px] text-zinc-500">{colab.setor}</span>
                         </div>
                       </div>
                     </td>
-                    <td className="py-4 px-6 text-center font-bold text-slate-700">{colab.uniforme.camisa}</td>
-                    <td className="py-4 px-6 text-center font-bold text-slate-700">{colab.uniforme.calca}</td>
-                    <td className="py-4 px-6 text-center font-bold text-slate-700">{colab.uniforme.calcado}</td>
+                    <td className="py-4 px-6 text-center font-bold text-zinc-300">{colab.uniforme.camisa}</td>
+                    <td className="py-4 px-6 text-center font-bold text-zinc-300">{colab.uniforme.calca}</td>
+                    <td className="py-4 px-6 text-center font-bold text-zinc-300">{colab.uniforme.calcado}</td>
                     <td className="py-4 px-6 text-center">
                        <StatusBadge status={colab.uniforme.status as any} />
                     </td>
                     <td className="py-4 px-6">
                       <div className="flex items-center justify-end gap-2">
-                        <button className="p-2 hover:bg-slate-100 rounded-lg text-slate-400 transition-colors" title="Editar Tamanhos">
+                        <button className="p-2 hover:bg-zinc-800 rounded-lg text-zinc-600 transition-colors" title="Editar Tamanhos">
                           <Edit size={16} />
                         </button>
                         <button className="h-8 px-3 text-xs font-bold bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
@@ -97,7 +97,7 @@ export default function UniformesPage() {
       </Card>
 
       <div className="grid gap-6 md:grid-cols-2">
-         <Card className="border-dashed border-2 bg-slate-50 hover:bg-slate-100/50 transition-colors cursor-pointer">
+         <Card className="border-dashed border-2 bg-[#09090b] hover:bg-zinc-800/30 transition-colors cursor-pointer">
             <CardContent className="p-8 flex flex-col items-center justify-center text-center">
               <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-4">
                 <Package size={24} />
@@ -108,7 +108,7 @@ export default function UniformesPage() {
               </p>
             </CardContent>
          </Card>
-         <Card className="border-dashed border-2 bg-slate-50 hover:bg-slate-100/50 transition-colors cursor-pointer">
+         <Card className="border-dashed border-2 bg-[#09090b] hover:bg-zinc-800/30 transition-colors cursor-pointer">
             <CardContent className="p-8 flex flex-col items-center justify-center text-center">
               <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4">
                 <CheckCircle size={24} />
@@ -126,17 +126,17 @@ export default function UniformesPage() {
 
 function UniformStatCard({ title, value, icon: Icon, color }: any) {
   return (
-    <Card className="border-none shadow-sm h-full">
+    <Card className="border-none  h-full">
       <CardContent className="pt-6">
         <div className="flex items-center justify-between">
-          <div className={`p-2 rounded-xl bg-slate-50 ${color}`}>
+          <div className={`p-2 rounded-xl bg-[#09090b] ${color}`}>
             <Icon size={20} />
           </div>
-          <span className="text-xs font-bold text-slate-400">Total</span>
+          <span className="text-xs font-bold text-zinc-600">Total</span>
         </div>
         <div className="mt-4">
           <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{title}</p>
-          <span className="text-2xl font-bold text-slate-900">{value} unidades</span>
+          <span className="text-2xl font-bold text-[#e7e5e4]">{value} unidades</span>
         </div>
       </CardContent>
     </Card>

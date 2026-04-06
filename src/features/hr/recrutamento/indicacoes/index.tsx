@@ -38,7 +38,7 @@ export default function IndicacoesPage() {
               />
             </div>
             <div className="flex items-center gap-2">
-              <button className="inline-flex items-center gap-2 h-10 px-3 border border-input rounded-md text-sm font-medium hover:bg-slate-50 transition-colors">
+              <button className="inline-flex items-center gap-2 h-10 px-3 border border-input rounded-md text-sm font-medium hover:bg-[#09090b] transition-colors">
                 <Filter size={16} />
                 Filtrar
               </button>
@@ -48,7 +48,7 @@ export default function IndicacoesPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm whitespace-nowrap">
-              <thead className="bg-slate-50 border-y border-slate-200">
+              <thead className="bg-[#09090b] border-y border-[#27272a]">
                 <tr className="text-muted-foreground font-medium">
                   <th className="py-3 px-6">Candidato</th>
                   <th className="py-3 px-6">Vaga Indicada</th>
@@ -61,17 +61,17 @@ export default function IndicacoesPage() {
               </thead>
               <tbody>
                 {mockIndicacoes.map((ind) => (
-                  <tr key={ind.id} className="border-b transition-colors hover:bg-slate-50/50">
-                    <td className="py-4 px-6 font-bold text-slate-900">{ind.candidato}</td>
+                  <tr key={ind.id} className="border-b transition-colors hover:bg-zinc-800/20">
+                    <td className="py-4 px-6 font-bold text-[#e7e5e4]">{ind.candidato}</td>
                     <td className="py-4 px-6 font-medium text-primary">{ind.cargo}</td>
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold">{ind.quemIndicou.charAt(0)}</div>
+                        <div className="w-6 h-6 rounded-full bg-zinc-700 flex items-center justify-center text-[10px] font-bold">{ind.quemIndicou.charAt(0)}</div>
                         <span>{ind.quemIndicou}</span>
                       </div>
                     </td>
-                    <td className="py-4 px-6 text-slate-600">{ind.setor}</td>
-                    <td className="py-4 px-6 text-slate-500">{ind.data}</td>
+                    <td className="py-4 px-6 text-zinc-400">{ind.setor}</td>
+                    <td className="py-4 px-6 text-zinc-500">{ind.data}</td>
                     <td className="py-4 px-6">
                       <StatusBadge status={ind.status as any} />
                     </td>
@@ -103,7 +103,7 @@ function StatCard({ title, value, icon: Icon, color }: any) {
             <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{title}</p>
             <h4 className="text-2xl font-bold mt-1">{value}</h4>
           </div>
-          <div className={`p-3 bg-slate-100 rounded-xl ${color || "text-slate-600"}`}>
+          <div className={`p-3 bg-zinc-800 rounded-xl ${color || "text-zinc-400"}`}>
             <Icon size={20} />
           </div>
         </div>

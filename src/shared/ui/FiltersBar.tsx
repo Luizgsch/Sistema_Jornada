@@ -17,27 +17,27 @@ export const FiltersBar: FC<FiltersBarProps> = ({
   children
 }) => {
   return (
-    <div className="w-full bg-white p-4 border border-slate-200 rounded-xl mb-6 shadow-sm shadow-slate-200/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="w-full bg-white dark:bg-[#18181b] p-4 border border-zinc-200 dark:border-[#27272a] rounded-xl mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors duration-300">
       <div className="relative w-full sm:max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-        <input 
-          type="text" 
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 dark:text-zinc-600" />
+        <input
+          type="text"
           placeholder={searchPlaceholder}
           onChange={(e) => onSearch?.(e.target.value)}
-          className="w-full pl-10 h-10 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[14px] font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-shadow"
+          className="w-full pl-10 h-10 rounded-lg border border-zinc-200 dark:border-[#27272a] bg-zinc-50 dark:bg-[#09090b] px-3 py-2 text-sm font-medium text-zinc-800 dark:text-[#e7e5e4] placeholder:text-zinc-400 dark:placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary/30 transition-all"
         />
       </div>
       <div className="flex items-center gap-3 shrink-0">
         {children}
-        <button 
+        <button
           onClick={onFilterClick}
-          className="inline-flex items-center justify-center gap-2 h-10 px-4 bg-white border border-slate-200 text-slate-700 rounded-lg text-[14px] font-semibold hover:bg-slate-50 transition-colors"
+          className="inline-flex items-center justify-center gap-2 h-10 px-4 bg-zinc-50 dark:bg-[#09090b] border border-zinc-200 dark:border-[#27272a] text-zinc-600 dark:text-zinc-400 rounded-lg text-sm font-semibold hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-800 dark:hover:text-zinc-300 transition-colors"
         >
-          <Filter size={16} className="text-slate-400" />
+          <Filter size={14} className="text-zinc-500 dark:text-zinc-600" />
           {filterLabel}
         </button>
-        <button className="inline-flex items-center justify-center p-2.5 bg-white border border-slate-200 text-slate-500 hover:text-slate-700 rounded-lg hover:bg-slate-50 transition-colors">
-           <ArrowUpDown size={18} />
+        <button className="inline-flex items-center justify-center p-2.5 bg-zinc-50 dark:bg-[#09090b] border border-zinc-200 dark:border-[#27272a] text-zinc-500 dark:text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-300 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+          <ArrowUpDown size={16} />
         </button>
       </div>
     </div>

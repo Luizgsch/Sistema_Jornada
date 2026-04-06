@@ -26,21 +26,21 @@ export default function QuadroEquipesPage() {
     <div className="space-y-8 pb-10 h-full flex flex-col">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shrink-0">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Quadro Operacional de Equipes</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-[#e7e5e4] dark:text-white">Quadro Operacional de Equipes</h1>
           <p className="text-muted-foreground mt-1">Visão global das escalas de trabalho, alocação e vagas abertas.</p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white p-4 border border-slate-200 rounded-xl shadow-sm flex flex-col sm:flex-row gap-4 shrink-0">
-        <div className="flex items-center gap-2 text-slate-500 font-medium text-sm">
+      <div className="bg-[#18181b] p-4 border border-[#27272a] rounded-xl  flex flex-col sm:flex-row gap-4 shrink-0">
+        <div className="flex items-center gap-2 text-zinc-500 font-medium text-sm">
           <Filter size={18} /> Filtros:
         </div>
         
         <div className="flex items-center gap-2">
-          <span className="text-sm text-slate-500">Setor:</span>
+          <span className="text-sm text-zinc-500">Setor:</span>
           <select 
-            className="border-slate-200 rounded-lg text-sm px-3 py-1.5 focus:ring-primary focus:border-primary"
+            className="border-[#27272a] rounded-lg text-sm px-3 py-1.5 focus:ring-primary focus:border-primary"
             value={setorFiltro}
             onChange={(e) => setSetorFiltro(e.target.value)}
           >
@@ -49,9 +49,9 @@ export default function QuadroEquipesPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-sm text-slate-500">Turno:</span>
+          <span className="text-sm text-zinc-500">Turno:</span>
           <select 
-            className="border-slate-200 rounded-lg text-sm px-3 py-1.5 focus:ring-primary focus:border-primary"
+            className="border-[#27272a] rounded-lg text-sm px-3 py-1.5 focus:ring-primary focus:border-primary"
             value={turnoFiltro}
             onChange={(e) => setTurnoFiltro(e.target.value)}
           >
@@ -68,9 +68,9 @@ export default function QuadroEquipesPage() {
             const vagas = members.filter(m => m.isVagaAberta).length;
 
             return (
-              <div key={setor} className="w-80 flex flex-col bg-slate-100/50 rounded-2xl border border-slate-200/60 overflow-hidden">
-                <div className="p-4 bg-slate-100 border-b border-slate-200 flex items-center justify-between sticky top-0 z-10">
-                  <h3 className="font-bold text-slate-800 tracking-tight">{setor}</h3>
+              <div key={setor} className="w-80 flex flex-col bg-zinc-800/30 rounded-2xl border border-[#27272a] overflow-hidden">
+                <div className="p-4 bg-zinc-800 border-b border-[#27272a] flex items-center justify-between sticky top-0 z-10">
+                  <h3 className="font-bold text-zinc-200 tracking-tight">{setor}</h3>
                   <div className="flex gap-2">
                     <span className="px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-xs font-bold" title="Equipe Ativa">
                       {ativos}
@@ -88,15 +88,15 @@ export default function QuadroEquipesPage() {
                     <Card 
                       key={member.id} 
                       className={cn(
-                        "shadow-sm transition-all hover:shadow-md cursor-pointer border-l-4",
+                        " transition-all hover: cursor-pointer border-l-4",
                         member.isVagaAberta 
                           ? "border-l-amber-400 bg-amber-50/30" 
-                          : "border-l-primary bg-white hover:-translate-y-0.5"
+                          : "border-l-primary bg-[#18181b] hover:-translate-y-0.5"
                       )}
                     >
                       <CardContent className="p-4">
                         <div className="flex justify-between items-start mb-2">
-                          <div className={cn("font-bold text-sm", member.isVagaAberta ? "text-amber-800" : "text-slate-900")}>
+                          <div className={cn("font-bold text-sm", member.isVagaAberta ? "text-amber-800" : "text-[#e7e5e4]")}>
                             {member.nome}
                           </div>
                           <div className={cn(
@@ -108,16 +108,16 @@ export default function QuadroEquipesPage() {
                         </div>
 
                         <div className="space-y-2 mt-3">
-                          <div className="flex items-center justify-between text-xs text-slate-500">
+                          <div className="flex items-center justify-between text-xs text-zinc-500">
                             <span className="flex items-center gap-1.5">
-                              <Briefcase size={12} className="text-slate-400" /> 
+                              <Briefcase size={12} className="text-zinc-600" /> 
                               <span className="truncate max-w-[140px]">{member.cargo}</span>
                             </span>
                           </div>
                           
-                          <div className="flex items-center justify-between text-xs text-slate-500">
+                          <div className="flex items-center justify-between text-xs text-zinc-500">
                             <span className="flex items-center gap-1.5">
-                              <Clock size={12} className="text-slate-400" /> 
+                              <Clock size={12} className="text-zinc-600" /> 
                               {member.turno}
                             </span>
                             
@@ -135,9 +135,9 @@ export default function QuadroEquipesPage() {
           })}
           
           {Object.keys(groupedBySetor).length === 0 && (
-            <div className="w-full flex flex-col items-center justify-center p-12 bg-white rounded-xl border border-dashed border-slate-300">
-              <LayoutGrid size={48} className="text-slate-300 mb-4" />
-              <p className="text-slate-500 font-medium">Nenhum colaborador ou vaga encontrada para estes filtros.</p>
+            <div className="w-full flex flex-col items-center justify-center p-12 bg-[#18181b] rounded-xl border border-dashed border-zinc-700">
+              <LayoutGrid size={48} className="text-zinc-400 mb-4" />
+              <p className="text-zinc-500 font-medium">Nenhum colaborador ou vaga encontrada para estes filtros.</p>
             </div>
           )}
         </div>

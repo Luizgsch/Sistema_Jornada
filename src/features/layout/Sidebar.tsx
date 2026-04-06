@@ -40,19 +40,33 @@ import {
 } from "@/domain/auth/roles";
 import { PosigrafLogo } from "@/shared/components/brand/PosigrafLogo";
 
+/** Roles that can access HR Core: rh, admin, gestor */
+type HRRole = 'rh' | 'admin' | 'gestor';
+
+interface MenuSubItem {
+  id: string;
+  label: string;
+  allowedRoles?: HRRole[];
+}
+
 interface MenuItem {
   id: string;
   icon: any;
   label: string;
-  subItems?: { id: string; label: string }[];
+  allowedRoles?: HRRole[];
+  subItems?: MenuSubItem[];
 }
 
+const ALL_HR: HRRole[] = ['rh', 'admin', 'gestor'];
+const ADMIN_ONLY: HRRole[] = ['admin', 'gestor'];
+
 const menuItemsHRCore: MenuItem[] = [
-  { id: "command-center", icon: LayoutDashboard, label: "Command Center" },
+  { id: "command-center", icon: LayoutDashboard, label: "Command Center", allowedRoles: ALL_HR },
   { 
     id: "recrutamento", 
     icon: Users, 
     label: "Recrutamento",
+    allowedRoles: ALL_HR,
     subItems: [
       { id: "recrutamento-dashboard", label: "Dashboard" },
       { id: "vagas", label: "Vagas" },
@@ -67,6 +81,7 @@ const menuItemsHRCore: MenuItem[] = [
     id: "admissoes", 
     icon: UserPlus, 
     label: "Admissões",
+    allowedRoles: ALL_HR,
     subItems: [
       { id: "dashboard-admissoes", label: "Dashboard" },
       { id: "documentos", label: "Documentos" },
@@ -78,6 +93,7 @@ const menuItemsHRCore: MenuItem[] = [
     id: "operacoes", 
     icon: Briefcase, 
     label: "Operações RH",
+    allowedRoles: ALL_HR,
     subItems: [
       { id: "colaboradores", label: "Colaboradores" },
       { id: "headcount", label: "Headcount & vagas" },
@@ -89,11 +105,12 @@ const menuItemsHRCore: MenuItem[] = [
       { id: "descricao-cargos", label: "Descrição de cargos" },
     ]
   },
-  { id: "comunicacao-interna", icon: MessageSquare, label: "Comunicação centralizada" },
+  { id: "comunicacao-interna", icon: MessageSquare, label: "Comunicação centralizada", allowedRoles: ALL_HR },
   { 
     id: "treinamentos", 
     icon: GraduationCap, 
     label: "Treinamentos",
+    allowedRoles: ALL_HR,
     subItems: [
       { id: "trilhas", label: "Trilhas" },
       { id: "cursos", label: "Cursos" },
@@ -104,9 +121,10 @@ const menuItemsHRCore: MenuItem[] = [
     id: "analytics", 
     icon: PieChart, 
     label: "Analytics",
+    allowedRoles: ADMIN_ONLY,
     subItems: [
-      { id: "indicadores", label: "Indicadores" },
-      { id: "relatorios", label: "Relatórios" },
+      { id: "indicadores", label: "Indicadores", allowedRoles: ALL_HR },
+      { id: "relatorios", label: "Relatórios", allowedRoles: ADMIN_ONLY },
     ]
   },
 ];
@@ -206,11 +224,23 @@ export function Sidebar({
     [usuario.tipo]
   );
 
-  const menuItems = useMemo(
+  const rawMenuItems = useMemo(
     () =>
       sistemaAtual === 'hr-core' ? menuItemsHRCore : sistemaAtual === 'dho' ? menuDHO : menuServicosGerais,
     [sistemaAtual, menuDHO, menuServicosGerais]
   );
+
+  const menuItems = useMemo(() => {
+    if (sistemaAtual !== 'hr-core') return rawMenuItems;
+    return rawMenuItems
+      .filter((item) => !item.allowedRoles || item.allowedRoles.includes(usuario.tipo as HRRole))
+      .map((item) => ({
+        ...item,
+        subItems: item.subItems?.filter(
+          (sub) => !sub.allowedRoles || sub.allowedRoles.includes(usuario.tipo as HRRole)
+        ),
+      }));
+  }, [rawMenuItems, sistemaAtual, usuario.tipo]);
 
   useEffect(() => {
     const parentIds: string[] = [];
@@ -243,32 +273,32 @@ export function Sidebar({
       initial={mobile ? { x: 0 } : { x: -280 }}
       animate={{ x: 0 }}
       className={cn(
-        "h-full bg-slate-950 text-white transition-all duration-300 z-50 flex flex-col",
+        "h-full bg-white dark:bg-[#09090b] border-r border-zinc-200 dark:border-[#27272a] transition-colors duration-300 z-50 flex flex-col",
         !mobile && "fixed left-0 top-0",
         collapsed && !mobile ? "w-20" : "w-72",
         className
       )}
     >
       {/* Seletor de Sistema */}
-      <div className="p-4 border-b border-slate-800">
+      <div className="p-4 border-b border-zinc-200 dark:border-[#27272a]">
         <div className="relative">
-          <button 
+          <button
             onClick={() => setMenuSeletorAberto(!menuSeletorAberto)}
-            className="flex items-center justify-between w-full p-3 bg-slate-800/50 hover:bg-slate-800 rounded-xl border border-slate-700 transition-all"
+            className="flex items-center justify-between w-full p-3 bg-zinc-100 dark:bg-zinc-800/40 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700 transition-all"
           >
             <div className="flex items-center gap-3">
               {sistemaAtual === 'hr-core' && <LayoutDashboard className="text-primary" size={20} />}
-              {sistemaAtual === 'dho' && <Building2 className="text-blue-400" size={20} />}
-              {sistemaAtual === 'servicos-gerais' && <Wrench className="text-amber-400" size={20} />}
-              <span className="font-bold text-white">{sistemaLabel}</span>
+              {sistemaAtual === 'dho' && <Building2 className="text-blue-500 dark:text-blue-400" size={20} />}
+              {sistemaAtual === 'servicos-gerais' && <Wrench className="text-amber-500 dark:text-amber-400" size={20} />}
+              <span className="font-bold text-zinc-800 dark:text-white">{sistemaLabel}</span>
             </div>
-            <ChevronDown className={cn("text-slate-400 transition-transform", menuSeletorAberto && "rotate-180")} size={18} />
+            <ChevronDown className={cn("text-zinc-400 dark:text-zinc-500 transition-transform", menuSeletorAberto && "rotate-180")} size={18} />
           </button>
-          
+
           {menuSeletorAberto && sistemasDisponiveis.length > 1 && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl z-50 overflow-hidden">
-              <div className="p-3 border-b border-slate-700">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Selecione o Sistema</p>
+            <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl z-50 overflow-hidden shadow-lg">
+              <div className="p-3 border-b border-zinc-200 dark:border-zinc-700">
+                <p className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Selecione o Sistema</p>
               </div>
               <div className="p-2">
                 {sistemasDisponiveis.map((sistema) => (
@@ -277,15 +307,15 @@ export function Sidebar({
                     onClick={() => toggleSistema(sistema.id as SistemaAtual)}
                     className={cn(
                       "flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-left transition-colors",
-                      sistemaAtual === sistema.id 
-                        ? "bg-primary/20 text-primary" 
-                        : "text-slate-300 hover:bg-slate-700"
+                      sistemaAtual === sistema.id
+                        ? "bg-primary/10 text-primary"
+                        : "text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700"
                     )}
                   >
                     <sistema.icon size={18} />
                     <div>
                       <p className="font-medium">{sistema.label}</p>
-                      <p className="text-xs text-slate-500">{sistema.descricao}</p>
+                      <p className="text-xs text-zinc-500 dark:text-zinc-600">{sistema.descricao}</p>
                     </div>
                   </button>
                 ))}
@@ -296,22 +326,24 @@ export function Sidebar({
       </div>
 
       {/* Marca + módulo ativo */}
-      <div className="flex items-center justify-between px-4 sm:px-6 py-4 min-h-[4.5rem] border-b border-slate-800">
+      <div className="flex items-center justify-between px-4 sm:px-6 py-4 min-h-[4.5rem] border-b border-zinc-200 dark:border-[#27272a]">
         {(!collapsed || mobile) && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="flex flex-col gap-1.5 min-w-0 w-full"
           >
-            <PosigrafLogo variant="full" inverted className="min-w-0" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-teal-400/90 truncate">
+            <PosigrafLogo variant="full" className="min-w-0 dark:hidden" />
+            <PosigrafLogo variant="full" inverted className="min-w-0 hidden dark:block" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-teal-600 dark:text-teal-400/90 truncate">
               {sistemaLabel}
             </span>
           </motion.div>
         )}
         {collapsed && !mobile && (
           <div className="flex justify-center w-full">
-            <PosigrafLogo variant="compact" inverted />
+            <PosigrafLogo variant="compact" className="dark:hidden" />
+            <PosigrafLogo variant="compact" inverted className="hidden dark:block" />
           </div>
         )}
       </div>
@@ -335,14 +367,14 @@ export function Sidebar({
                 className={cn(
                   "flex items-center justify-between w-full p-3 rounded-lg transition-all group",
                   isActive && !item.subItems
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" 
+                    ? "bg-primary text-white shadow-lg shadow-primary/20"
                     : item.subItems && isActive
-                    ? "text-white bg-slate-900"
-                    : "text-slate-400 hover:text-white hover:bg-slate-900"
+                    ? "text-zinc-800 dark:text-white bg-zinc-100 dark:bg-zinc-900/60"
+                    : "text-zinc-500 dark:text-zinc-500 hover:text-zinc-800 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900/60"
                 )}
               >
                 <div className="flex items-center gap-3">
-                  <item.icon size={20} className={isActive ? "text-inherit" : "text-slate-500"} />
+                  <item.icon size={20} className={isActive ? "text-inherit" : "text-zinc-400 dark:text-zinc-600"} />
                   <span className="font-medium">{item.label}</span>
                 </div>
                 {item.subItems && (
@@ -372,7 +404,7 @@ export function Sidebar({
                           "flex items-center gap-3 w-full p-2.5 pl-11 rounded-lg text-sm transition-all",
                           activePage === subItem.id
                             ? "bg-primary/10 text-primary font-medium"
-                            : "text-slate-400 hover:text-white hover:bg-slate-900"
+                            : "text-zinc-500 dark:text-zinc-500 hover:text-zinc-800 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900/60"
                         )}
                       >
                         {subItem.label}
@@ -388,10 +420,10 @@ export function Sidebar({
 
       {/* Botão recolher */}
       {!mobile && (
-        <div className="p-4 border-t border-slate-800">
+        <div className="p-4 border-t border-zinc-200 dark:border-[#27272a]">
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="flex items-center justify-between w-full p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all"
+            className="flex items-center justify-between w-full p-2 rounded-lg text-zinc-500 dark:text-zinc-500 hover:text-zinc-800 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900/60 transition-all"
           >
             <span className="text-sm font-medium">{collapsed ? "Expandir" : "Recolher"}</span>
             {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}

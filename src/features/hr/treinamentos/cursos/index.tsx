@@ -17,7 +17,7 @@ export default function CursosPage() {
         </div>
         <button 
           onClick={() => setShowNewCurso(true)}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors shadow-sm"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors "
         >
           <Plus size={18} />
           Novo Curso
@@ -36,7 +36,7 @@ export default function CursosPage() {
                 className="w-full pl-9 h-9 text-sm rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-primary/50"
               />
             </div>
-            <button className="h-9 px-3 border rounded-md text-sm font-medium hover:bg-slate-50 flex items-center gap-2">
+            <button className="h-9 px-3 border rounded-md text-sm font-medium hover:bg-[#09090b] flex items-center gap-2">
               <Filter size={14} />
               Filtros
             </button>
@@ -45,7 +45,7 @@ export default function CursosPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm whitespace-nowrap">
-              <thead className="bg-slate-50 border-b">
+              <thead className="bg-[#09090b] border-b">
                 <tr className="text-muted-foreground font-medium text-[11px] uppercase tracking-wider">
                   <th className="py-4 px-6">Nome do Curso</th>
                   <th className="py-4 px-6">Categoria</th>
@@ -58,24 +58,24 @@ export default function CursosPage() {
               </thead>
               <tbody>
                 {mockCursos.map((curso) => (
-                  <tr key={curso.id} className="border-b hover:bg-slate-50/50 transition-colors group">
+                  <tr key={curso.id} className="border-b hover:bg-zinc-800/20 transition-colors group">
                     <td className="py-4 px-6">
                       <div className="flex flex-col">
-                        <span className="font-bold text-slate-900">{curso.nome}</span>
-                        <span className="text-[10px] text-slate-500">Resp: {curso.responsavel}</span>
+                        <span className="font-bold text-[#e7e5e4]">{curso.nome}</span>
+                        <span className="text-[10px] text-zinc-500">Resp: {curso.responsavel}</span>
                       </div>
                     </td>
                     <td className="py-4 px-6">
-                      <span className="px-2 py-1 text-[10px] font-bold uppercase rounded-md bg-slate-100 text-slate-600 border">
+                      <span className="px-2 py-1 text-[10px] font-bold uppercase rounded-md bg-zinc-800 text-zinc-400 border">
                         {curso.categoria}
                       </span>
                     </td>
-                    <td className="py-4 px-6 text-center font-mono text-slate-600 font-medium">{curso.duracao}</td>
-                    <td className="py-4 px-6 text-center text-slate-600">{curso.formato}</td>
+                    <td className="py-4 px-6 text-center font-mono text-zinc-400 font-medium">{curso.duracao}</td>
+                    <td className="py-4 px-6 text-center text-zinc-400">{curso.formato}</td>
                     <td className="py-4 px-6 text-center">
                       {curso.obrigatorio ? 
                         <span className="text-xs font-bold text-rose-600 bg-rose-50 px-2 py-1 rounded-md">Sim</span> : 
-                        <span className="text-xs font-medium text-slate-500">Não</span>
+                        <span className="text-xs font-medium text-zinc-500">Não</span>
                       }
                     </td>
                     <td className="py-4 px-6 text-center">
@@ -83,13 +83,13 @@ export default function CursosPage() {
                     </td>
                     <td className="py-4 px-6">
                       <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button className="p-2 hover:bg-slate-200 rounded-lg text-slate-600 transition-colors" title="Associar a Trilha">
+                        <button className="p-2 hover:bg-zinc-700 rounded-lg text-zinc-400 transition-colors" title="Associar a Trilha">
                           <BookOpen size={16} />
                         </button>
-                        <button className="p-2 hover:bg-slate-200 rounded-lg text-slate-600 transition-colors" title="Visualizar Participantes">
+                        <button className="p-2 hover:bg-zinc-700 rounded-lg text-zinc-400 transition-colors" title="Visualizar Participantes">
                           <Users size={16} />
                         </button>
-                        <button className="p-2 hover:bg-slate-200 rounded-lg text-slate-600 transition-colors" title="Editar Curso">
+                        <button className="p-2 hover:bg-zinc-700 rounded-lg text-zinc-400 transition-colors" title="Editar Curso">
                           <Edit size={16} />
                         </button>
                       </div>
@@ -111,21 +111,21 @@ export default function CursosPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowNewCurso(false)}
-              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             />
             <motion.div 
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+              className="relative w-full max-w-2xl bg-[#18181b] rounded-2xl  overflow-hidden flex flex-col max-h-[90vh]"
             >
-              <div className="p-6 border-b bg-slate-50 flex items-center justify-between">
+              <div className="p-6 border-b bg-[#09090b] flex items-center justify-between">
                 <div>
                   <h2 className="text-xl font-bold">Criar Novo Curso</h2>
                   <p className="text-xs text-muted-foreground mt-1">Preencha os dados básicos do treinamento.</p>
                 </div>
-                <button onClick={() => setShowNewCurso(false)} className="p-2 hover:bg-slate-200 rounded-full transition-colors">
-                  <Plus className="rotate-45 text-slate-500" size={20} />
+                <button onClick={() => setShowNewCurso(false)} className="p-2 hover:bg-zinc-700 rounded-full transition-colors">
+                  <Plus className="rotate-45 text-zinc-500" size={20} />
                 </button>
               </div>
               
@@ -152,16 +152,16 @@ export default function CursosPage() {
                 </div>
               </div>
 
-              <div className="p-6 border-t bg-slate-50 flex justify-end gap-3">
+              <div className="p-6 border-t bg-[#09090b] flex justify-end gap-3">
                 <button 
                   onClick={() => setShowNewCurso(false)}
-                  className="px-6 py-2 border rounded-xl font-bold hover:bg-white transition-colors"
+                  className="px-6 py-2 border rounded-xl font-bold hover:bg-[#18181b] transition-colors"
                 >
                   Cancelar
                 </button>
                 <button 
                   onClick={() => setShowNewCurso(false)}
-                  className="px-6 py-2 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
+                  className="px-6 py-2 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all  "
                 >
                   Salvar Curso
                 </button>
@@ -177,8 +177,8 @@ export default function CursosPage() {
 function Field({ label, placeholder }: any) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[11px] font-bold text-slate-500 uppercase">{label}</label>
-      <input type="text" placeholder={placeholder} className="w-full h-10 px-3 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-1 focus:ring-primary" />
+      <label className="text-[11px] font-bold text-zinc-500 uppercase">{label}</label>
+      <input type="text" placeholder={placeholder} className="w-full h-10 px-3 rounded-lg border border-[#27272a] text-sm focus:outline-none focus:ring-1 focus:ring-primary" />
     </div>
   );
 }
@@ -186,8 +186,8 @@ function Field({ label, placeholder }: any) {
 function SelectField({ label, options }: any) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[11px] font-bold text-slate-500 uppercase">{label}</label>
-      <select className="w-full h-10 px-3 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-1 focus:ring-primary bg-white appearance-none cursor-pointer">
+      <label className="text-[11px] font-bold text-zinc-500 uppercase">{label}</label>
+      <select className="w-full h-10 px-3 rounded-lg border border-[#27272a] text-sm focus:outline-none focus:ring-1 focus:ring-primary bg-[#18181b] appearance-none cursor-pointer">
         {options.map((opt: any) => <option key={opt}>{opt}</option>)}
       </select>
     </div>
@@ -197,8 +197,8 @@ function SelectField({ label, options }: any) {
 function TextAreaField({ label, placeholder }: any) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[11px] font-bold text-slate-500 uppercase">{label}</label>
-      <textarea placeholder={placeholder} className="w-full h-20 p-3 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-1 focus:ring-primary resize-none" />
+      <label className="text-[11px] font-bold text-zinc-500 uppercase">{label}</label>
+      <textarea placeholder={placeholder} className="w-full h-20 p-3 rounded-lg border border-[#27272a] text-sm focus:outline-none focus:ring-1 focus:ring-primary resize-none" />
     </div>
   );
 }

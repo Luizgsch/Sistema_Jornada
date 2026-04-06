@@ -8,7 +8,11 @@ import {
   Calendar, 
   User, 
   ChevronRight,
-  Search
+  Search,
+  Send,
+  Mail,
+  MessageCircle,
+  Bell,
 } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
 import { motion, AnimatePresence } from "framer-motion";
@@ -50,9 +54,37 @@ const initialColumns = [
   }
 ];
 
+const NOTIFY_STEPS = [
+  { icon: Mail, label: "E-mail enviado ao gestor Thiago Neves...", delay: 400 },
+  { icon: MessageCircle, label: "Mensagem WhatsApp agendada para o candidato...", delay: 1000 },
+  { icon: Bell, label: "Lembrete no calendário criado para 02/04 às 09:00...", delay: 1700 },
+  { icon: Send, label: "Agenda do RH atualizada automaticamente...", delay: 2300 },
+];
+
 export default function OnboardingPage() {
   const [columns] = useState(initialColumns);
   const [selectedTask, setSelectedTask] = useState<any>(null);
+  const [showNotifyFlow, setShowNotifyFlow] = useState(false);
+  const [notifyDone, setNotifyDone] = useState<number[]>([]);
+  const [notifyFinished, setNotifyFinished] = useState(false);
+
+  const triggerNotify = () => {
+    setNotifyDone([]);
+    setNotifyFinished(false);
+    setShowNotifyFlow(true);
+
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    NOTIFY_STEPS.forEach((step, i) => {
+      const t = setTimeout(() => {
+        setNotifyDone((prev) => [...prev, i]);
+        if (i === NOTIFY_STEPS.length - 1) {
+          const ft = setTimeout(() => setNotifyFinished(true), 400);
+          timers.push(ft);
+        }
+      }, step.delay);
+      timers.push(t);
+    });
+  };
 
   return (
     <div className="h-full flex flex-col space-y-6">
@@ -67,7 +99,7 @@ export default function OnboardingPage() {
             <input 
               type="text" 
               placeholder="Buscar colaborador..." 
-              className="pl-10 h-10 w-64 rounded-lg border border-input bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="pl-10 h-10 w-64 rounded-lg border border-input bg-[#18181b] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
           <button className="h-10 px-4 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center gap-2">
@@ -83,29 +115,29 @@ export default function OnboardingPage() {
             <div key={column.id} className="w-72 flex flex-col">
               <div className="flex items-center justify-between mb-4 px-2">
                 <div className="flex items-center gap-2">
-                  <h3 className="font-bold text-slate-700">{column.title}</h3>
-                  <span className="bg-slate-200 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                  <h3 className="font-bold text-zinc-300">{column.title}</h3>
+                  <span className="bg-zinc-700 text-zinc-400 text-[10px] font-bold px-2 py-0.5 rounded-full">
                     {column.tasks.length}
                   </span>
                 </div>
-                <MoreVertical size={16} className="text-slate-400 cursor-pointer" />
+                <MoreVertical size={16} className="text-zinc-600 cursor-pointer" />
               </div>
               
-              <div className="flex-1 bg-slate-100/50 rounded-xl p-3 space-y-3 min-h-[500px] border border-dashed border-slate-200">
+              <div className="flex-1 bg-zinc-800/30 rounded-xl p-3 space-y-3 min-h-[500px] border border-dashed border-[#27272a]">
                 {column.tasks.map((task) => (
                   <motion.div
                     key={task.id}
                     layoutId={task.id}
                     onClick={() => setSelectedTask(task)}
-                    className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 cursor-pointer hover:border-primary/50 hover:shadow-md transition-all group"
+                    className="bg-[#18181b] p-4 rounded-xl  border border-[#27272a] cursor-pointer hover:border-primary/50 hover: transition-all group"
                   >
                     <div className="flex justify-between items-start mb-2">
                       <span className="text-xs font-bold text-primary bg-primary/5 px-2 py-0.5 rounded">
                         {task.role}
                       </span>
-                      <MoreVertical size={14} className="text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <MoreVertical size={14} className="text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <h4 className="font-bold text-slate-900 group-hover:text-primary transition-colors">{task.name}</h4>
+                    <h4 className="font-bold text-[#e7e5e4] group-hover:text-primary transition-colors">{task.name}</h4>
                     
                     <div className="mt-4 space-y-3">
                       <div className="flex items-center justify-between text-[11px] text-muted-foreground">
@@ -115,7 +147,7 @@ export default function OnboardingPage() {
                         </div>
                         <span>{task.progress}%</span>
                       </div>
-                      <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                      <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
                         <div 
                           className={cn(
                             "h-full rounded-full transition-all duration-500",
@@ -127,7 +159,7 @@ export default function OnboardingPage() {
                     </div>
                   </motion.div>
                 ))}
-                <button className="w-full py-2 border border-dashed border-slate-300 rounded-lg text-slate-400 text-xs font-medium hover:bg-white hover:text-slate-600 transition-all flex items-center justify-center gap-1">
+                <button className="w-full py-2 border border-dashed border-zinc-700 rounded-lg text-zinc-600 text-xs font-medium hover:bg-[#18181b] hover:text-zinc-400 transition-all flex items-center justify-center gap-1">
                   <Plus size={14} />
                   Adicionar Card
                 </button>
@@ -153,9 +185,9 @@ export default function OnboardingPage() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl z-[110] flex flex-col"
+              className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-[#18181b]  z-[110] flex flex-col"
             >
-              <div className="p-8 border-b bg-slate-50">
+              <div className="p-8 border-b bg-[#09090b]">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
                     <User size={32} />
@@ -190,10 +222,14 @@ export default function OnboardingPage() {
                   </div>
                 </div>
 
-                <div className="p-6 bg-slate-900 rounded-2xl text-white">
+                <div className="p-6 bg-[#09090b] rounded-2xl text-white">
                   <h4 className="font-bold mb-2">Próximo Passo</h4>
-                  <p className="text-slate-300 text-sm mb-4">Realizar treinamento de integração com o gestor direto em 02/04.</p>
-                  <button className="w-full py-3 bg-white text-slate-900 rounded-xl font-bold hover:bg-slate-100 transition-colors">
+                  <p className="text-zinc-400 text-sm mb-4">Realizar treinamento de integração com o gestor direto em 02/04.</p>
+                  <button
+                    onClick={triggerNotify}
+                    className="w-full py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Send size={16} />
                     Notificar Gestor
                   </button>
                 </div>
@@ -202,24 +238,99 @@ export default function OnboardingPage() {
           </>
         )}
       </AnimatePresence>
+
+      {/* Notify gesture modal */}
+      <AnimatePresence>
+        {showNotifyFlow && (
+          <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => notifyFinished && setShowNotifyFlow(false)}
+              className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 22, stiffness: 260 }}
+              className="relative w-full max-w-sm bg-[#18181b] border border-[#27272a] rounded-2xl overflow-hidden shadow-2xl"
+            >
+              <div className="p-5 bg-[#09090b] border-b border-[#27272a]">
+                <p className="text-xs font-bold uppercase tracking-widest text-primary mb-1">
+                  {notifyFinished ? "✓ Notificações enviadas" : "Disparando notificações…"}
+                </p>
+                <h3 className="text-lg font-bold text-[#e7e5e4]">
+                  Treinamento de {selectedTask?.name ?? "Candidato"}
+                </h3>
+              </div>
+              <div className="p-5 space-y-3">
+                {NOTIFY_STEPS.map((step, i) => {
+                  const isDone = notifyDone.includes(i);
+                  const isActive = !isDone && notifyDone.length === i;
+                  return (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0.2 }}
+                      animate={{ opacity: isDone || isActive ? 1 : 0.3 }}
+                      className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all ${
+                        isDone ? "bg-emerald-500/5 border-emerald-500/20"
+                          : isActive ? "bg-primary/5 border-primary/20"
+                          : "border-[#27272a]"
+                      }`}
+                    >
+                      <div className={`p-1.5 rounded-lg flex-shrink-0 ${isDone ? "bg-emerald-500/10 text-emerald-400" : isActive ? "bg-primary/10 text-primary" : "bg-zinc-800 text-zinc-600"}`}>
+                        {isDone
+                          ? <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}><CheckCircle2 size={16} /></motion.div>
+                          : isActive
+                          ? <Circle size={16} className="animate-pulse" />
+                          : <step.icon size={16} />
+                        }
+                      </div>
+                      <p className={`text-sm font-medium ${isDone ? "text-emerald-400" : isActive ? "text-[#e7e5e4]" : "text-zinc-600"}`}>
+                        {step.label}
+                      </p>
+                    </motion.div>
+                  );
+                })}
+              </div>
+              {notifyFinished && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="px-5 pb-5"
+                >
+                  <button
+                    onClick={() => setShowNotifyFlow(false)}
+                    className="w-full py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors"
+                  >
+                    Fechar
+                  </button>
+                </motion.div>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
 function CheckItem({ label, checked }: { label: string, checked?: boolean }) {
   return (
-    <div className="flex items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-primary/20 transition-all cursor-pointer group">
+    <div className="flex items-center justify-between p-4 rounded-xl border border-[#27272a] hover:border-primary/20 transition-all cursor-pointer group">
       <div className="flex items-center gap-3">
         {checked ? (
           <CheckCircle2 size={20} className="text-emerald-500" />
         ) : (
-          <Circle size={20} className="text-slate-300 group-hover:text-primary transition-colors" />
+          <Circle size={20} className="text-zinc-400 group-hover:text-primary transition-colors" />
         )}
-        <span className={cn("text-sm font-medium", checked ? "text-slate-400 line-through" : "text-slate-700")}>
+        <span className={cn("text-sm font-medium", checked ? "text-zinc-600 line-through" : "text-zinc-300")}>
           {label}
         </span>
       </div>
-      <ChevronRight size={14} className="text-slate-300" />
+      <ChevronRight size={14} className="text-zinc-400" />
     </div>
   );
 }

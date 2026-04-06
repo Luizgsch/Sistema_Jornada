@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { mockPipelineCandidatos } from "@/infrastructure/mock/mockRecrutamento";
 import { useToast } from "@/shared/ui/Toast";
+import { AutomationStepper } from "@/shared/components/automation/AutomationStepper";
 
 
 const stages = [
@@ -29,18 +30,16 @@ const stages = [
 
 export default function RecruitmentPipeline() {
   const [selectedCandidate, setSelectedCandidate] = useState<any>(null);
-  const { success, info } = useToast();
+  const [showStepper, setShowStepper] = useState(false);
+  const { info } = useToast();
 
   const getCandidatesByStage = (stageId: string) => {
     return mockPipelineCandidatos.filter(c => c.etapa === stageId);
   };
 
   const handleHire = () => {
-    success(
-      "Admissão Iniciada", 
-      `Os dados de ${selectedCandidate.nome} foram enviados para o módulo de Admissões.`
-    );
     setSelectedCandidate(null);
+    setShowStepper(true);
   };
 
   return (
@@ -56,7 +55,7 @@ export default function RecruitmentPipeline() {
             <input 
               type="text" 
               placeholder="Buscar candidato..." 
-              className="pl-10 h-10 w-64 rounded-lg border border-input bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="pl-10 h-10 w-64 rounded-lg border border-input bg-[#18181b] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
           <button className="h-10 px-4 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center gap-2">
@@ -72,35 +71,35 @@ export default function RecruitmentPipeline() {
             <div key={stage.id} className="w-72 flex flex-col">
               <div className="flex items-center justify-between mb-4 px-2">
                 <div className="flex items-center gap-2">
-                  <h3 className="font-bold text-slate-700">{stage.title}</h3>
-                  <span className="bg-slate-200 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                  <h3 className="font-bold text-zinc-300">{stage.title}</h3>
+                  <span className="bg-zinc-700 text-zinc-400 text-[10px] font-bold px-2 py-0.5 rounded-full">
                     {getCandidatesByStage(stage.id).length}
                   </span>
                 </div>
-                <MoreVertical size={16} className="text-slate-400 cursor-pointer" />
+                <MoreVertical size={16} className="text-zinc-600 cursor-pointer" />
               </div>
               
-              <div className="flex-1 bg-slate-100/50 rounded-xl p-3 space-y-3 min-h-[500px] border border-dashed border-slate-200">
+              <div className="flex-1 bg-zinc-800/30 rounded-xl p-3 space-y-3 min-h-[500px] border border-dashed border-[#27272a]">
                 {getCandidatesByStage(stage.id).map((candidate) => (
                   <motion.div
                     key={candidate.id}
                     layoutId={candidate.id}
                     onClick={() => setSelectedCandidate(candidate)}
-                    className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 cursor-pointer hover:border-primary/50 hover:shadow-md transition-all group"
+                    className="bg-[#18181b] p-4 rounded-xl  border border-[#27272a] cursor-pointer hover:border-primary/50 hover: transition-all group"
                   >
                     <div className="flex justify-between items-start mb-2">
                       <span className="text-[10px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded uppercase tracking-wider">
                         {candidate.cargo}
                       </span>
-                      <span className="text-[10px] font-medium text-slate-400">{candidate.origem}</span>
+                      <span className="text-[10px] font-medium text-zinc-600">{candidate.origem}</span>
                     </div>
-                    <h4 className="font-bold text-slate-900 group-hover:text-primary transition-colors">{candidate.nome}</h4>
+                    <h4 className="font-bold text-[#e7e5e4] group-hover:text-primary transition-colors">{candidate.nome}</h4>
                     <p className="text-xs text-muted-foreground mt-1">Exp: {candidate.experiencia}</p>
                     
                     <div className="mt-4 pt-4 border-t border-slate-50 flex items-center justify-between">
                       <div className="flex -space-x-2">
-                        <div className="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center text-[10px] font-bold text-slate-600">JS</div>
-                        <div className="w-6 h-6 rounded-full bg-primary/20 border-2 border-white flex items-center justify-center text-[10px] font-bold text-primary italic">AI</div>
+                        <div className="w-6 h-6 rounded-full bg-zinc-700 border-2 border-zinc-700 flex items-center justify-center text-[10px] font-bold text-zinc-400">JS</div>
+                        <div className="w-6 h-6 rounded-full bg-primary/20 border-2 border-zinc-700 flex items-center justify-center text-[10px] font-bold text-primary italic">AI</div>
                       </div>
                       <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                         <Clock size={10} />
@@ -131,15 +130,15 @@ export default function RecruitmentPipeline() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 bottom-0 w-full max-w-lg bg-white shadow-2xl z-[110] flex flex-col"
+              className="fixed right-0 top-0 bottom-0 w-full max-w-lg bg-[#18181b]  z-[110] flex flex-col"
             >
-              <div className="p-8 border-b bg-slate-50 flex items-start justify-between">
+              <div className="p-8 border-b bg-[#09090b] flex items-start justify-between">
                 <div className="flex items-center gap-5">
-                  <div className="w-20 h-20 bg-slate-900 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-xl shadow-slate-900/20">
+                  <div className="w-20 h-20 bg-[#09090b] rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-xl shadow-slate-900/20">
                     {selectedCandidate.nome.split(' ').map((n: any) => n[0]).join('')}
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-slate-900">{selectedCandidate.nome}</h2>
+                    <h2 className="text-2xl font-bold text-[#e7e5e4]">{selectedCandidate.nome}</h2>
                     <p className="text-primary font-bold text-sm tracking-wide uppercase">{selectedCandidate.cargo}</p>
                     <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
                       <div className="flex items-center gap-1">
@@ -153,7 +152,7 @@ export default function RecruitmentPipeline() {
                     </div>
                   </div>
                 </div>
-                <button onClick={() => setSelectedCandidate(null)} className="p-2 hover:bg-slate-200 rounded-full transition-colors">
+                <button onClick={() => setSelectedCandidate(null)} className="p-2 hover:bg-zinc-700 rounded-full transition-colors">
                   <Plus className="rotate-45" size={24} />
                 </button>
               </div>
@@ -165,7 +164,7 @@ export default function RecruitmentPipeline() {
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-4">Experiência Profissional</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-600 mb-4">Experiência Profissional</h3>
                   <div className="space-y-4">
                     <ExperienceItem title="Senior Software Engineer" company="Tech Solutions Inc." period="2020 - Presente" />
                     <ExperienceItem title="Fullstack Developer" company="Startup Growth" period="2018 - 2020" />
@@ -173,10 +172,10 @@ export default function RecruitmentPipeline() {
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-4">Currículo & Documentos</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-600 mb-4">Currículo & Documentos</h3>
                   <button className="flex items-center gap-3 w-full p-4 border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left group">
-                    <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-primary/10">
-                      <FileText size={20} className="text-slate-600 group-hover:text-primary" />
+                    <div className="p-2 bg-zinc-800 rounded-lg group-hover:bg-primary/10">
+                      <FileText size={20} className="text-zinc-400 group-hover:text-primary" />
                     </div>
                     <div>
                       <span className="block text-sm font-bold">Curriculo_Vite_{selectedCandidate.nome.replace(' ', '_')}.pdf</span>
@@ -185,11 +184,11 @@ export default function RecruitmentPipeline() {
                   </button>
                 </div>
 
-                <div className="p-6 bg-slate-900 rounded-2xl text-white">
+                <div className="p-6 bg-[#09090b] rounded-2xl text-white">
                   <h4 className="font-bold mb-2">
                     {selectedCandidate.etapa === 'aprovado' ? 'Ação Necessária' : 'Observações do RH'}
                   </h4>
-                  <p className="text-slate-300 text-sm italic mb-4">
+                  <p className="text-zinc-400 text-sm italic mb-4">
                     {selectedCandidate.etapa === 'aprovado' 
                       ? "O candidato foi aprovado em todas as etapas. Inicie o processo de admissão para coletar documentos e gerar contrato."
                       : '"Candidato demonstrou forte conhecimento técnico durante a triagem inicial. Boa comunicação e alinhamento cultural."'}
@@ -198,14 +197,14 @@ export default function RecruitmentPipeline() {
                   {selectedCandidate.etapa === 'aprovado' ? (
                     <button 
                       onClick={handleHire}
-                      className="w-full py-3 bg-emerald-500 text-white rounded-xl font-bold hover:bg-emerald-600 transition-colors shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2"
+                      className="w-full py-3 bg-emerald-500 text-white rounded-xl font-bold hover:bg-emerald-600 transition-colors  shadow-emerald-500/20 flex items-center justify-center gap-2"
                     >
                       Iniciar Admissão
                     </button>
                   ) : (
                     <button 
                       onClick={() => info("Ação Temporária", "Avanço de etapa simulado na demonstração.")}
-                      className="w-full py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+                      className="w-full py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors  "
                     >
                       Agendar Entrevista
                     </button>
@@ -216,6 +215,14 @@ export default function RecruitmentPipeline() {
           </>
         )}
       </AnimatePresence>
+
+      {/* Automation stepper for hiring */}
+      <AutomationStepper
+        isOpen={showStepper}
+        onClose={() => setShowStepper(false)}
+        vagaNome={selectedCandidate?.cargo ?? "Vaga em Aberto"}
+        candidatoNome={selectedCandidate?.nome ?? "Candidato Selecionado"}
+      />
     </div>
   );
 }
@@ -223,12 +230,12 @@ export default function RecruitmentPipeline() {
 function ContactCard({ icon: Icon, label, value }: any) {
   return (
     <div className="p-3 border rounded-xl flex items-center gap-3">
-      <div className="p-2 bg-slate-100 rounded-lg text-slate-600">
+      <div className="p-2 bg-zinc-800 rounded-lg text-zinc-400">
         <Icon size={16} />
       </div>
       <div>
-        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{label}</p>
-        <p className="text-xs font-bold text-slate-700">{value}</p>
+        <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-tighter">{label}</p>
+        <p className="text-xs font-bold text-zinc-300">{value}</p>
       </div>
     </div>
   );
@@ -236,9 +243,9 @@ function ContactCard({ icon: Icon, label, value }: any) {
 
 function ExperienceItem({ title, company, period }: any) {
   return (
-    <div className="relative pl-6 border-l-2 border-slate-100">
+    <div className="relative pl-6 border-l-2 border-[#27272a]">
       <div className="absolute left-[-5px] top-1 w-2 h-2 rounded-full bg-primary" />
-      <h4 className="text-sm font-bold text-slate-900">{title}</h4>
+      <h4 className="text-sm font-bold text-[#e7e5e4]">{title}</h4>
       <p className="text-xs text-primary font-medium">{company}</p>
       <p className="text-[11px] text-muted-foreground mt-1">{period}</p>
     </div>

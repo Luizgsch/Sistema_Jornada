@@ -46,7 +46,7 @@ export default function TemporariosPage() {
                 className="w-full pl-9 h-9 text-sm rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-primary"
               />
             </div>
-            <button className="inline-flex items-center gap-2 h-9 px-3 border rounded-md text-sm font-medium hover:bg-slate-50">
+            <button className="inline-flex items-center gap-2 h-9 px-3 border rounded-md text-sm font-medium hover:bg-[#09090b]">
               <Filter size={14} />
               Filtros
             </button>
@@ -55,7 +55,7 @@ export default function TemporariosPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm whitespace-nowrap">
-              <thead className="bg-slate-50 border-b">
+              <thead className="bg-[#09090b] border-b">
                 <tr className="text-muted-foreground font-medium">
                   <th className="py-4 px-6">Colaborador</th>
                   <th className="py-4 px-6">Cargo</th>
@@ -67,17 +67,17 @@ export default function TemporariosPage() {
               </thead>
               <tbody>
                 {temporarios.map((colab) => (
-                  <tr key={colab.matricula} className="border-b hover:bg-slate-50/50 transition-colors">
+                  <tr key={colab.matricula} className="border-b hover:bg-zinc-800/20 transition-colors">
                     <td className="py-4 px-6">
                       <div className="flex flex-col">
-                        <span className="font-bold text-slate-900">{colab.nome}</span>
-                        <span className="text-[10px] font-mono text-slate-500">{colab.matricula}</span>
+                        <span className="font-bold text-[#e7e5e4]">{colab.nome}</span>
+                        <span className="text-[10px] font-mono text-zinc-500">{colab.matricula}</span>
                       </div>
                     </td>
                     <td className="py-4 px-6">{colab.cargo}</td>
-                    <td className="py-4 px-6 text-center text-slate-500">{colab.admissao}</td>
+                    <td className="py-4 px-6 text-center text-zinc-500">{colab.admissao}</td>
                     <td className="py-4 px-6 text-center">
-                      <span className={`font-medium ${colab.status === 'vencendo' ? 'text-amber-600' : 'text-slate-600'}`}>
+                      <span className={`font-medium ${colab.status === 'vencendo' ? 'text-amber-600' : 'text-zinc-400'}`}>
                         {colab.vencimento}
                       </span>
                     </td>
@@ -109,7 +109,7 @@ export default function TemporariosPage() {
         <Card className="bg-amber-50 border-amber-200">
            <CardContent className="pt-6">
               <div className="flex gap-4">
-                 <div className="p-3 bg-white rounded-2xl text-amber-500 shadow-sm flex items-center justify-center">
+                 <div className="p-3 bg-[#18181b] rounded-2xl text-amber-500  flex items-center justify-center">
                     <AlertTriangle size={24} />
                  </div>
                  <div>
@@ -121,15 +121,15 @@ export default function TemporariosPage() {
               </div>
            </CardContent>
         </Card>
-        <Card className="bg-slate-900 text-white border-none">
+        <Card className="bg-[#09090b] text-white border-none">
            <CardContent className="pt-6">
               <div className="flex gap-4">
-                 <div className="p-3 bg-white/10 rounded-2xl text-primary shadow-sm flex items-center justify-center">
+                 <div className="p-3 bg-[#18181b]/10 rounded-2xl text-primary  flex items-center justify-center">
                     <UserCheck size={24} />
                  </div>
                  <div>
                     <h4 className="font-bold">Potencial de Efetivação</h4>
-                    <p className="text-sm text-slate-400 mt-1 leading-relaxed">
+                    <p className="text-sm text-zinc-600 mt-1 leading-relaxed">
                       Com base nas avaliações de desempenho, 3 colaboradores temporários atingiram os requisitos técnicos para efetivação CLT.
                     </p>
                  </div>
@@ -143,11 +143,11 @@ export default function TemporariosPage() {
 
 function MetricCard({ title, value, icon: Icon, color }: any) {
   return (
-    <Card className="border-none shadow-sm overflow-hidden group">
+    <Card className="border-none  overflow-hidden group">
       <CardContent className="p-6 relative">
-        <div className="absolute top-0 right-0 p-8 -mt-4 -mr-4 bg-slate-50 rounded-full scale-0 group-hover:scale-100 transition-transform duration-500" />
+        <div className="absolute top-0 right-0 p-8 -mt-4 -mr-4 bg-[#09090b] rounded-full scale-0 group-hover:scale-100 transition-transform duration-500" />
         <div className="relative flex items-center gap-4">
-          <div className={`p-3 rounded-2xl bg-slate-50 ${color}`}>
+          <div className={`p-3 rounded-2xl bg-[#09090b] ${color}`}>
             <Icon size={24} />
           </div>
           <div>

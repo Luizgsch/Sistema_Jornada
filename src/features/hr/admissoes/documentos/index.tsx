@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/shared/ui/Card";
-import { Search, Filter, FileText, CheckCircle, Eye, Download, UserPlus } from "lucide-react";
+import { Search, Filter, FileText, CheckCircle, Eye, Download, UserPlus, Sparkles } from "lucide-react";
 import { StatusBadge } from "@/shared/ui/StatusBadge";
 import { motion, AnimatePresence } from "framer-motion";
+import { SmartDrop } from "@/shared/components/automation/SmartDrop";
 
 
 const mockCandidates = [
@@ -14,9 +15,46 @@ const mockCandidates = [
 
 export default function DocumentosAdmissionais() {
   const [selectedCandidate, setSelectedCandidate] = useState<any>(null);
+  const [showSmartDrop, setShowSmartDrop] = useState(true);
 
   return (
     <div className="space-y-6">
+      {/* Smart Drop Section */}
+      <div className="rounded-2xl border border-primary/20 bg-primary/5 overflow-hidden">
+        <button
+          onClick={() => setShowSmartDrop((v) => !v)}
+          className="w-full flex items-center justify-between p-5 hover:bg-primary/5 transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-primary/10 rounded-xl">
+              <Sparkles size={20} className="text-primary" />
+            </div>
+            <div className="text-left">
+              <p className="font-bold text-[#e7e5e4]">Smart Drop — OCR com IA</p>
+              <p className="text-xs text-zinc-500">Arraste um documento e o formulário será preenchido automaticamente</p>
+            </div>
+          </div>
+          <span className="text-xs font-bold text-primary border border-primary/30 rounded-full px-3 py-1 flex-shrink-0">
+            {showSmartDrop ? "Recolher ▲" : "Expandir ▼"}
+          </span>
+        </button>
+        <AnimatePresence>
+          {showSmartDrop && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="overflow-hidden"
+            >
+              <div className="px-5 pb-5">
+                <SmartDrop />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Documentos Admissionais</h1>
@@ -42,11 +80,11 @@ export default function DocumentosAdmissionais() {
               />
             </div>
             <div className="flex items-center gap-2">
-              <button className="inline-flex items-center gap-2 h-10 px-3 border border-input rounded-md text-sm font-medium hover:bg-slate-50">
+              <button className="inline-flex items-center gap-2 h-10 px-3 border border-input rounded-md text-sm font-medium hover:bg-[#09090b]">
                 <Filter size={16} />
                 Filtros
               </button>
-              <button className="inline-flex items-center gap-2 h-10 px-3 border border-input rounded-md text-sm font-medium hover:bg-slate-50">
+              <button className="inline-flex items-center gap-2 h-10 px-3 border border-input rounded-md text-sm font-medium hover:bg-[#09090b]">
                 <Download size={16} />
                 Exportar
               </button>
@@ -56,7 +94,7 @@ export default function DocumentosAdmissionais() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm whitespace-nowrap">
-              <thead className="bg-slate-50 border-y border-slate-200">
+              <thead className="bg-[#09090b] border-y border-[#27272a]">
                 <tr className="text-muted-foreground font-medium">
                   <th className="py-3 px-6">Candidato</th>
                   <th className="py-3 px-6">Vaga / Setor</th>
@@ -68,10 +106,10 @@ export default function DocumentosAdmissionais() {
               </thead>
               <tbody>
                 {mockCandidates.map((candidate) => (
-                  <tr key={candidate.id} className="border-b hover:bg-slate-50/50 transition-colors group">
+                  <tr key={candidate.id} className="border-b hover:bg-zinc-800/20 transition-colors group">
                     <td className="py-4 px-6">
                       <div className="flex flex-col">
-                        <span className="font-bold text-slate-900">{candidate.nome}</span>
+                        <span className="font-bold text-[#e7e5e4]">{candidate.nome}</span>
                         <span className="text-[11px] text-muted-foreground">Responsável: {candidate.responsavel}</span>
                       </div>
                     </td>
@@ -81,7 +119,7 @@ export default function DocumentosAdmissionais() {
                         <span className="text-[11px] text-muted-foreground">{candidate.setor}</span>
                       </div>
                     </td>
-                    <td className="py-4 px-6 text-slate-600">{candidate.cpf}</td>
+                    <td className="py-4 px-6 text-zinc-400">{candidate.cpf}</td>
                     <td className="py-4 px-6">
                       <StatusBadge status={candidate.status as any} />
                     </td>
@@ -119,14 +157,14 @@ export default function DocumentosAdmissionais() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl z-[110] flex flex-col"
+              className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-[#18181b]  z-[110] flex flex-col"
             >
-              <div className="p-6 border-b flex items-center justify-between bg-slate-50">
+              <div className="p-6 border-b flex items-center justify-between bg-[#09090b]">
                 <div>
                   <h2 className="text-xl font-bold">Gerador de Documentos</h2>
                   <p className="text-xs text-muted-foreground">Colaborador: {selectedCandidate.nome}</p>
                 </div>
-                <button onClick={() => setSelectedCandidate(null)} className="p-2 hover:bg-slate-200 rounded-full transition-colors">
+                <button onClick={() => setSelectedCandidate(null)} className="p-2 hover:bg-zinc-700 rounded-full transition-colors">
                   <Search className="rotate-45" size={20} />
                 </button>
               </div>
@@ -188,8 +226,8 @@ function DocumentAction({ label, onClick }: any) {
       className="flex items-center justify-between w-full p-4 border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left group"
     >
       <div className="flex items-center gap-3">
-        <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-primary/10">
-          <FileText size={18} className="text-slate-600 group-hover:text-primary" />
+        <div className="p-2 bg-zinc-800 rounded-lg group-hover:bg-primary/10">
+          <FileText size={18} className="text-zinc-400 group-hover:text-primary" />
         </div>
         <span className="text-sm font-medium">{label}</span>
       </div>

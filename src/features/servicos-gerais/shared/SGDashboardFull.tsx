@@ -40,7 +40,7 @@ export function SGDashboardFullView() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <Card className="border-none shadow-sm">
+        <Card className="border-none ">
           <CardHeader className="pb-2">
             <h3 className="font-bold text-lg">Resumo integrado (simulação)</h3>
             <p className="text-sm text-muted-foreground">
@@ -48,30 +48,30 @@ export function SGDashboardFullView() {
             </p>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
-            <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-100">
-              <span className="text-slate-600">Cruzamento VT × Estacionamento</span>
+            <div className="flex items-center justify-between p-3 rounded-lg bg-[#09090b] border border-[#27272a]">
+              <span className="text-zinc-400">Cruzamento VT × Estacionamento</span>
               <span className="font-bold text-amber-700">
                 {mockCruzamentoBeneficios.filter((b) => b.redundancia).length} redundâncias
               </span>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-100">
-              <span className="text-slate-600">Satisfação refeição (hoje)</span>
+            <div className="flex items-center justify-between p-3 rounded-lg bg-[#09090b] border border-[#27272a]">
+              <span className="text-zinc-400">Satisfação refeição (hoje)</span>
               <span className="font-bold text-emerald-700">{mockSatisfacaoAttos.indicadorDia} / 5</span>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-100">
-              <span className="text-slate-600">Vouchers Natal emitidos</span>
-              <span className="font-bold text-slate-800">
+            <div className="flex items-center justify-between p-3 rounded-lg bg-[#09090b] border border-[#27272a]">
+              <span className="text-zinc-400">Vouchers Natal emitidos</span>
+              <span className="font-bold text-zinc-200">
                 {mockVouchersNatal.filter((v) => v.emitido).length} / {mockVouchersNatal.length}
               </span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-none shadow-sm">
+        <Card className="border-none ">
           <CardHeader className="pb-2">
             <h3 className="font-bold text-lg">Próximas ações sugeridas</h3>
           </CardHeader>
-          <CardContent className="space-y-2 text-sm text-slate-700">
+          <CardContent className="space-y-2 text-sm text-zinc-300">
             <p className="flex gap-2">
               <FileWarning className="text-rose-500 shrink-0" size={18} />
               Cobrar {nfAtrasada} nota(s) com fornecedor em atraso.

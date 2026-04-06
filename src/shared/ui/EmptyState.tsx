@@ -9,28 +9,28 @@ interface EmptyStateProps {
   onAction?: () => void;
 }
 
-export const EmptyState: FC<EmptyStateProps> = ({ 
-  icon, 
-  title, 
-  description, 
-  actionLabel, 
-  onAction 
+export const EmptyState: FC<EmptyStateProps> = ({
+  icon,
+  title,
+  description,
+  actionLabel,
+  onAction
 }) => {
   return (
-    <div className="w-full py-16 px-6 bg-white border border-dashed border-slate-300 rounded-2xl flex flex-col items-center justify-center text-center">
-      <div className="w-16 h-16 bg-slate-50 text-slate-300 rounded-2xl flex items-center justify-center mb-6 shadow-inner border border-slate-100">
+    <div className="w-full py-16 px-6 bg-white dark:bg-[#18181b] border border-dashed border-zinc-200 dark:border-[#27272a] rounded-2xl flex flex-col items-center justify-center text-center transition-colors duration-300">
+      <div className="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-600 rounded-2xl flex items-center justify-center mb-6 border border-zinc-200 dark:border-[#27272a]">
         {icon}
       </div>
-      <h3 className="text-[18px] font-bold text-slate-800 mb-2">{title}</h3>
-      <p className="text-[14px] text-slate-500 max-w-md leading-relaxed mb-6 text-balance">
+      <h3 className="text-lg font-semibold tracking-tighter text-zinc-800 dark:text-[#e7e5e4] mb-2">{title}</h3>
+      <p className="text-sm text-zinc-500 max-w-md leading-relaxed mb-6 text-balance">
         {description}
       </p>
       {actionLabel && onAction && (
-        <button 
+        <button
           onClick={onAction}
-          className="inline-flex items-center justify-center gap-2 h-10 px-5 bg-white text-slate-700 border border-slate-200 shadow-sm rounded-lg text-[14px] font-bold hover:bg-slate-50 hover:text-primary hover:border-primary/30 transition-all active:scale-[0.98]"
+          className="inline-flex items-center justify-center gap-2 h-10 px-5 bg-zinc-50 dark:bg-[#09090b] text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-[#27272a] rounded-lg text-sm font-semibold hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-primary dark:hover:text-primary hover:border-primary/30 transition-all"
         >
-          <Plus size={16} />
+          <Plus size={15} />
           {actionLabel}
         </button>
       )}

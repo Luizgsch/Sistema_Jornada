@@ -1,81 +1,32 @@
-# Role: Senior Full-Stack Engineer & UX Expert (Frontend Prototype)
-# Context: Enterprise HR/Operations Suite - "Sistema Integrado Posigraf"
+# Role: Senior UI/UX Designer (Specialist in Dark Interfaces & Bento Box)
+# Strategy: Refactor "Sistema Posigraf" to High-End Tech Aesthetic (Linear/Apple Style)
 
-## 1. Visão Geral
-[cite_start]O objetivo é criar a interface (Frontend Only) de uma plataforma de gestão corporativa que elimina o uso de planilhas manuais[cite: 3, 143]. O sistema deve ser dividido em módulos de acesso restrito (RBAC):
-- [cite_start]**DHO & Comunicação Interna:** Gestão de treinamentos, trilhas de aprendizagem e indicadores[cite: 119].
-- [cite_start]**Serviços Gerais:** Controle de faturamento (Elo/Attos), benefícios (VT/Estacionamento) e infraestrutura (Armários/Refeitório)[cite: 213, 221, 257, 264].
+## 1. Direção Visual & Estética
+Transforme a interface atual em um Dashboard Minimalista e Sofisticado. O objetivo é transmitir autoridade tecnológica e clareza absoluta de dados críticos.
 
-## 2. Módulo DHO & Comunicação Interna (Requisitos de UI)
-[cite_start]Criar telas que resolvam a falta de visibilidade estratégica[cite: 128]:
-- [cite_start]**Dashboard de T&D:** Visualização automática do indicador "Hora-Homem de Treinamento" (KPI principal)[cite: 121, 122].
-- [cite_start]**Gestão de Treinamentos:** - Lista de presença digital (QR Code/Checklist) para substituir o papel[cite: 131, 133].
-    - [cite_start]Fluxo de lançamento em lote para evitar digitação unitária[cite: 135, 137].
-- [cite_start]**Trilhas de Carreira Automáticas:** Interface que, ao selecionar um cargo, exibe instantaneamente os cursos obrigatórios e status de reciclagem[cite: 161, 163, 164].
-- [cite_start]**Portal do Gestor:** Formulário estruturado para solicitação de treinamentos e consultoria interna, com status de fila e priorização[cite: 180, 206].
+## 2. Design System (Dark Mode Específico)
+- **Background Principal:** `#09090b` (Zinc-950).
+- **Cards (Bento Boxes):** `#18181b` (Zinc-900) com `rounded-xl`.
+- **Bordas:** `1px solid #27272a` (Zinc-800) - extremamente sutis.
+- **Tipografia:** Use 'Inter' ou 'Geist'. 
+    - Títulos: `font-semibold`, `tracking-tighter`, cor `Stone-200` (#e7e5e4).
+    - Descrições: `text-sm`, cor `Stone-500`.
+- **Minimalismo:** Remova sombras externas (box-shadow) pesadas. O contraste deve vir apenas da variação tonal entre o fundo e os cards.
 
-## 3. Módulo Serviços Gerais (Requisitos de UI)
-[cite_start]Foco em integração de dados e alertas[cite: 215, 236]:
-- [cite_start]**Central de Notas Fiscais:** Kanban ou lista com alertas visuais para NFs pendentes ou atrasadas[cite: 216, 218].
-- [cite_start]**Conciliação de Acessos (Refeitório/Elo/Attos):** Tela de "Divergências" que destaca automaticamente acessos duplicados e separa faturamento Posigraf/Elo[cite: 222, 235, 240].
-- [cite_start]**Cruzamento de Benefícios:** Dashboard que correlaciona a base de Estacionamento + VT para identificar redundâncias[cite: 258, 261].
-- [cite_start]**Gestão de Armários:** Mapa visual do vestiário integrado à base de desligados (exibindo armários liberados automaticamente)[cite: 265, 268].
-- [cite_start]**Voucher Digital:** Gerador de QR Codes para o Voucher de Natal[cite: 299, 302].
+## 3. Layout Bento Box (Grid System)
+Organize as funcionalidades (DHO, RH, Serviços Gerais) em uma grade dinâmica:
+- Use `display: grid` com `gap-6` ou `gap-8`.
+- Distribua as métricas em tamanhos variados (`col-span-1`, `col-span-2`, `row-span-2`) para criar ritmo visual.
+- Cada funcionalidade ou KPI deve ser um card isolado e independente.
 
-## 4. Guia de Estilo e Stack
-- **Tecnologia:** React, TypeScript, Tailwind CSS, Lucide React (Ícones).
-- **Design:** Profissional, corporativo, focado em densidade de dados (tabelas limpas, filtros avançados).
-- **Navegação:** Sidebar persistente para troca de módulos (conforme cargo do usuário).
-- **Componentes:** Utilizar Shadcn/UI (se disponível) para Data Tables, Modais de confirmação e Badges de status.
+## 4. Alertas Neon (Sinalização de Crise)
+Para SLAs vencidos ou falhas críticas identificadas no documento SENAI:
+- Não utilize blocos de cores sólidas.
+- Use **Cores Neon com Glow**: Texto em `#ff0033` (Erro) ou `#39ff14` (Sucesso).
+- Aplique uma sombra interna suave ou `drop-shadow` neon apenas no dado crítico para fazê-lo "saltar" do fundo escuro.
 
-## 5. Instruções de Agente para o Cursor
-- Atue como um arquiteto que executa comandos de terminal para instalar dependências necessárias.
-- Crie os arquivos de componentes (`.tsx`) e estilos separadamente.
-- Mocke todos os dados (JSON) para que as telas pareçam populadas e funcionais.
-- Implemente a lógica de troca de contexto (Tabs ou Routing) entre DHO e Serviços Gerais.
-- **IMPORTANTE:** O código deve ser apenas Front-end (Vite/React), simulando as integrações que no futuro serão Back-end.
-
-## 6. RBAC (protótipo implementado)
-- **Permissões:** `src/domain/auth/roles.ts` — matriz por `TipoUsuario` (admin, gestor, rh, financeiro, logistica).
-- **Estado do usuário:** `src/features/auth/AuthContext.tsx` + `AuthProvider` após o login em `src/app/App.tsx`.
-- **Serviços Gerais por área:** `src/features/servicos-gerais/financeiro/` e `src/features/servicos-gerais/logistica/` (painéis e telas específicas); visão completa em `src/features/servicos-gerais/shared/`.
-- **DHO transversal (gestor):** rota lógica `dho-gestor` — formulários de solicitação de treinamento e consultoria para perfis financeiro e logística.
-- **UI:** sidebar filtra itens por perfil; topbar exibe badge de ambiente (azul = Financeiro, verde = Logística) em Serviços Gerais; acesso indevido em `src/features/access-denied/AccessDeniedPage.tsx`.
-
-## 7. Estrutura do código (clean architecture — front-end)
-- **`src/app/`** — composição raiz (`App.tsx`, `main.tsx`, entrada no Vite em `index.html`).
-- **`src/domain/`** — regras puras (ex.: `domain/auth/roles.ts` — permissões sem UI).
-- **`src/infrastructure/`** — detalhes externos ao domínio (ex.: `infrastructure/mock/` — dados e `mockLogin`).
-- **`src/shared/`** — UI genérica, utilitários e tipos compartilhados (`shared/ui/`, `shared/lib/`, `shared/types/`, `shared/components/`).
-- **`src/features/`** — módulos verticais: `auth`, `navigation`, `layout`, `login`, `access-denied`, `dho`, `servicos-gerais`, `hr/` (recrutamento, admissões, operações, treinamentos, analytics, comunicação).
-
-# Role: Senior Software Architect (RBAC & Frontend Security)
-# Context: Refactoring Access Levels for "Sistema Integrado Posigraf"
-
-## 1. Objetivo
-Implementar uma estrutura de permissões (RBAC) rigorosa no Frontend para garantir que usuários vejam apenas os módulos pertinentes ao seu cargo. A aba "Serviços Gerais" deve ser fragmentada em visões específicas.
-
-## 2. Matriz de Permissões (Mock Permission Logic)
-O sistema deve simular os seguintes perfis de usuário:
-
-- **PERFIL: RH/DHO**
-  - Acesso: Módulo Recrutamento Completo + Dashboard DHO (Indicadores e Trilhas).
-  - Restrição: Não visualiza faturamento de notas fiscais de Serviços Gerais.
-
-- **PERFIL: FINANCEIRO**
-  - Acesso: Módulo DHO (apenas para solicitar treinamentos) + Serviços Gerais (Sub-módulos: Notas Fiscais, Faturamento Elo/Attos, Controle de Compras).
-  - Restrição: Bloqueado para dados de Recrutamento e Gestão de Armários/Refeitório.
-
-- **PERFIL: LOGÍSTICA/FACILITIES**
-  - Acesso: Módulo DHO (apenas para solicitar treinamentos) + Serviços Gerais (Sub-módulos: Refeitório, Armários, Estacionamento/VT, Sociedade do Café, Chamados Manusis).
-  - Restrição: Bloqueado para Recrutamento e Faturamento Financeiro.
-
-## 3. Requisitos de UI/UX para o Cursor
-- **Sidebar Dinâmica:** Os itens da sidebar devem ser renderizados condicionalmente com base no `user_role`.
-- **Dashboard de DHO Transversal:** Criar uma "View de Gestor" simplificada dentro do DHO que esteja disponível para todos os perfis, focada exclusivamente em "Solicitar Treinamento" e "Abrir Chamado de Consultoria".
-- **Visual Feedback:** Se um usuário tentar acessar uma rota via URL que não pertence ao seu perfil, exibir uma tela de "Acesso Negado" elegante.
-
-## 4. Instruções de Implementação
-- Crie um arquivo `roles.ts` ou um Context Provider (`AuthContext.tsx`) que gerencie o estado global do usuário e suas permissões.
-- Refatore a estrutura de pastas para que os componentes de "Financeiro" e "Logística" fiquem em diretórios separados dentro de `features/servicos-gerais/`.
-- Utilize badges ou cores de identificação na UI para indicar em qual "Ambiente" o usuário está (Ex: Header Azul para Financeiro, Verde para Logística).
+## 5. Instruções de Implementação para a IA
+- Refatore o Tailwind CSS de todos os componentes existentes para seguir esta paleta de cinzas profundos (Zinc/Stone).
+- Elimine divisores de linha desnecessários; use o `gap` do grid para separar as informações.
+- Garanta que o "Respiro" (Padding `p-8`) seja mantido dentro de cada Bento Box.
+- O resultado final deve ser uma interface escura, elegante e altamente legível.
