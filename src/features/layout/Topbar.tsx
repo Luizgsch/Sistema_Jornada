@@ -52,9 +52,6 @@ export function Topbar({ onMenuClick, usuario, onLogout, sistemaAtual = 'hr-core
           >
             <Search className="h-4 w-4 mr-2 shrink-0 text-zinc-400 dark:text-zinc-600 group-hover:text-zinc-500 transition-colors" />
             <span className="flex-1 text-left">Pesquisar...</span>
-            <kbd className="hidden lg:flex items-center gap-0.5 text-[10px] text-zinc-400 dark:text-zinc-700 bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded-md border border-zinc-200 dark:border-zinc-700 font-mono shrink-0">
-              ⌘K
-            </kbd>
           </button>
         </div>
 
