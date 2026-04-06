@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 
 <head>
   <meta charset="UTF-8" />
@@ -7,9 +7,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Sistema integrado Posigraf — RH, DHO e Serviços Gerais (protótipo)." />
   <title>Posigraf — Sistema integrado</title>
+  <!-- Anti-flash: apply saved theme before first paint -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('posigraf-theme');
+        if (t === 'light') {
+          document.documentElement.classList.remove('dark');
+        } else {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -17,7 +30,7 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+            sans: ['Inter', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
           },
           colors: {
             primary: {
@@ -25,26 +38,24 @@
               foreground: '#ffffff',
             },
             secondary: {
-              DEFAULT: '#1E293B', // Slate 800
-              foreground: '#ffffff',
+              DEFAULT: '#27272a',
+              foreground: '#e7e5e4',
             },
-            success: '#16A34A',
-            warning: '#F59E0B',
-            danger: '#DC2626',
-            border: '#E2E8F0',
             card: {
-              DEFAULT: '#ffffff',
-              foreground: '#0f172a',
+              DEFAULT: '#18181b',
+              foreground: '#e7e5e4',
             },
-            background: '#F8FAFC',
+            background: '#09090b',
             muted: {
-              DEFAULT: '#f1f5f9',
-              foreground: '#64748b',
+              DEFAULT: '#27272a',
+              foreground: '#78716c',
             },
             accent: {
-              DEFAULT: '#f1f5f9',
-              foreground: '#0f172a',
-            }
+              DEFAULT: '#27272a',
+              foreground: '#e7e5e4',
+            },
+            border: '#27272a',
+            input: '#27272a',
           }
         }
       }
@@ -52,69 +63,189 @@
   </script>
   <style>
     :root {
-      --background: 0 0% 100%;
-      --foreground: 224 71.4% 4.1%;
-      --card: 0 0% 100%;
-      --card-foreground: 224 71.4% 4.1%;
-      --popover: 0 0% 100%;
-      --popover-foreground: 224 71.4% 4.1%;
+      /* Dark Zinc/Stone palette — Zinc-950 bg, Zinc-900 cards */
+      --background: 240 10% 3.9%;
+      --foreground: 0 0% 98%;
+      --card: 240 5.9% 10%;
+      --card-foreground: 0 0% 90%;
+      --popover: 240 5.9% 10%;
+      --popover-foreground: 0 0% 98%;
       --primary: 173 58% 39%;
       --primary-foreground: 210 20% 98%;
-      --secondary: 210 40% 96.1%;
-      --secondary-foreground: 222.2 47.4% 11.2%;
-      --muted: 210 40% 96.1%;
-      --muted-foreground: 215.4 16.3% 46.9%;
-      --accent: 210 40% 96.1%;
-      --accent-foreground: 222.2 47.4% 11.2%;
+      --secondary: 240 3.7% 15.9%;
+      --secondary-foreground: 0 0% 90%;
+      --muted: 240 3.7% 15.9%;
+      --muted-foreground: 25 5.3% 44.7%;
+      --accent: 240 3.7% 15.9%;
+      --accent-foreground: 0 0% 90%;
       --destructive: 0 84.2% 60.2%;
       --destructive-foreground: 210 20% 98%;
-      --border: 214.3 31.8% 91.4%;
-      --input: 214.3 31.8% 91.4%;
+      --border: 240 3.7% 15.9%;
+      --input: 240 3.7% 15.9%;
       --ring: 173 58% 39%;
       --radius: 0.75rem;
     }
 
-      body {
-        background-color: #F8FAFC;
-        margin: 0;
-        font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
-        color: #1E293B;
-        /* Premium Background Gradient (Subtle) */
-        background-image: radial-gradient(at 0% 0%, hsla(217,100%,70%,0.03) 0, transparent 40%), 
-                          radial-gradient(at 100% 0%, hsla(217,39%,50%,0.03) 0, transparent 40%);
-      }
+    /* Light mode CSS variables */
+    :root:not(.dark) {
+      --background: 0 0% 100%;
+      --foreground: 240 10% 9%;
+      --card: 0 0% 98%;
+      --card-foreground: 240 10% 9%;
+      --popover: 0 0% 100%;
+      --popover-foreground: 240 10% 9%;
+      --primary: 173 58% 39%;
+      --primary-foreground: 210 20% 98%;
+      --secondary: 240 5% 96%;
+      --secondary-foreground: 240 10% 9%;
+      --muted: 240 5% 96%;
+      --muted-foreground: 240 4% 46%;
+      --accent: 240 5% 96%;
+      --accent-foreground: 240 10% 9%;
+      --destructive: 0 84% 60%;
+      --destructive-foreground: 210 20% 98%;
+      --border: 240 6% 90%;
+      --input: 240 6% 90%;
+      --ring: 173 58% 39%;
+    }
 
-      /* Custom Scrollbar */
-      .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-      }
-      .custom-scrollbar::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #e2e8f0;
-        border-radius: 9999px;
-      }
-      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background-color: #cbd5e1;
-      }
+    body {
+      background-color: #09090b;
+      margin: 0;
+      font-family: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+      color: #e7e5e4;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
 
-      /* Premium SaaS Utilities */
-      .glass-card {
-        background-color: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-      }
-      
-      .text-balance {
-        text-wrap: balance;
-      }
+    html:not(.dark) body {
+      background-color: #fafafa;
+      color: #18181b;
+    }
 
+    /* Dark scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background-color: #3f3f46; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background-color: #52525b; }
+
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #3f3f46; border-radius: 9999px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #52525b; }
+
+    /* Neon alert utilities */
+    .neon-error {
+      color: #ff0033;
+      text-shadow: 0 0 8px rgba(255, 0, 51, 0.55), 0 0 20px rgba(255, 0, 51, 0.25);
+    }
+    .neon-success {
+      color: #39ff14;
+      text-shadow: 0 0 8px rgba(57, 255, 20, 0.55), 0 0 20px rgba(57, 255, 20, 0.25);
+    }
+    .neon-warning {
+      color: #fbbf24;
+      text-shadow: 0 0 8px rgba(251, 191, 36, 0.45);
+    }
+    .neon-error-sm {
+      color: #ff0033;
+      text-shadow: 0 0 6px rgba(255, 0, 51, 0.5);
+    }
+
+    /* Global theme transition — applies to all elements for smooth palette swap */
+    *, *::before, *::after {
+      transition-property: background-color, border-color, color, fill, stroke;
+      transition-duration: 300ms;
+      transition-timing-function: ease;
+    }
+
+    /* Glass card — dark variant */
+    .glass-card {
+      background-color: rgba(24, 24, 27, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid #27272a;
+    }
+    html:not(.dark) .glass-card {
+      background-color: rgba(255, 255, 255, 0.85);
+      border: 1px solid #e4e4e7;
+    }
+
+    .text-balance { text-wrap: balance; }
+
+    /* Bento card hover */
+    .bento-card {
+      background-color: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 0.75rem;
+      transition: border-color 0.2s;
+    }
+    .bento-card:hover { border-color: #3f3f46; }
+    html:not(.dark) .bento-card {
+      background-color: #ffffff;
+      border-color: #e4e4e7;
+    }
+    html:not(.dark) .bento-card:hover { border-color: #a1a1aa; }
+
+    /* Light mode scrollbar */
+    html:not(.dark) ::-webkit-scrollbar-thumb { background-color: #d4d4d8; }
+    html:not(.dark) ::-webkit-scrollbar-thumb:hover { background-color: #a1a1aa; }
+
+    /* ─── LIGHT MODE: Global overrides for hardcoded dark-palette Tailwind classes ─── */
+    /* These rules cover all ~40 feature pages that use hex shorthand without dark: prefix */
+
+    /* Backgrounds */
+    html:not(.dark) .bg-\[\#09090b\]         { background-color: #f9fafb; }
+    html:not(.dark) .bg-\[\#18181b\]         { background-color: #ffffff; }
+    html:not(.dark) .bg-\[\#0f0f11\]         { background-color: #f9fafb; }
+    html:not(.dark) .bg-\[\#09090b\]\/90     { background-color: rgba(249,250,251,0.9); }
+    html:not(.dark) .bg-\[\#18181b\]\/80     { background-color: rgba(255,255,255,0.85); }
+    html:not(.dark) .bg-zinc-900             { background-color: #f4f4f5; }
+    html:not(.dark) .bg-zinc-800             { background-color: #e4e4e7; }
+    html:not(.dark) .bg-zinc-800\/20         { background-color: rgba(244,244,245,0.6); }
+    html:not(.dark) .bg-zinc-800\/30         { background-color: rgba(244,244,245,0.7); }
+    html:not(.dark) .bg-zinc-800\/40         { background-color: rgba(244,244,245,0.8); }
+    html:not(.dark) .bg-zinc-800\/50         { background-color: rgba(244,244,245,0.9); }
+
+    /* Text */
+    html:not(.dark) .text-\[\#e7e5e4\]      { color: #18181b; }
+    html:not(.dark) .text-zinc-100           { color: #18181b; }
+    html:not(.dark) .text-zinc-200           { color: #27272a; }
+    html:not(.dark) .text-zinc-300           { color: #3f3f46; }
+
+    /* Borders */
+    html:not(.dark) .border-\[\#27272a\]     { border-color: #e4e4e7; }
+    html:not(.dark) .border-zinc-700         { border-color: #d4d4d8; }
+    html:not(.dark) .border-zinc-800         { border-color: #e4e4e7; }
+
+    /* Hover backgrounds */
+    html:not(.dark) .hover\:bg-\[\#09090b\]:hover { background-color: #f4f4f5; }
+    html:not(.dark) .hover\:bg-zinc-800:hover      { background-color: #e4e4e7; }
+    html:not(.dark) .hover\:bg-zinc-700:hover      { background-color: #d4d4d8; }
+    html:not(.dark) .hover\:bg-zinc-800\/50:hover  { background-color: rgba(228,228,231,0.6); }
+    html:not(.dark) .hover\:bg-zinc-800\/40:hover  { background-color: rgba(228,228,231,0.5); }
+    html:not(.dark) .hover\:bg-zinc-800\/20:hover  { background-color: rgba(244,244,245,0.7); }
+
+    /* Hover text */
+    html:not(.dark) .hover\:text-white:hover        { color: #18181b; }
+    html:not(.dark) .hover\:text-zinc-300:hover     { color: #27272a; }
+    html:not(.dark) .hover\:text-zinc-200:hover     { color: #3f3f46; }
+    html:not(.dark) .hover\:text-zinc-400:hover     { color: #52525b; }
+
+    /* Table-specific: thead rows that use dark bg */
+    html:not(.dark) thead.bg-\[\#09090b\],
+    html:not(.dark) thead > tr.bg-\[\#09090b\]      { background-color: #f4f4f5; }
+
+    /* Inputs */
+    html:not(.dark) input.bg-zinc-800\/40    { background-color: #f4f4f5; color: #18181b; }
+    html:not(.dark) input.bg-transparent     { color: #18181b; }
+
+    /* Ring / outline utilities used on focus */
+    html:not(.dark) .ring-zinc-700           { --tw-ring-color: #d4d4d8; }
+
+    /* BotOverlay notification badge border */
+    html:not(.dark) .border-\[\#09090b\]     { border-color: #f9fafb; }
   </style>
-  <script type="module" crossorigin src="/Sistema_Jornada/assets/index-C8ISWa-4.js"></script>
+  <script type="module" crossorigin src="/Sistema_Jornada/assets/index-DwfWCmhc.js"></script>
 </head>
 
 <body>
