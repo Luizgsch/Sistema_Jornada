@@ -29,6 +29,12 @@
       darkMode: 'class',
       theme: {
         extend: {
+          /* Sistema Jornada — escala global de border-radius (concêntrico: s < m < l) */
+          borderRadius: {
+            'radius-s': '0.375rem', /* 6px — checkboxes, kbd, hovers compactos */
+            'radius-m': '0.5rem',   /* 8px — botões, inputs, badges, ícones em chip */
+            'radius-l': '1rem',     /* 16px — cards, modais, painéis, command center */
+          },
           fontFamily: {
             sans: ['Inter', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
           },
@@ -38,24 +44,24 @@
               foreground: '#ffffff',
             },
             secondary: {
-              DEFAULT: '#27272a',
-              foreground: '#e7e5e4',
+              DEFAULT: '#334155',
+              foreground: '#f8fafc',
             },
             card: {
-              DEFAULT: '#18181b',
-              foreground: '#e7e5e4',
+              DEFAULT: '#1e293b',
+              foreground: '#f8fafc',
             },
-            background: '#09090b',
+            background: '#0f172a',
             muted: {
-              DEFAULT: '#27272a',
-              foreground: '#78716c',
+              DEFAULT: '#1e293b',
+              foreground: '#94a3b8',
             },
             accent: {
-              DEFAULT: '#27272a',
-              foreground: '#e7e5e4',
+              DEFAULT: '#334155',
+              foreground: '#f8fafc',
             },
-            border: '#27272a',
-            input: '#27272a',
+            border: '#334155',
+            input: '#334155',
           }
         }
       }
@@ -63,27 +69,31 @@
   </script>
   <style>
     :root {
-      /* Dark Zinc/Stone palette — Zinc-950 bg, Zinc-900 cards */
-      --background: 240 10% 3.9%;
-      --foreground: 0 0% 98%;
-      --card: 240 5.9% 10%;
-      --card-foreground: 0 0% 90%;
-      --popover: 240 5.9% 10%;
-      --popover-foreground: 0 0% 98%;
+      /* Dark — slate-900 base, slate-800 cards (elevação), texto legível */
+      --background: 222 47% 11%;
+      --foreground: 210 40% 98%;
+      --card: 217 33% 17%;
+      --card-foreground: 210 40% 98%;
+      --popover: 217 33% 17%;
+      --popover-foreground: 210 40% 98%;
       --primary: 173 58% 39%;
       --primary-foreground: 210 20% 98%;
-      --secondary: 240 3.7% 15.9%;
-      --secondary-foreground: 0 0% 90%;
-      --muted: 240 3.7% 15.9%;
-      --muted-foreground: 25 5.3% 44.7%;
-      --accent: 240 3.7% 15.9%;
-      --accent-foreground: 0 0% 90%;
+      --secondary: 215 25% 27%;
+      --secondary-foreground: 210 40% 98%;
+      --muted: 215 25% 22%;
+      --muted-foreground: 215 16% 65%;
+      --accent: 215 25% 27%;
+      --accent-foreground: 210 40% 98%;
       --destructive: 0 84.2% 60.2%;
       --destructive-foreground: 210 20% 98%;
-      --border: 240 3.7% 15.9%;
-      --input: 240 3.7% 15.9%;
+      --border: 215 20% 32%;
+      --input: 215 20% 32%;
       --ring: 173 58% 39%;
-      --radius: 0.75rem;
+      /* Raio base shadcn-compatível = Large (cards / popovers) */
+      --radius-s: 0.375rem;
+      --radius-m: 0.5rem;
+      --radius-l: 1rem;
+      --radius: var(--radius-l);
     }
 
     /* Light mode CSS variables */
@@ -109,12 +119,25 @@
       --ring: 173 58% 39%;
     }
 
+    /* App shell: one scroll region inside layout, never the document */
+    html {
+      height: 100%;
+      overflow: hidden;
+    }
+
     body {
-      background-color: #09090b;
+      background-color: #0f172a;
       margin: 0;
+      height: 100%;
+      overflow: hidden;
       font-family: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
-      color: #e7e5e4;
+      color: #f8fafc;
       transition: background-color 0.3s ease;
+    }
+
+    #root {
+      height: 100%;
+      overflow: hidden;
     }
 
     html:not(.dark) body {
@@ -160,10 +183,10 @@
 
     /* Glass card — dark variant */
     .glass-card {
-      background-color: rgba(24, 24, 27, 0.8);
+      background-color: rgba(30, 41, 59, 0.88);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1px solid #27272a;
+      border: 1px solid #334155;
     }
     html:not(.dark) .glass-card {
       background-color: rgba(255, 255, 255, 0.85);
@@ -174,9 +197,9 @@
 
     /* Bento card hover */
     .bento-card {
-      background-color: #18181b;
-      border: 1px solid #27272a;
-      border-radius: 0.75rem;
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: var(--radius-l);
       transition: border-color 0.2s;
     }
     .bento-card:hover { border-color: #3f3f46; }
@@ -244,8 +267,20 @@
 
     /* BotOverlay notification badge border */
     html:not(.dark) .border-\[\#09090b\]     { border-color: #f9fafb; }
+
+    /* Novo mapa escuro (slate) — espelha overrides dos hex antigos */
+    html:not(.dark) .bg-\[\#0f172a\]         { background-color: #f9fafb; }
+    html:not(.dark) .bg-\[\#1e293b\]         { background-color: #ffffff; }
+    html:not(.dark) .bg-\[\#0f172a\]\/50     { background-color: rgba(249,250,251,0.75); }
+    html:not(.dark) .bg-\[\#0f172a\]\/85     { background-color: rgba(249,250,251,0.92); }
+    html:not(.dark) .bg-\[\#0f172a\]\/90     { background-color: rgba(249,250,251,0.9); }
+    html:not(.dark) .bg-\[\#1e293b\]\/80     { background-color: rgba(255,255,255,0.85); }
+    html:not(.dark) .border-\[\#334155\]     { border-color: #e4e4e7; }
+    html:not(.dark) .hover\:bg-\[\#0f172a\]:hover { background-color: #f4f4f5; }
+    html:not(.dark) thead.bg-\[\#0f172a\],
+    html:not(.dark) thead > tr.bg-\[\#0f172a\]      { background-color: #f4f4f5; }
   </style>
-  <script type="module" crossorigin src="/Sistema_Jornada/assets/index-DFq8xSAF.js"></script>
+  <script type="module" crossorigin src="/Sistema_Jornada/assets/index-DCprALEd.js"></script>
 </head>
 
 <body>
