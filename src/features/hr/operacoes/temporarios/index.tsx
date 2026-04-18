@@ -43,10 +43,10 @@ export default function TemporariosPage() {
               <input 
                 type="text" 
                 placeholder="Pesquisar..." 
-                className="w-full pl-9 h-9 text-sm rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-primary"
+                className="w-full pl-9 h-9 text-sm rounded-radius-s border border-input focus:outline-none focus:ring-1 focus:ring-primary"
               />
             </div>
-            <button className="inline-flex items-center gap-2 h-9 px-3 border rounded-md text-sm font-medium hover:bg-[#09090b]">
+            <button className="inline-flex items-center gap-2 h-9 px-3 border rounded-radius-s text-sm font-medium hover:bg-[#0f172a]">
               <Filter size={14} />
               Filtros
             </button>
@@ -55,7 +55,7 @@ export default function TemporariosPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm whitespace-nowrap">
-              <thead className="bg-[#09090b] border-b">
+              <thead className="bg-[#0f172a] border-b">
                 <tr className="text-muted-foreground font-medium">
                   <th className="py-4 px-6">Colaborador</th>
                   <th className="py-4 px-6">Cargo</th>
@@ -86,11 +86,11 @@ export default function TemporariosPage() {
                     </td>
                     <td className="py-4 px-6">
                       <div className="flex items-center justify-end gap-2">
-                        <button className="h-8 px-2 text-xs font-bold text-emerald-600 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors flex items-center gap-1">
+                        <button className="h-8 px-2 text-xs font-bold text-emerald-600 bg-emerald-50 rounded-radius-m hover:bg-emerald-100 transition-colors flex items-center gap-1">
                           <Zap size={12} />
                           Efetivar
                         </button>
-                        <button className="h-8 px-2 text-xs font-bold text-primary bg-primary/5 rounded-lg hover:bg-primary/10 transition-colors flex items-center gap-1">
+                        <button className="h-8 px-2 text-xs font-bold text-primary bg-primary/5 rounded-radius-m hover:bg-primary/10 transition-colors flex items-center gap-1">
                           <RefreshCcw size={12} />
                           Renovar
                         </button>
@@ -109,7 +109,7 @@ export default function TemporariosPage() {
         <Card className="bg-amber-50 border-amber-200">
            <CardContent className="pt-6">
               <div className="flex gap-4">
-                 <div className="p-3 bg-[#18181b] rounded-2xl text-amber-500  flex items-center justify-center">
+                 <div className="p-3 bg-[#1e293b] rounded-radius-l text-amber-500  flex items-center justify-center">
                     <AlertTriangle size={24} />
                  </div>
                  <div>
@@ -121,10 +121,10 @@ export default function TemporariosPage() {
               </div>
            </CardContent>
         </Card>
-        <Card className="bg-[#09090b] text-white border-none">
+        <Card className="bg-[#0f172a] text-white border-none">
            <CardContent className="pt-6">
               <div className="flex gap-4">
-                 <div className="p-3 bg-[#18181b]/10 rounded-2xl text-primary  flex items-center justify-center">
+                 <div className="p-3 bg-[#1e293b]/10 rounded-radius-l text-primary  flex items-center justify-center">
                     <UserCheck size={24} />
                  </div>
                  <div>
@@ -145,9 +145,9 @@ function MetricCard({ title, value, icon: Icon, color }: any) {
   return (
     <Card className="border-none  overflow-hidden group">
       <CardContent className="p-6 relative">
-        <div className="absolute top-0 right-0 p-8 -mt-4 -mr-4 bg-[#09090b] rounded-full scale-0 group-hover:scale-100 transition-transform duration-500" />
+        <div className="absolute top-0 right-0 p-8 -mt-4 -mr-4 bg-[#0f172a] rounded-full scale-0 group-hover:scale-100 transition-transform duration-500" />
         <div className="relative flex items-center gap-4">
-          <div className={`p-3 rounded-2xl bg-[#09090b] ${color}`}>
+          <div className={`p-3 rounded-radius-l bg-[#0f172a] ${color}`}>
             <Icon size={24} />
           </div>
           <div>

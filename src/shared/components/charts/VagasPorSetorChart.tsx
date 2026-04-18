@@ -11,6 +11,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/Card";
 import type { VacancySectorData } from "@/shared/types";
 import { motion } from "framer-motion";
+import { useChartTheme } from "@/shared/components/charts/chartTheme";
 
 interface VagasPorSetorChartProps {
   data: VacancySectorData[];
@@ -19,6 +20,7 @@ interface VagasPorSetorChartProps {
 const COLORS = ["#8b5cf6", "#a78bfa", "#c4b5fd", "#ddd6fe", "#ede9fe"];
 
 export function VagasPorSetorChart({ data }: VagasPorSetorChartProps) {
+  const { gridStroke, axisTickFill, tooltipStyle, cursorFill } = useChartTheme();
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -33,7 +35,7 @@ export function VagasPorSetorChart({ data }: VagasPorSetorChartProps) {
           <div className="h-[300px] w-full mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data} layout="vertical" margin={{ left: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#e2e8f0" />
+                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={gridStroke} />
                 <XAxis type="number" hide />
                 <YAxis
                   dataKey="setor"
@@ -41,15 +43,11 @@ export function VagasPorSetorChart({ data }: VagasPorSetorChartProps) {
                   axisLine={false}
                   tickLine={false}
                   width={100}
-                  className="text-xs font-medium"
+                  tick={{ fill: axisTickFill, fontSize: 11 }}
                 />
                 <Tooltip
-                  cursor={{ fill: "#f1f5f9", radius: 4 }}
-                  contentStyle={{
-                    borderRadius: "8px",
-                    border: "1px solid #e2e8f0",
-                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                  }}
+                  cursor={{ fill: cursorFill, radius: 4 }}
+                  contentStyle={tooltipStyle}
                 />
                 <Bar dataKey="vagas" radius={[0, 4, 4, 0]} barSize={24}>
                   {data.map((_, index) => (

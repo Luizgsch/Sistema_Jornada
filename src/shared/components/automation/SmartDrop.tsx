@@ -91,16 +91,16 @@ export function SmartDrop({ onComplete }: SmartDropProps) {
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleDrop}
             onClick={() => fileRef.current?.click()}
-            className={`relative flex flex-col items-center justify-center gap-4 p-12 rounded-2xl border-2 border-dashed cursor-pointer transition-all duration-300 ${
+            className={`relative flex flex-col items-center justify-center gap-4 p-12 rounded-radius-l border-2 border-dashed cursor-pointer transition-all duration-300 ${
               isDragging
                 ? "border-primary bg-primary/10 scale-[1.02]"
-                : "border-[#27272a] bg-zinc-800/10 hover:border-primary/40 hover:bg-zinc-800/30"
+                : "border-[#334155] bg-zinc-800/10 hover:border-primary/40 hover:bg-zinc-800/30"
             }`}
           >
             <input ref={fileRef} type="file" className="hidden" onChange={handleFileChange} accept=".pdf,.jpg,.jpeg,.png" />
             <motion.div
               animate={isDragging ? { scale: 1.1 } : { scale: 1 }}
-              className="p-5 bg-primary/10 rounded-2xl text-primary"
+              className="p-5 bg-primary/10 rounded-radius-l text-primary"
             >
               <Upload size={32} />
             </motion.div>
@@ -108,7 +108,7 @@ export function SmartDrop({ onComplete }: SmartDropProps) {
               <p className="font-bold text-[#e7e5e4] text-lg">Arraste um documento aqui</p>
               <p className="text-sm text-zinc-500 mt-1.5">ou clique para selecionar • RG, CPF, CNH, Holerite</p>
             </div>
-            <div className="flex items-center gap-2 text-xs text-primary font-semibold bg-primary/5 px-4 py-2 rounded-full border border-primary/20">
+            <div className="flex items-center gap-2 text-xs text-primary font-semibold bg-primary/5 px-4 py-2 rounded-radius-m border border-primary/20">
               <Sparkles size={13} />
               IA extrai e preenche o formulário automaticamente
             </div>
@@ -121,7 +121,7 @@ export function SmartDrop({ onComplete }: SmartDropProps) {
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
-            className="flex flex-col items-center justify-center gap-6 p-12 rounded-2xl border border-[#27272a] bg-zinc-800/10"
+            className="flex flex-col items-center justify-center gap-6 p-12 rounded-radius-l border border-[#334155] bg-zinc-800/10"
           >
             <div className="relative w-24 h-24">
               <div className="absolute inset-0 rounded-full border-4 border-primary/10" />
@@ -138,7 +138,7 @@ export function SmartDrop({ onComplete }: SmartDropProps) {
               <p className="font-bold text-[#e7e5e4] text-lg">IA extraindo dados e validando campos...</p>
               <p className="text-sm text-zinc-500 mt-1">Aguarde, processamento em andamento</p>
             </div>
-            <div className="flex items-center gap-2.5 text-xs text-zinc-500 font-mono bg-zinc-900 px-4 py-2.5 rounded-xl border border-[#27272a]">
+            <div className="flex items-center gap-2.5 text-xs text-zinc-500 font-mono bg-zinc-900 px-4 py-2.5 rounded-radius-m border border-[#334155]">
               <FileText size={12} />
               {fileName}
             </div>
@@ -151,11 +151,11 @@ export function SmartDrop({ onComplete }: SmartDropProps) {
             key="done"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-2xl border border-emerald-500/25 bg-emerald-500/5 overflow-hidden"
+            className="rounded-radius-l border border-emerald-500/25 bg-emerald-500/5 overflow-hidden"
           >
             <div className="flex items-center justify-between p-4 border-b border-emerald-500/15">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-emerald-500/10 rounded-xl">
+                <div className="p-2 bg-emerald-500/10 rounded-radius-m">
                   <CheckCircle2 size={20} className="text-emerald-400" />
                 </div>
                 <div>
@@ -167,7 +167,7 @@ export function SmartDrop({ onComplete }: SmartDropProps) {
               </div>
               <button
                 onClick={reset}
-                className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-300 transition-colors px-3 py-1.5 rounded-lg border border-[#27272a] hover:border-zinc-600"
+                className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-300 transition-colors px-3 py-1.5 rounded-radius-m border border-[#334155] hover:border-zinc-600"
               >
                 <RefreshCw size={12} />
                 Novo upload

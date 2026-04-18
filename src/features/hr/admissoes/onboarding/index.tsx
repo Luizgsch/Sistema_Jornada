@@ -99,10 +99,10 @@ export default function OnboardingPage() {
             <input 
               type="text" 
               placeholder="Buscar colaborador..." 
-              className="pl-10 h-10 w-64 rounded-lg border border-input bg-[#18181b] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="pl-10 h-10 w-64 rounded-radius-m border border-input bg-[#1e293b] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
-          <button className="h-10 px-4 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center gap-2">
+          <button className="h-10 px-4 bg-primary text-white rounded-radius-m font-medium hover:bg-primary/90 transition-colors flex items-center gap-2">
             <Plus size={18} />
             Adicionar
           </button>
@@ -123,16 +123,16 @@ export default function OnboardingPage() {
                 <MoreVertical size={16} className="text-zinc-600 cursor-pointer" />
               </div>
               
-              <div className="flex-1 bg-zinc-800/30 rounded-xl p-3 space-y-3 min-h-[500px] border border-dashed border-[#27272a]">
+              <div className="flex-1 bg-zinc-800/30 rounded-radius-m p-3 space-y-3 min-h-[500px] border border-dashed border-[#334155]">
                 {column.tasks.map((task) => (
                   <motion.div
                     key={task.id}
                     layoutId={task.id}
                     onClick={() => setSelectedTask(task)}
-                    className="bg-[#18181b] p-4 rounded-xl  border border-[#27272a] cursor-pointer hover:border-primary/50 hover: transition-all group"
+                    className="bg-[#1e293b] p-4 rounded-radius-m  border border-[#334155] cursor-pointer hover:border-primary/50 hover: transition-all group"
                   >
                     <div className="flex justify-between items-start mb-2">
-                      <span className="text-xs font-bold text-primary bg-primary/5 px-2 py-0.5 rounded">
+                      <span className="text-xs font-bold text-primary bg-primary/5 px-2 py-0.5 rounded-radius-s">
                         {task.role}
                       </span>
                       <MoreVertical size={14} className="text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -159,7 +159,7 @@ export default function OnboardingPage() {
                     </div>
                   </motion.div>
                 ))}
-                <button className="w-full py-2 border border-dashed border-zinc-700 rounded-lg text-zinc-600 text-xs font-medium hover:bg-[#18181b] hover:text-zinc-400 transition-all flex items-center justify-center gap-1">
+                <button className="w-full py-2 border border-dashed border-zinc-700 rounded-radius-m text-zinc-600 text-xs font-medium hover:bg-[#1e293b] hover:text-zinc-400 transition-all flex items-center justify-center gap-1">
                   <Plus size={14} />
                   Adicionar Card
                 </button>
@@ -185,11 +185,11 @@ export default function OnboardingPage() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-[#18181b]  z-[110] flex flex-col"
+              className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-[#1e293b]  z-[110] flex flex-col"
             >
-              <div className="p-8 border-b bg-[#09090b]">
+              <div className="p-8 border-b bg-[#0f172a]">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
+                  <div className="w-16 h-16 bg-primary/10 rounded-radius-l flex items-center justify-center text-primary">
                     <User size={32} />
                   </div>
                   <div>
@@ -222,12 +222,12 @@ export default function OnboardingPage() {
                   </div>
                 </div>
 
-                <div className="p-6 bg-[#09090b] rounded-2xl text-white">
+                <div className="p-6 bg-[#0f172a] rounded-radius-l text-white">
                   <h4 className="font-bold mb-2">Próximo Passo</h4>
                   <p className="text-zinc-400 text-sm mb-4">Realizar treinamento de integração com o gestor direto em 02/04.</p>
                   <button
                     onClick={triggerNotify}
-                    className="w-full py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+                    className="w-full py-3 bg-primary text-white rounded-radius-m font-bold hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
                   >
                     <Send size={16} />
                     Notificar Gestor
@@ -255,9 +255,9 @@ export default function OnboardingPage() {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", damping: 22, stiffness: 260 }}
-              className="relative w-full max-w-sm bg-[#18181b] border border-[#27272a] rounded-2xl overflow-hidden shadow-2xl"
+              className="relative w-full max-w-sm bg-[#1e293b] border border-[#334155] rounded-radius-l overflow-hidden shadow-2xl"
             >
-              <div className="p-5 bg-[#09090b] border-b border-[#27272a]">
+              <div className="p-5 bg-[#0f172a] border-b border-[#334155]">
                 <p className="text-xs font-bold uppercase tracking-widest text-primary mb-1">
                   {notifyFinished ? "✓ Notificações enviadas" : "Disparando notificações…"}
                 </p>
@@ -274,13 +274,13 @@ export default function OnboardingPage() {
                       key={i}
                       initial={{ opacity: 0.2 }}
                       animate={{ opacity: isDone || isActive ? 1 : 0.3 }}
-                      className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all ${
+                      className={`flex items-center gap-3 p-3.5 rounded-radius-m border transition-all ${
                         isDone ? "bg-emerald-500/5 border-emerald-500/20"
                           : isActive ? "bg-primary/5 border-primary/20"
-                          : "border-[#27272a]"
+                          : "border-[#334155]"
                       }`}
                     >
-                      <div className={`p-1.5 rounded-lg flex-shrink-0 ${isDone ? "bg-emerald-500/10 text-emerald-400" : isActive ? "bg-primary/10 text-primary" : "bg-zinc-800 text-zinc-600"}`}>
+                      <div className={`p-1.5 rounded-radius-m flex-shrink-0 ${isDone ? "bg-emerald-500/10 text-emerald-400" : isActive ? "bg-primary/10 text-primary" : "bg-zinc-800 text-zinc-600"}`}>
                         {isDone
                           ? <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}><CheckCircle2 size={16} /></motion.div>
                           : isActive
@@ -303,7 +303,7 @@ export default function OnboardingPage() {
                 >
                   <button
                     onClick={() => setShowNotifyFlow(false)}
-                    className="w-full py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors"
+                    className="w-full py-2.5 bg-primary text-white rounded-radius-m font-bold hover:bg-primary/90 transition-colors"
                   >
                     Fechar
                   </button>
@@ -319,7 +319,7 @@ export default function OnboardingPage() {
 
 function CheckItem({ label, checked }: { label: string, checked?: boolean }) {
   return (
-    <div className="flex items-center justify-between p-4 rounded-xl border border-[#27272a] hover:border-primary/20 transition-all cursor-pointer group">
+    <div className="flex items-center justify-between p-4 rounded-radius-m border border-[#334155] hover:border-primary/20 transition-all cursor-pointer group">
       <div className="flex items-center gap-3">
         {checked ? (
           <CheckCircle2 size={20} className="text-emerald-500" />

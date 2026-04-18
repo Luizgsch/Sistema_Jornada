@@ -1,12 +1,14 @@
 import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/Card";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import { useChartTheme } from "@/shared/components/charts/chartTheme";
 
 interface TurnoverChartProps {
   data: any[];
 }
 
 export const TurnoverChart: FC<TurnoverChartProps> = ({ data }) => {
+  const { gridStroke, axisTickFill, tooltipStyle } = useChartTheme();
   return (
     <Card className="col-span-1">
       <CardHeader>
@@ -21,12 +23,10 @@ export const TurnoverChart: FC<TurnoverChartProps> = ({ data }) => {
                 <stop offset="95%" stopColor="#DC2626" stopOpacity={0}/>
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-            <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} dy={10} />
-            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} dx={-10} />
-            <Tooltip 
-              contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-            />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridStroke} />
+            <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: axisTickFill }} dy={10} />
+            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: axisTickFill }} dx={-10} />
+            <Tooltip contentStyle={tooltipStyle} />
             <Area 
               type="monotone" 
               dataKey="turnover" 

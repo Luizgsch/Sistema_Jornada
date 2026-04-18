@@ -157,16 +157,16 @@ export function BotOverlay() {
             exit={{ opacity: 0, scale: 0.92, y: 10 }}
             transition={{ type: "spring", damping: 26, stiffness: 320 }}
             style={{ transformOrigin: "bottom right" }}
-            className="w-80 bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-2xl overflow-hidden shadow-2xl shadow-black/20 dark:shadow-black/50 pointer-events-auto transition-colors duration-300"
+            className="w-80 bg-white dark:bg-[#1e293b] border border-zinc-200 dark:border-[#334155] rounded-radius-l overflow-hidden shadow-2xl shadow-black/20 dark:shadow-black/50 pointer-events-auto transition-colors duration-300"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-[#09090b] border-b border-zinc-200 dark:border-[#27272a]">
+            <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-[#0f172a] border-b border-zinc-200 dark:border-[#334155]">
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <div className="w-9 h-9 bg-primary/15 rounded-full flex items-center justify-center text-primary">
                     <Bot size={17} />
                   </div>
-                  <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-[#09090b]" />
+                  <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-[#0f172a]" />
                 </div>
                 <div>
                   <p className="text-sm font-bold text-zinc-800 dark:text-[#e7e5e4]">Posigraf Bot</p>
@@ -175,7 +175,7 @@ export function BotOverlay() {
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
+                className="p-1.5 rounded-radius-m hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
               >
                 <Minimize2 size={15} />
               </button>
@@ -201,11 +201,11 @@ export function BotOverlay() {
                       )}
                       <div className={cn("flex-1", isUser && "flex justify-end")}>
                         <div className={cn(
-                          "rounded-2xl px-3.5 py-2.5 border inline-block max-w-[90%]",
+                          "rounded-radius-l px-3.5 py-2.5 border inline-block max-w-[90%]",
                           isUser
                             ? "bg-teal-600/20 border-teal-500/30 rounded-tr-sm"
                             : cn(
-                                "bg-zinc-100 dark:bg-zinc-800/50 border-zinc-200 dark:border-[#27272a] rounded-tl-sm",
+                                "bg-zinc-100 dark:bg-zinc-800/50 border-zinc-200 dark:border-[#334155] rounded-tl-sm",
                                 msg.tag && `border-l-2 ${tagConfig[msg.tag].replace("text-", "border-")}`
                               )
                         )}>
@@ -222,18 +222,18 @@ export function BotOverlay() {
             </div>
 
             {/* Input */}
-            <div className="p-3 border-t border-zinc-200 dark:border-[#27272a] flex items-center gap-2">
+            <div className="p-3 border-t border-zinc-200 dark:border-[#334155] flex items-center gap-2">
               <input
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                 placeholder="Perguntar ao assistente..."
-                className="flex-1 bg-zinc-100 dark:bg-zinc-800/40 rounded-xl px-3 py-2 text-xs text-zinc-700 dark:text-zinc-300 placeholder:text-zinc-400 dark:placeholder-zinc-600 outline-none border border-zinc-200 dark:border-zinc-700 focus:border-teal-500/40 transition"
+                className="flex-1 bg-zinc-100 dark:bg-zinc-800/40 rounded-radius-m px-3 py-2 text-xs text-zinc-700 dark:text-zinc-300 placeholder:text-zinc-400 dark:placeholder-zinc-600 outline-none border border-zinc-200 dark:border-zinc-700 focus:border-teal-500/40 transition"
               />
               <button
                 onClick={handleSend}
                 disabled={!inputValue.trim()}
-                className="p-2 rounded-lg bg-primary hover:bg-primary/80 text-white disabled:opacity-30 disabled:cursor-not-allowed transition shrink-0"
+                className="p-2 rounded-radius-m bg-primary hover:bg-primary/80 text-white disabled:opacity-30 disabled:cursor-not-allowed transition shrink-0"
               >
                 <Send size={13} />
               </button>
@@ -265,7 +265,7 @@ export function BotOverlay() {
           <motion.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 rounded-full text-white text-[10px] font-bold flex items-center justify-center border-2 border-white dark:border-[#09090b]"
+            className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 rounded-full text-white text-[10px] font-bold flex items-center justify-center border-2 border-white dark:border-[#0f172a]"
           >
             {MOCK_MESSAGES.length}
           </motion.span>
@@ -282,7 +282,7 @@ export function BotOverlay() {
             initial={{ opacity: 0, x: 10, scale: 0.95 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 10 }}
-            className="absolute right-16 bottom-2 bg-white dark:bg-[#18181b] border border-amber-500/30 rounded-xl px-3 py-2.5 flex items-center gap-2 shadow-xl pointer-events-none whitespace-nowrap max-w-[240px]"
+            className="absolute right-16 bottom-2 bg-white dark:bg-[#1e293b] border border-amber-500/30 rounded-radius-m px-3 py-2.5 flex items-center gap-2 shadow-xl pointer-events-none whitespace-nowrap max-w-[240px]"
           >
             <Bell size={12} className="text-amber-400 flex-shrink-0" />
             <p className="text-xs font-semibold text-amber-300 leading-snug truncate">{getLiveAlertForRole(usuario.tipo)}</p>
@@ -293,7 +293,7 @@ export function BotOverlay() {
             initial={{ opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 10 }}
-            className="absolute right-16 bottom-2 bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl px-3 py-2 flex items-center gap-2 shadow-lg pointer-events-none whitespace-nowrap"
+            className="absolute right-16 bottom-2 bg-white dark:bg-[#1e293b] border border-zinc-200 dark:border-[#334155] rounded-radius-m px-3 py-2 flex items-center gap-2 shadow-lg pointer-events-none whitespace-nowrap"
           >
             <Zap size={12} className="text-primary" />
             <p className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Bot tem novas notificações</p>

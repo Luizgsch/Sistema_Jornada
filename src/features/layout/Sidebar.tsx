@@ -22,8 +22,8 @@ import {
   ClipboardCheck,
   Smile,
   ClipboardList,
-  Coffee,
   Ticket,
+  UsersRound,
   Handshake,
   MessageSquare,
 } from "lucide-react";
@@ -61,14 +61,14 @@ const ALL_HR: HRRole[] = ['rh', 'admin', 'gestor'];
 const ADMIN_ONLY: HRRole[] = ['admin', 'gestor'];
 
 const menuItemsHRCore: MenuItem[] = [
-  { id: "command-center", icon: LayoutDashboard, label: "Command Center", allowedRoles: ALL_HR },
+  { id: "command-center", icon: LayoutDashboard, label: "Início", allowedRoles: ALL_HR },
   { 
     id: "recrutamento", 
     icon: Users, 
     label: "Recrutamento",
     allowedRoles: ALL_HR,
     subItems: [
-      { id: "recrutamento-dashboard", label: "Dashboard" },
+      { id: "recrutamento-dashboard", label: "Operação hoje" },
       { id: "vagas", label: "Vagas" },
       { id: "pipeline", label: "Pipeline" },
       { id: "triagem-ia", label: "Triagem com IA" },
@@ -83,7 +83,7 @@ const menuItemsHRCore: MenuItem[] = [
     label: "Admissões",
     allowedRoles: ALL_HR,
     subItems: [
-      { id: "dashboard-admissoes", label: "Dashboard" },
+      { id: "dashboard-admissoes", label: "Operação hoje" },
       { id: "documentos", label: "Documentos" },
       { id: "onboarding", label: "Onboarding" },
       { id: "matriculas", label: "Matrículas" },
@@ -120,11 +120,11 @@ const menuItemsHRCore: MenuItem[] = [
   { 
     id: "analytics", 
     icon: PieChart, 
-    label: "Analytics",
+    label: "Analytics (BI)",
     allowedRoles: ADMIN_ONLY,
     subItems: [
-      { id: "indicadores", label: "Indicadores", allowedRoles: ALL_HR },
-      { id: "relatorios", label: "Relatórios", allowedRoles: ADMIN_ONLY },
+      { id: "indicadores", label: "Painéis por área", allowedRoles: ALL_HR },
+      { id: "relatorios", label: "Relatórios exportáveis", allowedRoles: ADMIN_ONLY },
     ]
   },
 ];
@@ -169,8 +169,17 @@ const menuItemsServicosGeraisBase: MenuItem[] = [
   { id: "sg-fechamento-attos", icon: ClipboardCheck, label: "Fechamento Attos" },
   { id: "sg-satisfacao-attos", icon: Smile, label: "Satisfação refeição" },
   { id: "sg-chamados-manusis", icon: ClipboardList, label: "Chamados (Manusis)" },
-  { id: "sg-cafe-abastecimento", icon: Coffee, label: "Sociedade do Café" },
   { id: "sg-voucher-natal", icon: Ticket, label: "Voucher Natal" },
+  {
+    id: "sg-engajamento",
+    icon: UsersRound,
+    label: "Engajamento",
+    subItems: [
+      { id: "sg-engajamento-cafe", label: "Sociedade do Café" },
+      { id: "sg-engajamento-aniversariantes", label: "Aniversariantes" },
+      { id: "sg-engajamento-mural", label: "Mural" },
+    ],
+  },
 ];
 
 const menuItemsDHOLimited: MenuItem[] = [
@@ -214,10 +223,18 @@ export function Sidebar({
     if (mobile && onClose) onClose();
   };
 
-  const menuServicosGerais = useMemo(
-    () => menuItemsServicosGeraisBase.filter((item) => canAccessSGPage(usuario.tipo, item.id)),
-    [usuario.tipo]
-  );
+  const menuServicosGerais = useMemo(() => {
+    return menuItemsServicosGeraisBase
+      .map((item) => {
+        if (item.subItems) {
+          const allowedSubs = item.subItems.filter((s) => canAccessSGPage(usuario.tipo, s.id));
+          if (allowedSubs.length === 0) return null;
+          return { ...item, subItems: allowedSubs };
+        }
+        return canAccessSGPage(usuario.tipo, item.id) ? item : null;
+      })
+      .filter((item): item is MenuItem => item !== null);
+  }, [usuario.tipo]);
 
   const menuDHO = useMemo(
     () => (isDHOLimitedProfile(usuario.tipo) ? menuItemsDHOLimited : menuItemsDHO),
@@ -273,18 +290,18 @@ export function Sidebar({
       initial={mobile ? { x: 0 } : { x: -280 }}
       animate={{ x: 0 }}
       className={cn(
-        "h-full bg-white dark:bg-[#09090b] border-r border-zinc-200 dark:border-[#27272a] transition-colors duration-300 z-50 flex flex-col",
+        "h-full min-h-0 bg-white dark:bg-[#0f172a] border-r border-zinc-200 dark:border-[#334155] transition-colors duration-300 z-50 flex flex-col",
         !mobile && "fixed left-0 top-0",
         collapsed && !mobile ? "w-20" : "w-72",
         className
       )}
     >
       {/* Seletor de Sistema */}
-      <div className="p-4 border-b border-zinc-200 dark:border-[#27272a]">
+      <div className="p-4 border-b border-zinc-200 dark:border-[#334155]">
         <div className="relative">
           <button
             onClick={() => setMenuSeletorAberto(!menuSeletorAberto)}
-            className="flex items-center justify-between w-full p-3 bg-zinc-100 dark:bg-zinc-800/40 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700 transition-all"
+            className="flex items-center justify-between w-full p-3 bg-zinc-100 dark:bg-zinc-800/40 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-radius-m border border-zinc-200 dark:border-zinc-700 transition-all"
           >
             <div className="flex items-center gap-3">
               {sistemaAtual === 'hr-core' && <LayoutDashboard className="text-primary" size={20} />}
@@ -292,11 +309,11 @@ export function Sidebar({
               {sistemaAtual === 'servicos-gerais' && <Wrench className="text-amber-500 dark:text-amber-400" size={20} />}
               <span className="font-bold text-zinc-800 dark:text-white">{sistemaLabel}</span>
             </div>
-            <ChevronDown className={cn("text-zinc-400 dark:text-zinc-500 transition-transform", menuSeletorAberto && "rotate-180")} size={18} />
+            <ChevronDown className={cn("text-zinc-400 dark:text-slate-400 transition-transform", menuSeletorAberto && "rotate-180")} size={18} />
           </button>
 
           {menuSeletorAberto && sistemasDisponiveis.length > 1 && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl z-50 overflow-hidden shadow-lg">
+            <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-radius-m z-50 overflow-hidden shadow-lg">
               <div className="p-3 border-b border-zinc-200 dark:border-zinc-700">
                 <p className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Selecione o Sistema</p>
               </div>
@@ -306,7 +323,7 @@ export function Sidebar({
                     key={sistema.id}
                     onClick={() => toggleSistema(sistema.id as SistemaAtual)}
                     className={cn(
-                      "flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-left transition-colors",
+                      "flex items-center gap-3 w-full px-3 py-2.5 rounded-radius-m text-left transition-colors",
                       sistemaAtual === sistema.id
                         ? "bg-primary/10 text-primary"
                         : "text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700"
@@ -315,7 +332,7 @@ export function Sidebar({
                     <sistema.icon size={18} />
                     <div>
                       <p className="font-medium">{sistema.label}</p>
-                      <p className="text-xs text-zinc-500 dark:text-zinc-600">{sistema.descricao}</p>
+                      <p className="text-xs text-zinc-500 dark:text-slate-400">{sistema.descricao}</p>
                     </div>
                   </button>
                 ))}
@@ -326,7 +343,7 @@ export function Sidebar({
       </div>
 
       {/* Marca + módulo ativo */}
-      <div className="flex items-center justify-between px-4 sm:px-6 py-4 min-h-[4.5rem] border-b border-zinc-200 dark:border-[#27272a]">
+      <div className="flex items-center justify-between px-4 sm:px-6 py-4 min-h-[4.5rem] border-b border-zinc-200 dark:border-[#334155]">
         {(!collapsed || mobile) && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -349,7 +366,7 @@ export function Sidebar({
       </div>
 
       {/* Menu de navegação */}
-      <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+      <nav className="flex-1 min-h-0 px-4 py-6 pr-3 space-y-1 overflow-y-auto overscroll-y-contain custom-scrollbar [scrollbar-width:thin]">
         {menuItems.map((item) => {
           const isExpanded = expandedItems.includes(item.id);
           const isActive = activePage === item.id || item.subItems?.some(s => s.id === activePage);
@@ -365,16 +382,16 @@ export function Sidebar({
                   }
                 }}
                 className={cn(
-                  "flex items-center justify-between w-full p-3 rounded-lg transition-all group",
+                  "flex items-center justify-between w-full p-3 rounded-radius-m transition-all group",
                   isActive && !item.subItems
                     ? "bg-primary text-white shadow-lg shadow-primary/20"
                     : item.subItems && isActive
                     ? "text-zinc-800 dark:text-white bg-zinc-100 dark:bg-zinc-900/60"
-                    : "text-zinc-500 dark:text-zinc-500 hover:text-zinc-800 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900/60"
+                    : "text-zinc-500 dark:text-slate-400 hover:text-zinc-800 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900/60"
                 )}
               >
                 <div className="flex items-center gap-3">
-                  <item.icon size={20} className={isActive ? "text-inherit" : "text-zinc-400 dark:text-zinc-600"} />
+                  <item.icon size={20} className={isActive ? "text-inherit" : "text-zinc-400 dark:text-slate-500"} />
                   <span className="font-medium">{item.label}</span>
                 </div>
                 {item.subItems && (
@@ -401,10 +418,10 @@ export function Sidebar({
                         key={subItem.id}
                         onClick={() => handleItemClick(subItem.id)}
                         className={cn(
-                          "flex items-center gap-3 w-full p-2.5 pl-11 rounded-lg text-sm transition-all",
+                          "flex items-center gap-3 w-full p-2.5 pl-11 rounded-radius-m text-sm transition-all",
                           activePage === subItem.id
                             ? "bg-primary/10 text-primary font-medium"
-                            : "text-zinc-500 dark:text-zinc-500 hover:text-zinc-800 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900/60"
+                            : "text-zinc-500 dark:text-slate-400 hover:text-zinc-800 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900/60"
                         )}
                       >
                         {subItem.label}
@@ -420,10 +437,10 @@ export function Sidebar({
 
       {/* Botão recolher */}
       {!mobile && (
-        <div className="p-4 border-t border-zinc-200 dark:border-[#27272a]">
+        <div className="p-4 border-t border-zinc-200 dark:border-[#334155]">
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="flex items-center justify-between w-full p-2 rounded-lg text-zinc-500 dark:text-zinc-500 hover:text-zinc-800 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900/60 transition-all"
+            className="flex items-center justify-between w-full p-2 rounded-radius-m text-zinc-500 dark:text-slate-400 hover:text-zinc-800 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900/60 transition-all"
           >
             <span className="text-sm font-medium">{collapsed ? "Expandir" : "Recolher"}</span>
             {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}

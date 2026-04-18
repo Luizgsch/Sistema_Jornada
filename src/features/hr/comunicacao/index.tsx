@@ -32,17 +32,17 @@ export default function ComunicacaoPage() {
       </div>
 
       {/* Main App Container */}
-      <div className="flex-1 overflow-hidden bg-[#18181b] border border-[#27272a]  rounded-2xl flex">
+      <div className="flex-1 overflow-hidden bg-[#1e293b] border border-[#334155]  rounded-radius-l flex">
         
         {/* Left Sidebar - Contacts List */}
-        <div className="w-80 border-r border-[#27272a] flex flex-col bg-[#09090b] shrink-0">
-          <div className="p-4 border-b border-[#27272a] bg-[#18181b]">
+        <div className="w-80 border-r border-[#334155] flex flex-col bg-[#0f172a] shrink-0">
+          <div className="p-4 border-b border-[#334155] bg-[#1e293b]">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-600" />
               <input 
                 type="text" 
                 placeholder="Buscar candidato..." 
-                className="w-full pl-9 h-10 rounded-lg border border-[#27272a] bg-[#09090b] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="w-full pl-9 h-10 rounded-radius-m border border-[#334155] bg-[#0f172a] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>
           </div>
@@ -52,8 +52,8 @@ export default function ComunicacaoPage() {
                 key={contato.id}
                 onClick={() => setActiveContactId(contato.id)}
                 className={cn(
-                  "p-4 border-b border-[#27272a] cursor-pointer transition-colors relative",
-                  activeContactId === contato.id ? "bg-primary/5" : "hover:bg-zinc-800/30 bg-[#18181b]"
+                  "p-4 border-b border-[#334155] cursor-pointer transition-colors relative",
+                  activeContactId === contato.id ? "bg-primary/5" : "hover:bg-zinc-800/30 bg-[#1e293b]"
                 )}
               >
                 {activeContactId === contato.id && (
@@ -83,7 +83,7 @@ export default function ComunicacaoPage() {
         <div className="flex-1 flex flex-col min-w-0 bg-zinc-800/20 bg-[url('https://th.bing.com/th/id/R.546ee5fb4ebbd7bdef7f3c4dbb718501?rik=z%2fy%2fH9MIFM4pBQ&pid=ImgRaw&r=0')] bg-blend-soft-light bg-opacity-40">
           
           {/* Chat Header */}
-          <div className="h-16 px-6 border-b border-[#27272a] bg-[#18181b]/95 backdrop-blur-sm flex items-center justify-between  shrink-0">
+          <div className="h-16 px-6 border-b border-[#334155] bg-[#1e293b]/95 backdrop-blur-sm flex items-center justify-between  shrink-0">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 bg-primary/10 text-primary font-bold rounded-full flex items-center justify-center">
                 {activeContact.avatarInitials}
@@ -107,7 +107,7 @@ export default function ComunicacaoPage() {
           {/* Chat Messages */}
           <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
             <div className="flex justify-center mb-6">
-               <span className="bg-[#18181b]/80 backdrop-blur border border-[#27272a] text-zinc-500 text-xs px-3 py-1 rounded-full ">
+               <span className="bg-[#1e293b]/80 backdrop-blur border border-[#334155] text-zinc-500 text-xs px-3 py-1 rounded-full ">
                  Início da conversa com {activeContact.nome}
                </span>
             </div>
@@ -121,8 +121,8 @@ export default function ComunicacaoPage() {
               activeMessages.map(msg => (
                 <div key={msg.id} className={cn("flex w-full", msg.remetente === 'rh' ? "justify-end" : "justify-start")}>
                   <div className={cn(
-                    "max-w-[70%] sm:max-w-[60%] rounded-2xl p-3 ",
-                    msg.remetente === 'rh' ? "bg-primary text-white rounded-tr-sm" : "bg-[#18181b] border border-[#27272a] text-zinc-200 rounded-tl-sm"
+                    "max-w-[70%] sm:max-w-[60%] rounded-radius-l p-3 ",
+                    msg.remetente === 'rh' ? "bg-primary text-white rounded-tr-sm" : "bg-[#1e293b] border border-[#334155] text-zinc-200 rounded-tl-sm"
                   )}>
                     
                     {msg.tipo === 'texto' && (
@@ -133,8 +133,8 @@ export default function ComunicacaoPage() {
                       <div className="flex flex-col gap-2">
                         <p className="text-[14px] leading-relaxed opacity-90">{msg.texto}</p>
                         <div className={cn(
-                          "flex items-center gap-3 p-2 rounded-lg mt-1",
-                          msg.remetente === 'rh' ? "bg-[#18181b]/20" : "bg-[#09090b] border border-[#27272a]"
+                          "flex items-center gap-3 p-2 rounded-radius-m mt-1",
+                          msg.remetente === 'rh' ? "bg-[#1e293b]/20" : "bg-[#0f172a] border border-[#334155]"
                         )}>
                           <FileText size={24} className={msg.remetente === 'rh' ? "text-white" : "text-rose-500"} />
                           <div className="flex-1 min-w-0">
@@ -148,7 +148,7 @@ export default function ComunicacaoPage() {
                     {msg.tipo === 'convite' && (
                       <div className="flex flex-col gap-2">
                         <p className="text-[14px] leading-relaxed font-bold">{msg.texto}</p>
-                        <div className="flex items-center gap-3 p-3 bg-[#18181b]/20 rounded-lg mt-1 border border-zinc-700/20">
+                        <div className="flex items-center gap-3 p-3 bg-[#1e293b]/20 rounded-radius-m mt-1 border border-zinc-700/20">
                           <Calendar size={28} className="text-white" />
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-bold truncate">Nova Reunião Agendada</p>
@@ -173,23 +173,23 @@ export default function ComunicacaoPage() {
 
           {/* Quick Actions Templates */}
           <div className="px-6 pb-2 pt-2 flex gap-2 overflow-x-auto no-scrollbar">
-            <button onClick={() => handleQuickAction("Agendar Entrevista")} className="shrink-0 px-3 py-1.5 bg-[#18181b] border border-[#27272a] rounded-full text-xs font-semibold text-zinc-400 hover:bg-primary hover:text-[#e7e5e4] hover:border-primary transition-colors flex items-center gap-1.5 ">
+            <button onClick={() => handleQuickAction("Agendar Entrevista")} className="shrink-0 px-3 py-1.5 bg-[#1e293b] border border-[#334155] rounded-full text-xs font-semibold text-zinc-400 hover:bg-primary hover:text-[#e7e5e4] hover:border-primary transition-colors flex items-center gap-1.5 ">
               <Calendar size={14} /> Agendar Entrevista
             </button>
-            <button onClick={() => handleQuickAction("Pedir Documentos")} className="shrink-0 px-3 py-1.5 bg-[#18181b] border border-[#27272a] rounded-full text-xs font-semibold text-zinc-400 hover:bg-primary hover:text-[#e7e5e4] hover:border-primary transition-colors flex items-center gap-1.5 ">
+            <button onClick={() => handleQuickAction("Pedir Documentos")} className="shrink-0 px-3 py-1.5 bg-[#1e293b] border border-[#334155] rounded-full text-xs font-semibold text-zinc-400 hover:bg-primary hover:text-[#e7e5e4] hover:border-primary transition-colors flex items-center gap-1.5 ">
               <FileText size={14} /> Solicitar Documentos
             </button>
-            <button onClick={() => handleQuickAction("Aprovar")} className="shrink-0 px-3 py-1.5 bg-[#18181b] border border-[#27272a] rounded-full text-xs font-semibold text-emerald-600 hover:bg-emerald-500 hover:text-[#e7e5e4] transition-colors flex items-center gap-1.5 ">
+            <button onClick={() => handleQuickAction("Aprovar")} className="shrink-0 px-3 py-1.5 bg-[#1e293b] border border-[#334155] rounded-full text-xs font-semibold text-emerald-600 hover:bg-emerald-500 hover:text-[#e7e5e4] transition-colors flex items-center gap-1.5 ">
               <CheckCircle2 size={14} /> Mover para Aprovado
             </button>
           </div>
 
           {/* Chat Input */}
-          <div className="p-4 bg-[#18181b] border-t border-[#27272a] flex items-end gap-3 shrink-0">
+          <div className="p-4 bg-[#1e293b] border-t border-[#334155] flex items-end gap-3 shrink-0">
             <button className="p-2.5 text-zinc-600 hover:text-zinc-400 hover:bg-zinc-800 rounded-full transition-colors shrink-0">
               <Paperclip size={20} />
             </button>
-            <div className="flex-1 bg-[#09090b] border border-[#27272a] rounded-2xl p-1  focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+            <div className="flex-1 bg-[#0f172a] border border-[#334155] rounded-radius-l p-1  focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
               <textarea 
                 className="w-full bg-transparent border-none focus:outline-none resize-none px-3 py-2 text-sm text-zinc-200 placeholder:text-zinc-600 max-h-32 min-h-[44px]"
                 placeholder="Escreva sua mensagem via WhatsApp..."
@@ -214,8 +214,8 @@ export default function ComunicacaoPage() {
         </div>
 
         {/* Right Sidebar - CRM Properties Panel */}
-        <div className="w-72 border-l border-[#27272a] bg-[#18181b] flex flex-col shrink-0 overflow-y-auto custom-scrollbar">
-          <div className="p-6 flex flex-col items-center border-b border-[#27272a]">
+        <div className="w-72 border-l border-[#334155] bg-[#1e293b] flex flex-col shrink-0 overflow-y-auto custom-scrollbar">
+          <div className="p-6 flex flex-col items-center border-b border-[#334155]">
             <div className="h-20 w-20 bg-primary/10 text-primary font-bold text-2xl rounded-full flex items-center justify-center mb-4">
               {activeContact.avatarInitials}
             </div>
@@ -249,7 +249,7 @@ export default function ComunicacaoPage() {
               ) : (
                 <ul className="space-y-2">
                   {activeContact.documentosEnviados.map((doc, idx) => (
-                    <li key={idx} className="flex items-center justify-between p-2 bg-[#09090b] border border-[#27272a] rounded-lg group hover:border-zinc-700 transition-colors cursor-pointer">
+                    <li key={idx} className="flex items-center justify-between p-2 bg-[#0f172a] border border-[#334155] rounded-radius-m group hover:border-zinc-700 transition-colors cursor-pointer">
                       <div className="flex items-center gap-2 overflow-hidden">
                         <FileText size={14} className="text-rose-500 shrink-0" />
                         <span className="text-xs font-medium text-zinc-300 truncate">{doc}</span>

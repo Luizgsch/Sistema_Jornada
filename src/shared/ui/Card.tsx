@@ -11,7 +11,7 @@ export function Card({ children, className, urgency }: CardProps) {
   return (
     <div
       className={cn(
-        "bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-100 dark:border-zinc-800 overflow-hidden transition-colors duration-300",
+        "bg-white dark:bg-[#1e293b] rounded-radius-l border border-zinc-100 dark:border-[#334155] overflow-hidden transition-colors duration-300",
         urgency === "critical" && "border-l-4 border-l-red-600/80",
         urgency === "warning" && "border-l-4 border-l-amber-500/70",
         className
@@ -28,7 +28,7 @@ export function CardHeader({ children, className }: CardProps) {
 
 export function CardTitle({ children, className }: CardProps) {
   return (
-    <h3 className={cn("text-base font-semibold leading-snug tracking-tight text-zinc-800 dark:text-[#e7e5e4]", className)}>
+    <h3 className={cn("text-base font-semibold leading-snug tracking-tight text-zinc-800 dark:text-[#f8fafc]", className)}>
       {children}
     </h3>
   );

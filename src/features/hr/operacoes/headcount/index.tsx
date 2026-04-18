@@ -1,11 +1,63 @@
+import { useMemo, useState } from 'react';
 import { Users, Building2, Network, PieChart as PieChartIcon, Search } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/Card';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
-import { mockHeadcountTable, mockHeadcountDistribucao, mockOrgChart } from '@/infrastructure/mock/mockHeadcount';
-
-const COLORS = ['#2563EB', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899', '#64748B'];
+import {
+  mockHeadcountTable,
+  mockHeadcountDistribucaoEnriquecida,
+  mockHeadcountGenero,
+  mockHeadcountEscolaridade,
+  mockOrgChart,
+} from '@/infrastructure/mock/mockHeadcount';
+import { useTheme } from '@/features/theme/ThemeContext';
+import {
+  binaryAccentNeutral,
+  brightenHex,
+  donutLegendStyle,
+  donutSliceStroke,
+  fillsByValueDescending,
+  groupSmallestAsOutros,
+  outrosSliceFill,
+  sequentialBrandPalette,
+} from '@/shared/lib/chartDonut';
 
 export default function HeadcountPage() {
+  const { isDark } = useTheme();
+  const sliceStroke = donutSliceStroke(isDark);
+  const legendStyle = donutLegendStyle(isDark);
+
+  const [hoverSetor, setHoverSetor] = useState<number | null>(null);
+  const [hoverGen, setHoverGen] = useState<number | null>(null);
+  const [hoverEdu, setHoverEdu] = useState<number | null>(null);
+
+  const setorData = useMemo(
+    () =>
+      groupSmallestAsOutros(
+        mockHeadcountDistribucaoEnriquecida.map((d) => ({ name: d.name, value: d.value }))
+      ),
+    []
+  );
+
+  const setorFills = useMemo(() => {
+    const values = setorData.map((d) => d.value);
+    const palette = sequentialBrandPalette(setorData.length, isDark);
+    const ranked = fillsByValueDescending(values, palette);
+    return setorData.map((d, i) => (d.name === 'Outros' ? outrosSliceFill(isDark) : ranked[i]));
+  }, [setorData, isDark]);
+
+  const generoFills = useMemo(() => {
+    const [accent, neutral] = binaryAccentNeutral(isDark);
+    const maxV = Math.max(...mockHeadcountGenero.map((g) => g.value));
+    return mockHeadcountGenero.map((g) => (g.value >= maxV ? accent : neutral));
+  }, [isDark]);
+
+  const escolaridadeFills = useMemo(() => {
+    const pal = sequentialBrandPalette(mockHeadcountEscolaridade.length, isDark);
+    return fillsByValueDescending(
+      mockHeadcountEscolaridade.map((e) => e.value),
+      pal
+    );
+  }, [isDark]);
   const totalAtivos = mockHeadcountTable.reduce((acc, curr) => acc + curr.ativos, 0);
   const totalDisponiveis = mockHeadcountTable.reduce((acc, curr) => acc + curr.disponiveis, 0);
 
@@ -64,6 +116,96 @@ export default function HeadcountPage() {
         </Card>
       </div>
 
+      <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+        <Card className="h-full">
+          <CardHeader>
+            <CardTitle className="text-lg font-bold flex items-center gap-2">
+              <PieChartIcon className="text-primary" size={20} />
+              Composição por gênero
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={mockHeadcountGenero}
+                  innerRadius={68}
+                  outerRadius={100}
+                  paddingAngle={2}
+                  dataKey="value"
+                  onMouseEnter={(_, i) => setHoverGen(i)}
+                  onMouseLeave={() => setHoverGen(null)}
+                >
+                  {mockHeadcountGenero.map((_, index) => (
+                    <Cell
+                      key={`gen-${index}`}
+                      fill={
+                        hoverGen === index ? brightenHex(generoFills[index], 0.14) : generoFills[index]
+                      }
+                      stroke={sliceStroke}
+                      strokeWidth={2}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{
+                    borderRadius: '8px',
+                    border: 'none',
+                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                  }}
+                  formatter={(value) => [`${value} colaboradores`, 'Ativos']}
+                />
+                <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={legendStyle} />
+              </PieChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card className="h-full">
+          <CardHeader>
+            <CardTitle className="text-lg font-bold flex items-center gap-2">
+              <PieChartIcon className="text-primary" size={20} />
+              Distribuição por escolaridade
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={mockHeadcountEscolaridade}
+                  innerRadius={68}
+                  outerRadius={100}
+                  paddingAngle={2}
+                  dataKey="value"
+                  onMouseEnter={(_, i) => setHoverEdu(i)}
+                  onMouseLeave={() => setHoverEdu(null)}
+                >
+                  {mockHeadcountEscolaridade.map((_, index) => (
+                    <Cell
+                      key={`edu-${index}`}
+                      fill={
+                        hoverEdu === index ? brightenHex(escolaridadeFills[index], 0.14) : escolaridadeFills[index]
+                      }
+                      stroke={sliceStroke}
+                      strokeWidth={2}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{
+                    borderRadius: '8px',
+                    border: 'none',
+                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                  }}
+                  formatter={(value) => [`${value} colaboradores`, 'Ativos']}
+                />
+                <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={legendStyle} />
+              </PieChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+
       <div className="grid gap-6 grid-cols-1 xl:grid-cols-2">
         {/* Distribuição Chart */}
         <Card className="h-full">
@@ -77,21 +219,30 @@ export default function HeadcountPage() {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={mockHeadcountDistribucao}
+                  data={setorData}
                   innerRadius={70}
                   outerRadius={110}
-                  paddingAngle={5}
+                  paddingAngle={2}
                   dataKey="value"
+                  onMouseEnter={(_, i) => setHoverSetor(i)}
+                  onMouseLeave={() => setHoverSetor(null)}
                 >
-                  {mockHeadcountDistribucao.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  {setorData.map((_, index) => (
+                    <Cell
+                      key={`setor-${index}`}
+                      fill={
+                        hoverSetor === index ? brightenHex(setorFills[index], 0.14) : setorFills[index]
+                      }
+                      stroke={sliceStroke}
+                      strokeWidth={2}
+                    />
                   ))}
                 </Pie>
                 <Tooltip 
                   contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                   formatter={(value) => [`${value} colaboradores`, 'Ativos']}
                 />
-                <Legend verticalAlign="bottom" height={36}/>
+                <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={legendStyle} />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
@@ -99,7 +250,7 @@ export default function HeadcountPage() {
 
         {/* Organograma Simples */}
         <Card className="flex flex-col h-full overflow-hidden bg-zinc-800/20">
-          <CardHeader className="bg-[#18181b] border-b border-[#27272a] pb-4">
+          <CardHeader className="bg-[#1e293b] border-b border-[#334155] pb-4">
             <CardTitle className="text-lg font-bold flex items-center gap-2">
               <Network className="text-primary" size={20} />
               Organograma Resumido
@@ -107,7 +258,7 @@ export default function HeadcountPage() {
           </CardHeader>
           <CardContent className="p-6 flex-1 flex flex-col items-center justify-center overflow-auto gap-6">
             {/* Diretoria */}
-            <div className="bg-[#09090b] text-white p-4 rounded-xl text-center  w-64 border border-[#27272a] z-10 relative">
+            <div className="bg-[#0f172a] text-white p-4 rounded-radius-l text-center  w-64 border border-[#334155] z-10 relative">
               <h4 className="font-bold text-lg">{mockOrgChart.diretoria.nome}</h4>
               <p className="text-zinc-600 text-sm mt-1">{mockOrgChart.diretoria.headcount} membros</p>
               
@@ -126,10 +277,10 @@ export default function HeadcountPage() {
             {/* Setores */}
             <div className="flex w-full justify-between max-w-[900px]">
               {mockOrgChart.diretoria.setores.map((setor, index) => (
-                <div key={index} className="bg-[#18181b] border border-[#27272a] p-4 rounded-xl text-center  w-[22%] sm:w-[23%] flex flex-col transition-all hover:-translate-y-1 hover: cursor-default">
+                <div key={index} className="bg-[#1e293b] border border-[#334155] p-4 rounded-radius-l text-center  w-[22%] sm:w-[23%] flex flex-col transition-all hover:-translate-y-1 hover: cursor-default">
                   <h5 className="font-bold text-zinc-200 text-[13px] leading-tight mb-2 h-10 flex items-center justify-center">{setor.nome}</h5>
                   <div className="mt-auto">
-                    <span className="inline-block bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded-md mb-1">{setor.lider}</span>
+                    <span className="inline-block bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded-radius-s mb-1">{setor.lider}</span>
                     <p className="text-zinc-500 text-xs">{setor.headcount} pessoas</p>
                   </div>
                 </div>
@@ -142,10 +293,10 @@ export default function HeadcountPage() {
       {/* Table Section */}
       <div className="space-y-4">
         <h3 className="text-xl font-bold tracking-tight mt-6">Detalhamento de Vagas Operacionais</h3>
-        <div className="bg-[#18181b] rounded-xl  border border-[#27272a] overflow-hidden">
+        <div className="bg-[#1e293b] rounded-radius-l  border border-[#334155] overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
-              <thead className="text-xs text-zinc-500 bg-[#09090b] uppercase border-b border-[#27272a]">
+              <thead className="text-xs text-zinc-500 bg-[#0f172a] uppercase border-b border-[#334155]">
                 <tr>
                   <th className="px-6 py-4 font-semibold">Setor</th>
                   <th className="px-6 py-4 font-semibold text-center text-blue-600">Ativos</th>
@@ -171,7 +322,7 @@ export default function HeadcountPage() {
                   }
 
                   return (
-                    <tr key={idx} className="border-b border-[#27272a] hover:bg-zinc-800/20 transition-colors">
+                    <tr key={idx} className="border-b border-[#334155] hover:bg-zinc-800/20 transition-colors">
                       <td className="px-6 py-4 font-semibold text-[#e7e5e4]">{item.setor}</td>
                       <td className="px-6 py-4 text-center font-bold text-blue-600">{item.ativos}</td>
                       <td className="px-6 py-4 text-center text-zinc-400 font-medium">{item.aprovadas}</td>
@@ -186,7 +337,7 @@ export default function HeadcountPage() {
                         )}
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <span className={`px-2.5 py-1 text-xs font-semibold rounded-full ${statusColor}`}>
+                        <span className={`px-2.5 py-1 text-xs font-semibold rounded-radius-m ${statusColor}`}>
                           {statusText}
                         </span>
                         <div className="w-full bg-zinc-800 rounded-full h-1.5 mt-2">

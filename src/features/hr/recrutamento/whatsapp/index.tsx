@@ -72,7 +72,7 @@ export default function WhatsAppBotPage() {
           <p className="text-muted-foreground mt-1">Central de comunicação automatizada com candidatos.</p>
         </div>
         <div className="flex items-center gap-2">
-          <button className="inline-flex items-center gap-2 px-4 py-2 border rounded-lg font-medium hover:bg-[#09090b] transition-colors ">
+          <button className="inline-flex items-center gap-2 px-4 py-2 border rounded-radius-m font-medium hover:bg-[#0f172a] transition-colors ">
             <RefreshCw size={18} />
             Sincronizar
           </button>
@@ -84,7 +84,7 @@ export default function WhatsAppBotPage() {
           <Card key={idx} className="border-none ">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className={`p-3 rounded-2xl bg-[#09090b] ${stat.color}`}>
+                <div className={`p-3 rounded-radius-l bg-[#0f172a] ${stat.color}`}>
                   <stat.icon size={24} />
                 </div>
                 <div>
@@ -104,7 +104,7 @@ export default function WhatsAppBotPage() {
             initial={{ opacity: 0, y: -16, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -16 }}
-            className="flex items-center gap-4 p-4 bg-emerald-500/5 border border-emerald-500/25 rounded-2xl"
+            className="flex items-center gap-4 p-4 bg-emerald-500/5 border border-emerald-500/25 rounded-radius-l"
           >
             <div className="relative flex-shrink-0">
               <div className="w-10 h-10 bg-emerald-500/10 rounded-full flex items-center justify-center text-emerald-400">
@@ -129,14 +129,14 @@ export default function WhatsAppBotPage() {
             <div className="flex items-center gap-2 flex-shrink-0">
               <button
                 onClick={handleProcessDoc}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500 text-white text-xs font-bold rounded-lg hover:bg-emerald-600 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500 text-white text-xs font-bold rounded-radius-m hover:bg-emerald-600 transition-colors"
               >
                 <Download size={12} />
                 Anexar à {INCOMING_DOC.matricula}
               </button>
               <button
                 onClick={() => setIncomingDoc(false)}
-                className="p-1.5 text-zinc-600 hover:text-zinc-400 rounded-lg hover:bg-zinc-800 transition-colors text-lg leading-none"
+                className="p-1.5 text-zinc-600 hover:text-zinc-400 rounded-radius-m hover:bg-zinc-800 transition-colors text-lg leading-none"
               >
                 ×
               </button>
@@ -147,7 +147,7 @@ export default function WhatsAppBotPage() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex items-center gap-3 p-4 bg-[#09090b] border border-[#27272a] rounded-2xl text-emerald-400"
+            className="flex items-center gap-3 p-4 bg-[#0f172a] border border-[#334155] rounded-radius-l text-emerald-400"
           >
             <CheckCircle2 size={18} className="flex-shrink-0" />
             <p className="text-sm font-medium">
@@ -157,7 +157,7 @@ export default function WhatsAppBotPage() {
         )}
       </AnimatePresence>
 
-      <div className="flex border-b border-[#27272a] overflow-x-auto">
+      <div className="flex border-b border-[#334155] overflow-x-auto">
         <button
           onClick={() => setActiveTab('conversas')}
           className={cn(
@@ -193,15 +193,15 @@ export default function WhatsAppBotPage() {
             exit={{ opacity: 0, y: -10 }}
             className="h-[calc(100vh-20rem)]"
           >
-            <div className="flex flex-col lg:flex-row h-full border border-[#27272a] rounded-2xl overflow-hidden bg-[#18181b] ">
-              <div className="w-full lg:w-80 border-r border-[#27272a] flex flex-col bg-[#09090b] shrink-0 order-2 lg:order-1">
-                <div className="p-4 border-b border-[#27272a] bg-[#18181b]">
+            <div className="flex flex-col lg:flex-row h-full border border-[#334155] rounded-radius-l overflow-hidden bg-[#1e293b] ">
+              <div className="w-full lg:w-80 border-r border-[#334155] flex flex-col bg-[#0f172a] shrink-0 order-2 lg:order-1">
+                <div className="p-4 border-b border-[#334155] bg-[#1e293b]">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-600" />
                     <input 
                       type="text" 
                       placeholder="Buscar candidato..." 
-                      className="w-full pl-9 h-10 rounded-lg border border-[#27272a] bg-[#09090b] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                      className="w-full pl-9 h-10 rounded-radius-m border border-[#334155] bg-[#0f172a] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                 </div>
@@ -211,8 +211,8 @@ export default function WhatsAppBotPage() {
                       key={contato.id}
                       onClick={() => setActiveContactId(contato.id)}
                       className={cn(
-                        "p-4 border-b border-[#27272a] cursor-pointer transition-colors relative",
-                        activeContactId === contato.id ? "bg-primary/5" : "hover:bg-zinc-800/30 bg-[#18181b]"
+                        "p-4 border-b border-[#334155] cursor-pointer transition-colors relative",
+                        activeContactId === contato.id ? "bg-primary/5" : "hover:bg-zinc-800/30 bg-[#1e293b]"
                       )}
                     >
                       {activeContactId === contato.id && (
@@ -239,7 +239,7 @@ export default function WhatsAppBotPage() {
               </div>
 
               <div className="flex-1 flex flex-col min-w-0 bg-zinc-800/20 order-1 lg:order-2">
-                <div className="h-16 px-4 lg:px-6 border-b border-[#27272a] bg-[#18181b]/95 backdrop-blur-sm flex items-center justify-between  shrink-0">
+                <div className="h-16 px-4 lg:px-6 border-b border-[#334155] bg-[#1e293b]/95 backdrop-blur-sm flex items-center justify-between  shrink-0">
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="h-10 w-10 bg-primary/10 text-primary font-bold rounded-full flex items-center justify-center shrink-0">
                       {activeContact.avatarInitials}
@@ -262,7 +262,7 @@ export default function WhatsAppBotPage() {
 
                 <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
                   <div className="flex justify-center mb-6">
-                    <span className="bg-[#18181b]/80 backdrop-blur border border-[#27272a] text-zinc-500 text-xs px-3 py-1 rounded-full ">
+                    <span className="bg-[#1e293b]/80 backdrop-blur border border-[#334155] text-zinc-500 text-xs px-3 py-1 rounded-full ">
                       Início da conversa com {activeContact.nome}
                     </span>
                   </div>
@@ -270,8 +270,8 @@ export default function WhatsAppBotPage() {
                   {activeMessages.map(msg => (
                     <div key={msg.id} className={cn("flex w-full", msg.remetente === 'rh' ? "justify-end" : "justify-start")}>
                       <div className={cn(
-                        "max-w-[70%] sm:max-w-[60%] rounded-2xl p-3 ",
-                        msg.remetente === 'rh' ? "bg-primary text-white rounded-tr-sm" : "bg-[#18181b] border border-[#27272a] text-zinc-200 rounded-tl-sm"
+                        "max-w-[70%] sm:max-w-[60%] rounded-radius-l p-3 ",
+                        msg.remetente === 'rh' ? "bg-primary text-white rounded-tr-sm" : "bg-[#1e293b] border border-[#334155] text-zinc-200 rounded-tl-sm"
                       )}>
                         {msg.tipo === 'texto' && (
                           <p className="text-[14px] leading-relaxed break-words">{msg.texto}</p>
@@ -280,8 +280,8 @@ export default function WhatsAppBotPage() {
                           <div className="flex flex-col gap-2">
                             <p className="text-[14px] leading-relaxed opacity-90">{msg.texto}</p>
                             <div className={cn(
-                              "flex items-center gap-3 p-2 rounded-lg mt-1",
-                              msg.remetente === 'rh' ? "bg-[#18181b]/20" : "bg-[#09090b] border border-[#27272a]"
+                              "flex items-center gap-3 p-2 rounded-radius-m mt-1",
+                              msg.remetente === 'rh' ? "bg-[#1e293b]/20" : "bg-[#0f172a] border border-[#334155]"
                             )}>
                               <FileText size={24} className={msg.remetente === 'rh' ? "text-white" : "text-rose-500"} />
                               <div className="flex-1 min-w-0">
@@ -303,22 +303,22 @@ export default function WhatsAppBotPage() {
                 </div>
 
                 <div className="px-6 pb-2 pt-2 flex gap-2 overflow-x-auto no-scrollbar">
-                  <button onClick={() => info("Agendar Entrevista", "Convite enviado ao candidato.")} className="shrink-0 px-3 py-1.5 bg-[#18181b] border border-[#27272a] rounded-full text-xs font-semibold text-zinc-400 hover:bg-primary hover:text-[#e7e5e4] hover:border-primary transition-colors flex items-center gap-1.5 ">
+                  <button onClick={() => info("Agendar Entrevista", "Convite enviado ao candidato.")} className="shrink-0 px-3 py-1.5 bg-[#1e293b] border border-[#334155] rounded-full text-xs font-semibold text-zinc-400 hover:bg-primary hover:text-[#e7e5e4] hover:border-primary transition-colors flex items-center gap-1.5 ">
                     <Calendar size={14} /> Agendar Entrevista
                   </button>
-                  <button onClick={() => info("Solicitar Documentos", "Mensagem automática enviada.")} className="shrink-0 px-3 py-1.5 bg-[#18181b] border border-[#27272a] rounded-full text-xs font-semibold text-zinc-400 hover:bg-primary hover:text-[#e7e5e4] hover:border-primary transition-colors flex items-center gap-1.5 ">
+                  <button onClick={() => info("Solicitar Documentos", "Mensagem automática enviada.")} className="shrink-0 px-3 py-1.5 bg-[#1e293b] border border-[#334155] rounded-full text-xs font-semibold text-zinc-400 hover:bg-primary hover:text-[#e7e5e4] hover:border-primary transition-colors flex items-center gap-1.5 ">
                     <FileText size={14} /> Solicitar Documentos
                   </button>
-                  <button onClick={() => success("Candidato Aprovado", "Movido para próximo estágio.")} className="shrink-0 px-3 py-1.5 bg-[#18181b] border border-[#27272a] rounded-full text-xs font-semibold text-emerald-600 hover:bg-emerald-500 hover:text-[#e7e5e4] transition-colors flex items-center gap-1.5 ">
+                  <button onClick={() => success("Candidato Aprovado", "Movido para próximo estágio.")} className="shrink-0 px-3 py-1.5 bg-[#1e293b] border border-[#334155] rounded-full text-xs font-semibold text-emerald-600 hover:bg-emerald-500 hover:text-[#e7e5e4] transition-colors flex items-center gap-1.5 ">
                     <CheckCircle2 size={14} /> Mover para Aprovado
                   </button>
                 </div>
 
-                <div className="p-4 bg-[#18181b] border-t border-[#27272a] flex items-end gap-3 shrink-0">
+                <div className="p-4 bg-[#1e293b] border-t border-[#334155] flex items-end gap-3 shrink-0">
                   <button className="p-2.5 text-zinc-600 hover:text-zinc-400 hover:bg-zinc-800 rounded-full transition-colors shrink-0">
                     <Paperclip size={20} />
                   </button>
-                  <div className="flex-1 bg-[#09090b] border border-[#27272a] rounded-2xl p-1  focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+                  <div className="flex-1 bg-[#0f172a] border border-[#334155] rounded-radius-l p-1  focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
                     <textarea 
                       className="w-full bg-transparent border-none focus:outline-none resize-none px-3 py-2 text-sm text-zinc-200 placeholder:text-zinc-600 max-h-32 min-h-[44px]"
                       placeholder="Digite sua mensagem..."
@@ -342,8 +342,8 @@ export default function WhatsAppBotPage() {
                 </div>
               </div>
 
-              <div className="w-full lg:w-72 border-l border-[#27272a] bg-[#18181b] flex flex-col shrink-0 overflow-y-auto custom-scrollbar order-3">
-                <div className="p-4 lg:p-6 flex flex-col items-center border-b border-[#27272a]">
+              <div className="w-full lg:w-72 border-l border-[#334155] bg-[#1e293b] flex flex-col shrink-0 overflow-y-auto custom-scrollbar order-3">
+                <div className="p-4 lg:p-6 flex flex-col items-center border-b border-[#334155]">
                   <div className="h-16 w-16 lg:h-20 lg:w-20 bg-primary/10 text-primary font-bold text-xl lg:text-2xl rounded-full flex items-center justify-center mb-3 lg:mb-4">
                     {activeContact.avatarInitials}
                   </div>
@@ -384,7 +384,7 @@ export default function WhatsAppBotPage() {
               <Card className="border-none ">
                 <CardHeader className="pb-4 border-b">
                   <div className="flex items-center gap-3">
-                    <div className="p-3 bg-primary/10 rounded-xl text-primary">
+                    <div className="p-3 bg-primary/10 rounded-radius-m text-primary">
                       <Bot size={24} />
                     </div>
                     <div>
@@ -394,7 +394,7 @@ export default function WhatsAppBotPage() {
                   </div>
                 </CardHeader>
                 <CardContent className="pt-6 space-y-4">
-                  <div className="p-4 bg-[#09090b] rounded-xl">
+                  <div className="p-4 bg-[#0f172a] rounded-radius-m">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white">
@@ -412,19 +412,19 @@ export default function WhatsAppBotPage() {
                   <div>
                     <label className="text-xs font-bold text-zinc-500 uppercase">Mensagem de Boas-vindas</label>
                     <textarea 
-                      className="w-full mt-2 p-3 rounded-xl border border-[#27272a] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                      className="w-full mt-2 p-3 rounded-radius-m border border-[#334155] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
                       rows={3}
                       defaultValue="Olá! 👋 Bem-vindo ao RH da Empresa! Sou seu assistente virtual. Como posso ajudá-lo hoje?"
                     />
                   </div>
 
-                  <div className="flex items-center justify-between p-4 bg-[#09090b] rounded-xl">
+                  <div className="flex items-center justify-between p-4 bg-[#0f172a] rounded-radius-m">
                     <div>
                       <p className="font-bold text-[#e7e5e4]">Atendimento Humano</p>
                       <p className="text-xs text-muted-foreground">Transfere para atendente após opção 0</p>
                     </div>
                     <button className="w-12 h-6 bg-emerald-500 rounded-full relative">
-                      <div className="absolute right-1 top-1 w-4 h-4 bg-[#18181b] rounded-full shadow" />
+                      <div className="absolute right-1 top-1 w-4 h-4 bg-[#1e293b] rounded-full shadow" />
                     </button>
                   </div>
                 </CardContent>
@@ -433,7 +433,7 @@ export default function WhatsAppBotPage() {
               <Card className="border-none ">
                 <CardHeader className="pb-4 border-b">
                   <div className="flex items-center gap-3">
-                    <div className="p-3 bg-amber-500/10 rounded-xl text-amber-500">
+                    <div className="p-3 bg-amber-500/10 rounded-radius-m text-amber-500">
                       <MessageCircle size={24} />
                     </div>
                     <div>
@@ -444,14 +444,14 @@ export default function WhatsAppBotPage() {
                 </CardHeader>
                 <CardContent className="pt-6 space-y-3">
                   {botMenuOptions.map((option) => (
-                    <div key={option.numero} className="flex items-center gap-4 p-3 border rounded-xl hover:bg-[#09090b] transition-colors">
-                      <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-bold text-sm">
+                    <div key={option.numero} className="flex items-center gap-4 p-3 border rounded-radius-m hover:bg-[#0f172a] transition-colors">
+                      <div className="w-8 h-8 bg-primary/10 rounded-radius-m flex items-center justify-center text-primary font-bold text-sm">
                         {option.numero}
                       </div>
                       <div className="flex-1">
                         <p className="font-medium text-sm text-zinc-200">{option.texto}</p>
                       </div>
-                      <button className="p-2 hover:bg-zinc-800 rounded-lg text-zinc-600">
+                      <button className="p-2 hover:bg-zinc-800 rounded-radius-m text-zinc-600">
                         <Settings size={14} />
                       </button>
                     </div>
@@ -463,7 +463,7 @@ export default function WhatsAppBotPage() {
             <Card className="border-none ">
               <CardHeader className="pb-4 border-b">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 bg-blue-500/10 rounded-xl text-blue-500">
+                  <div className="p-3 bg-blue-500/10 rounded-radius-m text-blue-500">
                     <Zap size={24} />
                   </div>
                   <div>
@@ -474,15 +474,15 @@ export default function WhatsAppBotPage() {
               </CardHeader>
               <CardContent className="pt-6">
                 <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
-                  <div className="p-4 bg-[#09090b] rounded-xl text-center">
+                  <div className="p-4 bg-[#0f172a] rounded-radius-m text-center">
                     <p className="text-3xl font-black text-primary">72%</p>
                     <p className="text-sm text-muted-foreground mt-1">Das mensagens resolvidas pela IA</p>
                   </div>
-                  <div className="p-4 bg-[#09090b] rounded-xl text-center">
+                  <div className="p-4 bg-[#0f172a] rounded-radius-m text-center">
                     <p className="text-3xl font-black text-emerald-500">2min</p>
                     <p className="text-sm text-muted-foreground mt-1">Tempo médio de primeira resposta</p>
                   </div>
-                  <div className="p-4 bg-[#09090b] rounded-xl text-center">
+                  <div className="p-4 bg-[#0f172a] rounded-radius-m text-center">
                     <p className="text-3xl font-black text-amber-500">847</p>
                     <p className="text-sm text-muted-foreground mt-1">Conversas este mês</p>
                   </div>
@@ -491,10 +491,10 @@ export default function WhatsAppBotPage() {
             </Card>
 
             <div className="flex flex-col sm:flex-row justify-end gap-3">
-              <button className="px-6 py-2 border rounded-xl font-bold hover:bg-[#09090b] transition-colors order-2 sm:order-1">
+              <button className="px-6 py-2 border rounded-radius-m font-bold hover:bg-[#0f172a] transition-colors order-2 sm:order-1">
                 Restaurar Padrões
               </button>
-              <button className="px-6 py-2 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all   flex items-center justify-center gap-2 order-1 sm:order-2">
+              <button className="px-6 py-2 bg-primary text-white rounded-radius-m font-bold hover:bg-primary/90 transition-all   flex items-center justify-center gap-2 order-1 sm:order-2">
                 <Save size={18} />
                 Salvar Configurações
               </button>

@@ -127,14 +127,14 @@ export function SGNotasFiscaisView() {
           return (
             <div
               key={col.id}
-              className={`bg-[#18181b] rounded-xl min-h-[280px] flex flex-col ${
+              className={`bg-[#1e293b] rounded-radius-m min-h-[280px] flex flex-col ${
                 col.alerta
-                  ? 'border border-[#27272a] border-l-4 border-l-red-600/70'
-                  : 'border border-[#27272a]'
+                  ? 'border border-[#334155] border-l-4 border-l-red-600/70'
+                  : 'border border-[#334155]'
               }`}
             >
               <div
-                className={`px-4 py-3 border-b border-[#27272a] font-semibold text-sm flex items-center justify-between ${
+                className={`px-4 py-3 border-b border-[#334155] font-semibold text-sm flex items-center justify-between ${
                   col.alerta ? 'text-red-400' : 'text-[#e7e5e4]'
                 }`}
               >
@@ -151,10 +151,10 @@ export function SGNotasFiscaisView() {
                 {itens.map((n) => (
                   <div
                     key={n.id}
-                    className={`p-3 rounded-lg text-sm ${
+                    className={`p-3 rounded-radius-m text-sm ${
                       n.diasAtraso > 0
                         ? 'bg-red-500/5 border border-red-500/15'
-                        : 'bg-[#09090b] border border-[#27272a]'
+                        : 'bg-[#0f172a] border border-[#334155]'
                     }`}
                   >
                     <p className="font-semibold text-[#e7e5e4] leading-tight">{n.fornecedor}</p>
@@ -184,7 +184,7 @@ export function SGNotasFiscaisView() {
 export function SGConciliacaoView() {
   return (
     <Card>
-      <CardHeader className="border-b border-[#27272a] pb-4">
+      <CardHeader className="border-b border-[#334155] pb-4">
         <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4] flex items-center gap-2">
           <GitMerge className="text-amber-400" size={20} />
           Conciliação Elo · Attos · faturamento
@@ -196,13 +196,13 @@ export function SGConciliacaoView() {
       <CardContent className="p-0">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
-            <thead className="bg-[#09090b] text-zinc-500 text-xs uppercase tracking-widest">
+            <thead className="bg-[#0f172a] text-zinc-500 text-xs uppercase tracking-widest">
               <tr>
-                <th className="py-4 px-6 border-b border-[#27272a]">Colaborador</th>
-                <th className="py-4 px-6 border-b border-[#27272a]">Origem sistema</th>
-                <th className="py-4 px-6 border-b border-[#27272a]">Faturamento</th>
-                <th className="py-4 px-6 border-b border-[#27272a] text-center">Dup. cadastro</th>
-                <th className="py-4 px-6 border-b border-[#27272a] text-center">Dup. refeitório</th>
+                <th className="py-4 px-6 border-b border-[#334155]">Colaborador</th>
+                <th className="py-4 px-6 border-b border-[#334155]">Origem sistema</th>
+                <th className="py-4 px-6 border-b border-[#334155]">Faturamento</th>
+                <th className="py-4 px-6 border-b border-[#334155] text-center">Dup. cadastro</th>
+                <th className="py-4 px-6 border-b border-[#334155] text-center">Dup. refeitório</th>
               </tr>
             </thead>
             <tbody>
@@ -210,12 +210,12 @@ export function SGConciliacaoView() {
                 <tr
                   key={r.id}
                   className={`hover:bg-zinc-800/30 transition-colors ${
-                    r.duplicado || r.refeitorioDuplicado ? 'border-l-4 border-l-amber-500/60 border-[#27272a]' : ''
+                    r.duplicado || r.refeitorioDuplicado ? 'border-l-4 border-l-amber-500/60 border-[#334155]' : ''
                   }`}
                 >
-                  <td className="py-4 px-6 border-b border-[#27272a] font-semibold text-[#e7e5e4]">{r.colaborador}</td>
-                  <td className="py-4 px-6 border-b border-[#27272a] text-zinc-600 text-xs">{r.origem}</td>
-                  <td className="py-4 px-6 border-b border-[#27272a]">
+                  <td className="py-4 px-6 border-b border-[#334155] font-semibold text-[#e7e5e4]">{r.colaborador}</td>
+                  <td className="py-4 px-6 border-b border-[#334155] text-zinc-600 text-xs">{r.origem}</td>
+                  <td className="py-4 px-6 border-b border-[#334155]">
                     <FatBadge
                       label={r.tipoFaturamento}
                       color={
@@ -225,12 +225,12 @@ export function SGConciliacaoView() {
                       }
                     />
                   </td>
-                  <td className="py-4 px-6 border-b border-[#27272a] text-center">
+                  <td className="py-4 px-6 border-b border-[#334155] text-center">
                     {r.duplicado
                       ? <span className="text-xs font-bold neon-warning">Sim</span>
                       : <span className="text-zinc-700">—</span>}
                   </td>
-                  <td className="py-4 px-6 border-b border-[#27272a] text-center">
+                  <td className="py-4 px-6 border-b border-[#334155] text-center">
                     {r.refeitorioDuplicado
                       ? <span className="text-xs font-bold neon-warning">Sim</span>
                       : <span className="text-zinc-700">—</span>}
@@ -252,7 +252,7 @@ export function SGComprasView() {
   }, {});
   return (
     <Card>
-      <CardHeader className="border-b border-[#27272a] pb-4 flex flex-row items-center gap-2">
+      <CardHeader className="border-b border-[#334155] pb-4 flex flex-row items-center gap-2">
         <ShoppingCart className="text-amber-400" size={20} />
         <div>
           <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4]">Controle de compras / insumos</h3>
@@ -261,26 +261,26 @@ export function SGComprasView() {
       </CardHeader>
       <CardContent className="p-0">
         <table className="w-full text-sm">
-          <thead className="bg-[#09090b] text-zinc-500 text-xs uppercase tracking-widest">
+          <thead className="bg-[#0f172a] text-zinc-500 text-xs uppercase tracking-widest">
             <tr>
-              <th className="py-4 px-6 border-b border-[#27272a]">Mês</th>
-              <th className="py-4 px-6 border-b border-[#27272a]">Categoria</th>
-              <th className="py-4 px-6 border-b border-[#27272a] text-right">Valor (R$)</th>
+              <th className="py-4 px-6 border-b border-[#334155]">Mês</th>
+              <th className="py-4 px-6 border-b border-[#334155]">Categoria</th>
+              <th className="py-4 px-6 border-b border-[#334155] text-right">Valor (R$)</th>
             </tr>
           </thead>
           <tbody>
             {mockComprasMensais.map((r, i) => (
               <tr key={i} className="hover:bg-zinc-800/30 transition-colors">
-                <td className="py-4 px-6 border-b border-[#27272a] font-mono text-xs text-zinc-600">{r.mes}</td>
-                <td className="py-4 px-6 border-b border-[#27272a] text-zinc-400">{r.categoria}</td>
-                <td className="py-4 px-6 border-b border-[#27272a] text-right font-bold text-[#e7e5e4]">
+                <td className="py-4 px-6 border-b border-[#334155] font-mono text-xs text-zinc-600">{r.mes}</td>
+                <td className="py-4 px-6 border-b border-[#334155] text-zinc-400">{r.categoria}</td>
+                <td className="py-4 px-6 border-b border-[#334155] text-right font-bold text-[#e7e5e4]">
                   R$ {r.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div className="p-4 bg-[#09090b] border-t border-[#27272a] text-sm">
+        <div className="p-4 bg-[#0f172a] border-t border-[#334155] text-sm">
           <p className="font-semibold text-zinc-400 mb-2">Totais por mês</p>
           <div className="flex flex-wrap gap-4">
             {Object.entries(totais).map(([mes, v]) => (
@@ -299,7 +299,7 @@ export function SGComprasView() {
 export function SGFaturamentoAttosView() {
   return (
     <Card>
-      <CardHeader className="border-b border-[#27272a] pb-4">
+      <CardHeader className="border-b border-[#334155] pb-4">
         <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4] flex items-center gap-2">
           <UtensilsCrossed className="text-orange-400" size={20} />
           Faturamento Attos — integração diária
@@ -308,12 +308,12 @@ export function SGFaturamentoAttosView() {
       </CardHeader>
       <CardContent className="p-0">
         <table className="w-full text-sm">
-          <thead className="bg-[#09090b] text-zinc-500 text-xs uppercase tracking-widest">
+          <thead className="bg-[#0f172a] text-zinc-500 text-xs uppercase tracking-widest">
             <tr>
-              <th className="py-4 px-6 border-b border-[#27272a]">Data</th>
-              <th className="py-4 px-6 border-b border-[#27272a] text-center">Refeições</th>
-              <th className="py-4 px-6 border-b border-[#27272a]">Integrado</th>
-              <th className="py-4 px-6 border-b border-[#27272a]">Origem</th>
+              <th className="py-4 px-6 border-b border-[#334155]">Data</th>
+              <th className="py-4 px-6 border-b border-[#334155] text-center">Refeições</th>
+              <th className="py-4 px-6 border-b border-[#334155]">Integrado</th>
+              <th className="py-4 px-6 border-b border-[#334155]">Origem</th>
             </tr>
           </thead>
           <tbody>
@@ -321,19 +321,19 @@ export function SGFaturamentoAttosView() {
               <tr
                 key={r.data}
                 className={`hover:bg-zinc-800/30 transition-colors ${
-                  !r.integrado ? 'border-l-4 border-l-amber-500/60 border-[#27272a]' : ''
+                  !r.integrado ? 'border-l-4 border-l-amber-500/60 border-[#334155]' : ''
                 }`}
               >
-                <td className="py-4 px-6 border-b border-[#27272a] font-mono text-xs text-zinc-600">{r.data}</td>
-                <td className="py-4 px-6 border-b border-[#27272a] text-center font-bold text-[#e7e5e4]">{r.refeicoes}</td>
-                <td className="py-4 px-6 border-b border-[#27272a]">
+                <td className="py-4 px-6 border-b border-[#334155] font-mono text-xs text-zinc-600">{r.data}</td>
+                <td className="py-4 px-6 border-b border-[#334155] text-center font-bold text-[#e7e5e4]">{r.refeicoes}</td>
+                <td className="py-4 px-6 border-b border-[#334155]">
                   {r.integrado ? (
                     <FatBadge label="Integrado" color="bg-emerald-500/10 text-emerald-400 border-emerald-500/20" />
                   ) : (
                     <FatBadge label="Pendente" color="bg-amber-500/10 text-amber-400 border-amber-500/20" />
                   )}
                 </td>
-                <td className="py-4 px-6 border-b border-[#27272a] text-xs text-zinc-600">{r.origem}</td>
+                <td className="py-4 px-6 border-b border-[#334155] text-xs text-zinc-600">{r.origem}</td>
               </tr>
             ))}
           </tbody>
@@ -346,14 +346,14 @@ export function SGFaturamentoAttosView() {
 export function SGFechamentoAttosView() {
   return (
     <Card>
-      <CardHeader className="border-b border-[#27272a] pb-4">
+      <CardHeader className="border-b border-[#334155] pb-4">
         <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4]">Fechamento Attos — fonte única</h3>
         <p className="text-sm text-zinc-500">
           Consolidação em um painel para substituir planilhas paralelas e reduzir divergência.
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="p-4 rounded-xl border border-dashed border-[#27272a] bg-[#09090b]">
+        <div className="p-4 rounded-radius-m border border-dashed border-[#334155] bg-[#0f172a]">
           <p className="text-sm text-zinc-400">
             <strong className="text-[#e7e5e4]">Competência 2026-03</strong> — fechamento validado. Última sincronização: 02/04/2026 06:00.
             Todas as linhas originadas do mesmo conjunto de dados (simulação).

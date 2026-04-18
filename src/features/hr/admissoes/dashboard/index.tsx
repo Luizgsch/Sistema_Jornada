@@ -12,18 +12,9 @@ const activityFeed = [
   { icon: "⚠️", text: "8 docs pendentes sem envio há mais de 24h.", time: "há 15min", color: "text-amber-400" },
   { icon: "🤖", text: "Triagem IA priorizou 3 candidatos para Carla Oliveira.", time: "há 31min", color: "text-blue-400" },
 ];
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell
-} from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { DonutPieChart } from "@/shared/components/charts/DonutPieChart";
+import { useChartTheme } from "@/shared/components/charts/chartTheme";
 
 const sectorData = [
   { name: "Tecnologia", value: 8 },
@@ -32,14 +23,19 @@ const sectorData = [
   { name: "Vendas", value: 4 },
 ];
 
-const COLORS = ["#0d9488", "#8b5cf6", "#3b82f6", "#f59e0b"];
+const tipoContratoPie = [
+  { name: "CLT", value: 15 },
+  { name: "PJ", value: 5 },
+  { name: "Estágio", value: 4 },
+];
 
 export default function AdmissoesDashboard() {
+  const { isDark, tooltipStyle, gridStroke, axisTickFill, cursorFill } = useChartTheme();
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl md:text-3xl font-semibold tracking-tighter text-[#e7e5e4]">Dashboard de Admissões</h1>
-        <p className="text-zinc-500 mt-2 leading-relaxed text-sm">Visão geral do fluxo de entrada de novos colaboradores.</p>
+        <p className="text-zinc-500 dark:text-slate-400 mt-2 leading-relaxed text-sm">Visão geral do fluxo de entrada de novos colaboradores.</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -81,22 +77,19 @@ export default function AdmissoesDashboard() {
             <div className="h-[260px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={sectorData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />
                   <XAxis
                     dataKey="name"
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: '#71717a', fontSize: 11 }}
+                    tick={{ fill: axisTickFill, fontSize: 11 }}
                   />
                   <YAxis
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: '#71717a', fontSize: 11 }}
+                    tick={{ fill: axisTickFill, fontSize: 11 }}
                   />
-                  <Tooltip
-                    contentStyle={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '8px', color: '#e7e5e4' }}
-                    cursor={{ fill: 'rgba(255,255,255,0.03)' }}
-                  />
+                  <Tooltip contentStyle={tooltipStyle} cursor={{ fill: cursorFill }} />
                   <Bar dataKey="value" fill="#0d9488" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
@@ -110,28 +103,16 @@ export default function AdmissoesDashboard() {
           </CardHeader>
           <CardContent>
             <div className="h-[260px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={[
-                      { name: "CLT", value: 15 },
-                      { name: "PJ", value: 5 },
-                      { name: "Estágio", value: 4 },
-                    ]}
-                    innerRadius={60}
-                    outerRadius={80}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {COLORS.map((color, index) => (
-                      <Cell key={`cell-${index}`} fill={color} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '8px', color: '#e7e5e4' }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
+              <DonutPieChart
+                data={tipoContratoPie}
+                isDark={isDark}
+                paletteMode="sequential-by-value"
+                tooltipStyle={tooltipStyle}
+                height={260}
+                innerRadius={58}
+                outerRadius={82}
+                paddingAngle={2}
+              />
             </div>
           </CardContent>
         </Card>
@@ -144,25 +125,25 @@ export default function AdmissoesDashboard() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="bg-[#09090b] text-zinc-500 text-xs uppercase tracking-widest">
+              <thead className="bg-[#0f172a] text-slate-500 dark:text-slate-300 text-xs font-semibold uppercase tracking-widest">
                 <tr>
-                  <th className="py-4 px-6 border-b border-[#27272a]">Nome</th>
-                  <th className="py-4 px-6 border-b border-[#27272a]">Cargo</th>
-                  <th className="py-4 px-6 border-b border-[#27272a]">Setor</th>
-                  <th className="py-4 px-6 border-b border-[#27272a]">Início</th>
-                  <th className="py-4 px-6 border-b border-[#27272a]">Documentação</th>
+                  <th className="py-4 px-6 border-b border-[#334155]">Nome</th>
+                  <th className="py-4 px-6 border-b border-[#334155]">Cargo</th>
+                  <th className="py-4 px-6 border-b border-[#334155]">Setor</th>
+                  <th className="py-4 px-6 border-b border-[#334155]">Início</th>
+                  <th className="py-4 px-6 border-b border-[#334155]">Documentação</th>
                 </tr>
               </thead>
               <tbody>
                 {mockRecentAdmissoes.map((item) => (
                   <tr key={item.id} className="hover:bg-zinc-800/30 transition-colors">
-                    <td className="py-4 px-6 border-b border-[#27272a] font-semibold text-[#e7e5e4]">{item.nome}</td>
-                    <td className="py-4 px-6 border-b border-[#27272a] text-zinc-400">{item.cargo}</td>
-                    <td className="py-4 px-6 border-b border-[#27272a] text-zinc-400">{item.setor}</td>
-                    <td className="py-4 px-6 border-b border-[#27272a]">
+                    <td className="py-4 px-6 border-b border-[#334155] font-semibold text-[#e7e5e4]">{item.nome}</td>
+                    <td className="py-4 px-6 border-b border-[#334155] text-zinc-400">{item.cargo}</td>
+                    <td className="py-4 px-6 border-b border-[#334155] text-zinc-400">{item.setor}</td>
+                    <td className="py-4 px-6 border-b border-[#334155]">
                       <PulseBadge dueDate={item.dataInicio} label={item.dataInicio.split('-').reverse().join('/')} />
                     </td>
-                    <td className="py-4 px-6 border-b border-[#27272a]">
+                    <td className="py-4 px-6 border-b border-[#334155]">
                       <StatusBadge status={item.statusDoc} />
                     </td>
                   </tr>
@@ -173,9 +154,9 @@ export default function AdmissoesDashboard() {
         </CardContent>
       </Card>
       {/* Automation Activity Feed */}
-      <div className="rounded-2xl border border-[#27272a] bg-[#18181b] overflow-hidden">
-        <div className="flex items-center gap-3 p-4 border-b border-[#27272a]">
-          <div className="p-2 bg-primary/10 rounded-xl">
+      <div className="rounded-radius-l border border-[#334155] bg-[#1e293b] overflow-hidden">
+        <div className="flex items-center gap-3 p-4 border-b border-[#334155]">
+          <div className="p-2 bg-primary/10 rounded-radius-m">
             <Zap size={16} className="text-primary" />
           </div>
           <div>
@@ -183,7 +164,7 @@ export default function AdmissoesDashboard() {
             <p className="text-[11px] text-zinc-500">Ações executadas pelo sistema sem intervenção manual</p>
           </div>
         </div>
-        <div className="divide-y divide-[#27272a]">
+        <div className="divide-y divide-zinc-200 dark:divide-[#334155]">
           {activityFeed.map((item, i) => (
             <motion.div
               key={i}
@@ -219,14 +200,14 @@ function MetricCard({ title, value, icon: Icon, trend, subtitle, accent, urgency
   return (
     <div
       className={cn(
-        "bg-[#18181b] rounded-xl border p-8 flex flex-col gap-4",
+        "bg-[#1e293b] rounded-radius-m border p-8 flex flex-col gap-4",
         urgency
-          ? "border-[#27272a] border-l-4 border-l-red-600/70"
-          : "border-[#27272a] hover:border-zinc-600 transition-colors"
+          ? "border-[#334155] border-l-4 border-l-red-600/70"
+          : "border-[#334155] hover:border-zinc-600 transition-colors"
       )}
     >
       <div className="flex items-center justify-between">
-        <div className={`p-2 rounded-lg ${style.bg}`}>
+        <div className={`p-2 rounded-radius-m ${style.bg}`}>
           <Icon className={`w-4 h-4 ${style.icon}`} />
         </div>
         {trend && (

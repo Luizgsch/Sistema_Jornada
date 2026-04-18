@@ -14,6 +14,7 @@ import {
 import { mockCandidates } from '@/infrastructure/mock/mockCandidatos';
 import { mockNotasFiscais, mockChamadosManusis } from '@/infrastructure/mock/mockServicosGerais';
 import { mockRecrutamentoVagas } from '@/infrastructure/mock/mockRecrutamento';
+import { getStatusPresentation } from '@/shared/lib/recrutamentoStatusStyles';
 import { useAuth } from '@/features/auth/AuthContext';
 
 type ResultCategory = 'candidatos' | 'vagas' | 'notas-fiscais' | 'chamados';
@@ -60,8 +61,8 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
           category: 'candidatos',
           title: c.nome,
           subtitle: c.skills.join(', ') || 'Sem habilidades cadastradas',
-          badge: c.status,
-          badgeColor: c.status === 'Alta prioridade' ? 'bg-rose-500/15 text-rose-400 border-rose-500/20' : c.status === 'Entrevista' ? 'bg-blue-500/15 text-blue-400 border-blue-500/20' : 'bg-zinc-800 text-zinc-500 border-zinc-700',
+          badge: getStatusPresentation(c.status).label,
+          badgeColor: getStatusPresentation(c.status).badgeClass,
           pinned: c.status === 'Alta prioridade',
         });
       });
@@ -71,8 +72,8 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
           category: 'vagas',
           title: v.cargo,
           subtitle: `${v.setor} · ${v.contrato} · ${v.salario}`,
-          badge: v.status,
-          badgeColor: v.status === 'aberta' ? 'bg-teal-500/15 text-teal-400 border-teal-500/20' : v.status === 'processo' ? 'bg-blue-500/15 text-blue-400 border-blue-500/20' : 'bg-zinc-800 text-zinc-500 border-zinc-700',
+          badge: getStatusPresentation(v.status).label,
+          badgeColor: getStatusPresentation(v.status).badgeClass,
           pinned: v.status === 'aberta',
         });
       });
@@ -186,7 +187,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
             transition={{ duration: 0.18, ease: 'easeOut' }}
             className="fixed top-[12vh] left-1/2 -translate-x-1/2 w-full max-w-xl z-[201] px-4"
           >
-            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-radius-l shadow-2xl shadow-black/50 overflow-hidden">
 
               {/* Search input */}
               <div className="flex items-center gap-3 px-4 py-3.5 border-b border-zinc-800">
@@ -207,7 +208,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                       <X size={14} />
                     </button>
                   )}
-                  <kbd className="hidden sm:flex items-center text-[10px] text-zinc-700 bg-zinc-800 px-1.5 py-0.5 rounded border border-zinc-700 font-mono">
+                  <kbd className="hidden sm:flex items-center text-[10px] text-zinc-700 bg-zinc-800 px-1.5 py-0.5 rounded-radius-s border border-zinc-700 font-mono">
                     ESC
                   </kbd>
                 </div>
@@ -291,11 +292,11 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
               {/* Footer */}
               <div className="flex items-center gap-4 px-4 py-2.5 border-t border-zinc-800/80 text-[10px] text-zinc-700">
                 <span className="flex items-center gap-1.5">
-                  <kbd className="bg-zinc-800 px-1.5 py-0.5 rounded border border-zinc-700/70 font-mono">↑↓</kbd>
+                  <kbd className="bg-zinc-800 px-1.5 py-0.5 rounded-radius-s border border-zinc-700/70 font-mono">↑↓</kbd>
                   Navegar
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <kbd className="bg-zinc-800 px-1.5 py-0.5 rounded border border-zinc-700/70 font-mono">↵</kbd>
+                  <kbd className="bg-zinc-800 px-1.5 py-0.5 rounded-radius-s border border-zinc-700/70 font-mono">↵</kbd>
                   Abrir
                 </span>
                 <span className="ml-auto font-medium capitalize">

@@ -21,13 +21,13 @@ export default function CargosPage() {
           <h1 className="text-3xl font-bold tracking-tight text-[#e7e5e4] dark:text-white">Banco de Cargos e Descrições</h1>
           <p className="text-muted-foreground mt-1">Biblioteca centralizada de descrições de cargos (Job Descriptions), requisitos e tetos salariais.</p>
         </div>
-        <button className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors ">
+        <button className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-radius-m font-medium hover:bg-primary/90 transition-colors ">
           <Plus size={18} />
           Novo Cargo
         </button>
       </div>
 
-      <div className="bg-[#18181b] p-4 border border-[#27272a] rounded-xl ">
+      <div className="bg-[#1e293b] p-4 border border-[#334155] rounded-radius-m ">
         <div className="relative max-w-md w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-600" />
           <input 
@@ -35,7 +35,7 @@ export default function CargosPage() {
             placeholder="Buscar por nome do cargo ou departamento..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 h-10 rounded-lg border border-[#27272a] bg-[#09090b] px-3 py-2 text-[14px] font-medium text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-primary/20"
+            className="w-full pl-10 h-10 rounded-radius-m border border-[#334155] bg-[#0f172a] px-3 py-2 text-[14px] font-medium text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-primary/20"
           />
         </div>
       </div>
@@ -58,7 +58,7 @@ export default function CargosPage() {
                 <h3 className="text-lg font-bold text-[#e7e5e4] leading-tight mb-2">{cargo.nome}</h3>
                 <p className="text-sm text-zinc-500 line-clamp-2">{cargo.descricao}</p>
               </div>
-              <div className="mt-6 pt-4 border-t border-[#27272a] flex items-center justify-between">
+              <div className="mt-6 pt-4 border-t border-[#334155] flex items-center justify-between">
                 <div className="flex items-center gap-1.5 text-sm font-semibold text-primary">
                   <FileText size={16} /> Detalhes da Vaga
                 </div>
@@ -70,7 +70,7 @@ export default function CargosPage() {
         ))}
 
         {filteredCargos.length === 0 && (
-          <div className="col-span-1 md:col-span-2 lg:col-span-3 py-12 text-center text-zinc-500 border-2 border-dashed border-[#27272a] rounded-2xl">
+          <div className="col-span-1 md:col-span-2 lg:col-span-3 py-12 text-center text-zinc-500 border-2 border-dashed border-[#334155] rounded-radius-l">
             Nenhum cargo encontrado na busca.
           </div>
         )}
@@ -92,9 +92,9 @@ export default function CargosPage() {
               animate={{ x: 0 }} 
               exit={{ x: "100%" }} 
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative w-full max-w-xl h-full sm:h-[calc(100vh-2rem)] sm:my-4 sm:mr-4 bg-[#18181b] sm:rounded-2xl  flex flex-col z-10 overflow-hidden"
+              className="relative w-full max-w-xl h-full sm:h-[calc(100vh-2rem)] sm:my-4 sm:mr-4 bg-[#1e293b] sm:rounded-radius-l  flex flex-col z-10 overflow-hidden"
             >
-              <div className="flex items-start justify-between p-6 border-b border-[#27272a] shrink-0">
+              <div className="flex items-start justify-between p-6 border-b border-[#334155] shrink-0">
                 <div>
                   <span className="inline-block px-2.5 py-1 text-xs font-bold uppercase overflow-hidden bg-primary/10 text-primary rounded-full mb-2">
                     {selectedCargo.departamento}
@@ -154,16 +154,16 @@ export default function CargosPage() {
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {selectedCargo.competenciasComportamentais.map((c, idx) => (
-                      <span key={idx} className="bg-zinc-800 text-zinc-300 border border-[#27272a] px-3 py-1.5 rounded-lg text-xs font-semibold">
+                      <span key={idx} className="bg-zinc-800 text-zinc-300 border border-[#334155] px-3 py-1.5 rounded-radius-m text-xs font-semibold">
                         {c}
                       </span>
                     ))}
                   </div>
                 </section>
 
-                <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex items-center justify-between">
+                <div className="bg-emerald-50 border border-emerald-100 rounded-radius-m p-4 flex items-center justify-between">
                    <div className="flex items-center gap-3">
-                     <div className="p-2 bg-emerald-100 text-emerald-600 rounded-lg">
+                     <div className="p-2 bg-emerald-100 text-emerald-600 rounded-radius-m">
                        <DollarSign size={20} />
                      </div>
                      <div>
@@ -175,11 +175,11 @@ export default function CargosPage() {
 
               </div>
 
-              <div className="p-6 border-t border-[#27272a] bg-[#09090b] shrink-0 flex gap-3">
-                <button className="flex-1 justify-center inline-flex items-center gap-2 px-4 py-2.5 bg-[#18181b] border border-zinc-700 text-zinc-300 rounded-xl text-sm font-semibold hover:bg-[#09090b] transition-colors ">
+              <div className="p-6 border-t border-[#334155] bg-[#0f172a] shrink-0 flex gap-3">
+                <button className="flex-1 justify-center inline-flex items-center gap-2 px-4 py-2.5 bg-[#1e293b] border border-zinc-700 text-zinc-300 rounded-radius-m text-sm font-semibold hover:bg-[#0f172a] transition-colors ">
                   Editar Job Description
                 </button>
-                <button className="flex-1 justify-center inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary/90 transition-colors ">
+                <button className="flex-1 justify-center inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-radius-m text-sm font-semibold hover:bg-primary/90 transition-colors ">
                   Abrir Nova Vaga
                 </button>
               </div>

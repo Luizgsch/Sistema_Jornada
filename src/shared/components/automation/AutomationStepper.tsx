@@ -79,12 +79,12 @@ export function AutomationStepper({
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 24 }}
             transition={{ type: "spring", damping: 22, stiffness: 260 }}
-            className="relative w-full max-w-lg bg-[#18181b] border border-[#27272a] rounded-2xl overflow-hidden shadow-2xl shadow-black/60"
+            className="relative w-full max-w-lg bg-[#1e293b] border border-[#334155] rounded-radius-l overflow-hidden shadow-2xl shadow-black/60"
           >
             {/* Header */}
-            <div className="p-6 bg-[#09090b] border-b border-[#27272a]">
+            <div className="p-6 bg-[#0f172a] border-b border-[#334155]">
               <div className="flex items-center gap-2 mb-2">
-                <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-primary bg-primary/10 px-2.5 py-1 rounded-full border border-primary/20">
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-primary bg-primary/10 px-2.5 py-1 rounded-radius-m border border-primary/20">
                   <Loader2 size={10} className={isFinished ? "hidden" : "animate-spin"} />
                   {isFinished ? "✓ Automação concluída" : "Sistema trabalhando…"}
                 </span>
@@ -109,16 +109,16 @@ export function AutomationStepper({
                     initial={{ opacity: 0.25 }}
                     animate={{ opacity: isDone || isActive ? 1 : 0.3 }}
                     transition={{ duration: 0.4 }}
-                    className={`flex items-center gap-4 p-4 rounded-xl border transition-all duration-500 ${
+                    className={`flex items-center gap-4 p-4 rounded-radius-m border transition-all duration-500 ${
                       isDone
                         ? "bg-emerald-500/5 border-emerald-500/20"
                         : isActive
                         ? "bg-primary/5 border-primary/20"
-                        : "border-[#27272a] bg-transparent"
+                        : "border-[#334155] bg-transparent"
                     }`}
                   >
                     <div
-                      className={`flex-shrink-0 p-2 rounded-lg transition-all duration-400 ${
+                      className={`flex-shrink-0 p-2 rounded-radius-m transition-all duration-400 ${
                         isDone
                           ? "bg-emerald-500/10 text-emerald-400"
                           : isActive
@@ -164,7 +164,7 @@ export function AutomationStepper({
                   animate={{ opacity: 1, y: 0 }}
                   className="px-6 pb-6"
                 >
-                  <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-3 mb-4">
+                  <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-radius-m flex items-center gap-3 mb-4">
                     <PartyPopper size={20} className="text-emerald-400 flex-shrink-0" />
                     <p className="text-sm font-bold text-emerald-400">
                       Todas as notificações enviadas! Nenhuma ação manual necessária.
@@ -172,7 +172,7 @@ export function AutomationStepper({
                   </div>
                   <button
                     onClick={onClose}
-                    className="w-full py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+                    className="w-full py-3 bg-primary text-white rounded-radius-m font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
                   >
                     Concluir
                   </button>

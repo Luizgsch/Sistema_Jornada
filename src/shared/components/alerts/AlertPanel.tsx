@@ -46,7 +46,7 @@ export function AlertPanel({ alerts }: AlertPanelProps) {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.7 + index * 0.1 }}
                   className={cn(
-                    "group flex items-center justify-between p-4 rounded-lg border border-transparent hover:border-border hover:bg-muted/50 transition-all cursor-pointer",
+                    "group flex items-center justify-between p-4 rounded-radius-m border border-transparent hover:border-border hover:bg-muted/50 transition-all cursor-pointer",
                     alert.priority === "high" && "bg-rose-50/50 dark:bg-rose-900/10",
                     alert.priority === "medium" && "bg-amber-50/50 dark:bg-amber-900/10"
                   )}

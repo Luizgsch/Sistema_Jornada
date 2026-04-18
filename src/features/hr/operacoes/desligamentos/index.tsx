@@ -1,19 +1,40 @@
-import { FileUp, UserMinus, Eye } from 'lucide-react';
+import { useState } from 'react';
+import { UserMinus, Eye } from 'lucide-react';
 import { KpiCard } from '@/shared/components/dashboard/KpiCard';
 import { TurnoverChart } from '@/shared/components/charts/TurnoverChart';
 import { FiltersBar } from '@/shared/ui/FiltersBar';
 import { useToast } from '@/shared/ui/Toast';
+import { Button } from '@/shared/ui/Button';
+import { delay } from '@/shared/lib/delay';
 import { mockDesligamentosKpis, mockDesligamentosList, mockTurnoverChart } from '@/infrastructure/mock/mockDesligamentos';
 
 export default function DesligamentosPage() {
-  const { success, info } = useToast();
+  const { success, info, error } = useToast();
+  const [exportLoading, setExportLoading] = useState(false);
+  const [registerLoading, setRegisterLoading] = useState(false);
 
-  const handleExport = () => {
-    success("Relatório gerado", "O arquivo do relatório de desligamentos está sendo baixado.");
-  }
-  const handleRegister = () => {
-    info("Novo Desligamento", "Abrindo formulário de offboarding...");
-  }
+  const handleExport = async () => {
+    setExportLoading(true);
+    try {
+      await delay(700);
+      success("Relatório gerado", "O arquivo do relatório de desligamentos está sendo baixado.");
+    } catch {
+      error("Falha na exportação", "Tente novamente.");
+    } finally {
+      setExportLoading(false);
+    }
+  };
+  const handleRegister = async () => {
+    setRegisterLoading(true);
+    try {
+      await delay(500);
+      info("Novo Desligamento", "Abrindo formulário de offboarding...");
+    } catch {
+      error("Ação indisponível", "Tente novamente.");
+    } finally {
+      setRegisterLoading(false);
+    }
+  };
 
   return (
     <div className="space-y-8 pb-10">
@@ -24,18 +45,14 @@ export default function DesligamentosPage() {
           <p className="text-muted-foreground mt-1">Gestão de offboarding, KPIs de turnover e histórico.</p>
         </div>
         <div className="flex items-center gap-3">
-          <button 
-            onClick={handleExport}
-            className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-[#18181b] border border-[#27272a] text-zinc-300 rounded-lg text-sm font-semibold hover:bg-[#09090b] transition-colors "
-          >
-            <FileUp size={16} /> Exportar Relatório
-          </button>
-          <button 
-            onClick={handleRegister}
-            className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors "
+          <Button
+            className="rounded-radius-m"
+            isLoading={registerLoading}
+            disabled={exportLoading}
+            onClick={() => void handleRegister()}
           >
             <UserMinus size={16} /> Registrar Desligamento
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -54,12 +71,20 @@ export default function DesligamentosPage() {
       {/* Filters and Table */}
       <div className="space-y-4">
         <h3 className="text-xl font-bold tracking-tight mt-4">Histórico de Desligamentos</h3>
-        <FiltersBar searchPlaceholder="Buscar colaborador por nome, cargo ou setor..." filterLabel="Filtrar Desligamentos" />
+        <FiltersBar
+          searchPlaceholder="Buscar colaborador por nome, cargo ou setor..."
+          filterLabel="Filtrar Desligamentos"
+          showExport
+          exportLabel="Exportar relatório"
+          exportLoading={exportLoading}
+          exportDisabled={registerLoading}
+          onExportClick={() => void handleExport()}
+        />
         
-        <div className="bg-[#18181b] rounded-xl  border border-[#27272a] overflow-hidden">
+        <div className="bg-[#1e293b] rounded-radius-l  border border-[#334155] overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
-              <thead className="text-xs text-zinc-500 bg-[#09090b] uppercase border-b border-[#27272a]">
+              <thead className="text-xs text-zinc-500 bg-[#0f172a] uppercase border-b border-[#334155]">
                 <tr>
                   <th className="px-6 py-4 font-semibold">Colaborador</th>
                   <th className="px-6 py-4 font-semibold">Setor</th>
@@ -71,7 +96,7 @@ export default function DesligamentosPage() {
               </thead>
               <tbody>
                 {mockDesligamentosList.map((item) => (
-                  <tr key={item.id} className="border-b border-[#27272a] hover:bg-zinc-800/20 transition-colors">
+                  <tr key={item.id} className="border-b border-[#334155] hover:bg-zinc-800/20 transition-colors">
                     <td className="px-6 py-4">
                       <div className="font-semibold text-[#e7e5e4]">{item.nome}</div>
                       <div className="text-xs text-zinc-500 mt-0.5">{item.cargo}</div>
@@ -92,7 +117,7 @@ export default function DesligamentosPage() {
                     <td className="px-6 py-4 text-right">
                       <button 
                         onClick={() => info("Histórico", `Abrindo o histórico de ${item.nome}`)}
-                        className="p-2 text-zinc-600 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors"
+                        className="p-2 text-zinc-600 hover:text-primary hover:bg-primary/10 rounded-radius-m transition-colors"
                         title="Visualizar Histórico"
                       >
                         <Eye size={18} />

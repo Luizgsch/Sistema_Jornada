@@ -1,46 +1,44 @@
 @layer base {
-  /* Dark mode (default) */
+  /* Dark mode (default) — slate elevation, sem preto puro */
   :root {
     --color-primary: #0d9488;
     --color-primary-foreground: #ffffff;
-    --color-secondary: #27272a;
-    --color-secondary-foreground: #e7e5e4;
+    --color-secondary: #334155;
+    --color-secondary-foreground: #f8fafc;
     --color-success: #22c55e;
     --color-warning: #f59e0b;
     --color-danger: #ff0033;
-    --color-border-theme: #27272a;
-    --color-card: #18181b;
-    --color-card-foreground: #e7e5e4;
-    --color-background-theme: #09090b;
-    --color-muted: #27272a;
-    --color-muted-foreground: #78716c;
-    --color-accent: #27272a;
-    --color-accent-foreground: #e7e5e4;
+    --color-border-theme: #334155;
+    --color-card: #1e293b;
+    --color-card-foreground: #f8fafc;
+    --color-background-theme: #0f172a;
+    --color-muted: #1e293b;
+    --color-muted-foreground: #94a3b8;
+    --color-accent: #334155;
+    --color-accent-foreground: #f8fafc;
 
-    /* Shadcn UI HSL variables — dark mode */
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 90%;
-    --card: 240 5.9% 10%;
-    --card-foreground: 0 0% 90%;
-    --popover: 240 5.9% 10%;
-    --popover-foreground: 0 0% 98%;
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+    --card: 217 33% 17%;
+    --card-foreground: 210 40% 98%;
+    --popover: 217 33% 17%;
+    --popover-foreground: 210 40% 98%;
     --primary: 173 58% 39%;
     --primary-foreground: 210 20% 98%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 90%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 25 5.3% 44.7%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 90%;
+    --secondary: 215 25% 27%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 215 25% 22%;
+    --muted-foreground: 215 16% 65%;
+    --accent: 215 25% 27%;
+    --accent-foreground: 210 40% 98%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 20% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
+    --border: 215 20% 32%;
+    --input: 215 20% 32%;
     --ring: 173 58% 39%;
     --radius: 0.75rem;
   }
 
-  /* Light mode overrides — activated when .dark is absent on <html> */
   :root:not(.dark) {
     --color-secondary: #f4f4f5;
     --color-secondary-foreground: #18181b;

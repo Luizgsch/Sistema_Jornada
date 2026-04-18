@@ -1,8 +1,74 @@
 export const mockCursos = [
-  { id: "C-01", nome: "Boas Práticas de Segurança da Informação", categoria: "Compliance", duracao: "4h", formato: "Online", obrigatorio: true, responsavel: "TI", status: "ativo" },
-  { id: "C-02", nome: "Liderança Inspiradora", categoria: "Soft Skills", duracao: "16h", formato: "Híbrido", obrigatorio: false, responsavel: "RH", status: "ativo" },
-  { id: "C-03", nome: "Integração Novos Colaboradores (Onboarding)", categoria: "Institucional", duracao: "8h", formato: "Presencial", obrigatorio: true, responsavel: "RH", status: "ativo" },
-  { id: "C-04", nome: "Design System Fundamentals", categoria: "Técnico", duracao: "10h", formato: "Online", obrigatorio: false, responsavel: "Design Team", status: "arquivado" },
+  {
+    id: "C-01",
+    nome: "Boas Práticas de Segurança da Informação",
+    categoria: "Compliance",
+    duracao: "4h",
+    formato: "Online",
+    obrigatorio: true,
+    responsavel: "TI",
+    status: "ativo",
+    descricao:
+      "Capacitação obrigatória sobre classificação de dados, phishing, senhas e uso seguro de e-mail corporativo. Alinhada à política interna de SI e LGPD.",
+    aulas: [
+      "Introdução e cenário de ameaças",
+      "Senhas, MFA e gestão de acessos",
+      "Phishing e engenharia social",
+      "Dados pessoais e boas práticas LGPD",
+      "Quiz final e certificado",
+    ],
+  },
+  {
+    id: "C-02",
+    nome: "Liderança Inspiradora",
+    categoria: "Soft Skills",
+    duracao: "16h",
+    formato: "Híbrido",
+    obrigatorio: false,
+    responsavel: "RH",
+    status: "ativo",
+    descricao:
+      "Desenvolvimento de competências de liderança situacional, feedback contínuo e condução de reuniões produtivas com equipes híbridas.",
+    aulas: [
+      "Autoconhecimento e estilo de liderança",
+      "Feedback e conversas difíceis",
+      "Metas, priorização e delegação",
+      "Engajamento e reconhecimento",
+      "Projeto prático e mentoria em grupo",
+    ],
+  },
+  {
+    id: "C-03",
+    nome: "Integração Novos Colaboradores (Onboarding)",
+    categoria: "Institucional",
+    duracao: "8h",
+    formato: "Presencial",
+    obrigatorio: true,
+    responsavel: "RH",
+    status: "ativo",
+    descricao:
+      "Jornada de boas-vindas: cultura, benefícios, políticas internas, saúde e segurança no trabalho e canais de suporte ao colaborador.",
+    aulas: [
+      "Cultura e propósito da empresa",
+      "Benefícios e políticas de RH",
+      "SSMA e rotas de emergência",
+      "Ferramentas digitais e acessos",
+      "Tour presencial e encerramento",
+    ],
+  },
+  {
+    id: "C-04",
+    nome: "Design System Fundamentals",
+    categoria: "Técnico",
+    duracao: "10h",
+    formato: "Online",
+    obrigatorio: false,
+    responsavel: "Design Team",
+    status: "arquivado",
+    descricao:
+      "Fundamentos de tokens, componentes reutilizáveis e documentação de padrões visuais para produtos digitais (curso arquivado — consulte sucessão).",
+    aulas: ["Tokens e temas", "Componentes base", "Acessibilidade em UI", "Handoff com desenvolvimento"],
+  },
 ];
 
 export const mockTrilhas = [

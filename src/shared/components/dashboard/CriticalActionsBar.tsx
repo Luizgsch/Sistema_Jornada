@@ -78,12 +78,12 @@ export function CriticalActionsBar({ actions, className }: CriticalActionsBarPro
           </span>
           <div className="flex items-center gap-1.5">
             {criticalCount > 0 && (
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/15 text-rose-600 dark:text-rose-300 border border-rose-500/30">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-radius-m text-[11px] font-bold bg-rose-500/15 text-rose-600 dark:text-rose-300 border border-rose-500/30">
                 {criticalCount} crítico{criticalCount > 1 ? 's' : ''}
               </span>
             )}
             {warningCount > 0 && (
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-radius-m text-[11px] font-bold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
                 {warningCount} alerta{warningCount > 1 ? 's' : ''}
               </span>
             )}
@@ -104,7 +104,7 @@ export function CriticalActionsBar({ actions, className }: CriticalActionsBarPro
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.06 }}
               className={cn(
-                'flex items-start gap-3 p-3.5 rounded-xl border transition-colors duration-300',
+                'flex items-start gap-3 p-3.5 rounded-radius-m border transition-colors duration-300',
                 cfg.containerClass,
                 action.action && 'cursor-pointer hover:brightness-105'
               )}
@@ -117,7 +117,7 @@ export function CriticalActionsBar({ actions, className }: CriticalActionsBarPro
                 <div className="flex items-start justify-between gap-2">
                   <p className="text-[13px] font-semibold text-zinc-800 dark:text-[#e7e5e4] leading-tight">
                     {action.count !== undefined && (
-                      <span className={cn('inline-flex items-center justify-center w-5 h-5 rounded-md text-[11px] font-black mr-1.5 border', cfg.badgeClass)}>
+                      <span className={cn('inline-flex items-center justify-center w-5 h-5 rounded-radius-s text-[11px] font-black mr-1.5 border', cfg.badgeClass)}>
                         {action.count}
                       </span>
                     )}

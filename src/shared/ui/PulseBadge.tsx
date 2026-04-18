@@ -28,7 +28,7 @@ export function PulseBadge({ dueDate, label, className }: PulseBadgeProps) {
     return (
       <span
         className={cn(
-          "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border",
+          "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-radius-m text-xs font-semibold border",
           "bg-red-500/10 text-red-400 border-red-500/20",
           className
         )}
@@ -46,7 +46,7 @@ export function PulseBadge({ dueDate, label, className }: PulseBadgeProps) {
     return (
       <span
         className={cn(
-          "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border",
+          "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-radius-m text-xs font-semibold border",
           "bg-amber-500/10 text-amber-400 border-amber-500/20",
           className
         )}
@@ -63,7 +63,7 @@ export function PulseBadge({ dueDate, label, className }: PulseBadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border",
+        "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-radius-m text-xs font-semibold border",
         "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
         className
       )}

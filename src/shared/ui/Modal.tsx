@@ -23,12 +23,11 @@ export const Modal: FC<ModalProps> = ({
   maxWidth = "md"
 }) => {
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => { document.body.style.overflow = "unset"; };
+    if (!isOpen) return;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.removeProperty("overflow");
+    };
   }, [isOpen]);
 
   const maxWClass = {
@@ -55,16 +54,18 @@ export const Modal: FC<ModalProps> = ({
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.96, opacity: 0, y: 8 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className={`relative w-full ${maxWClass} bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-2xl flex flex-col max-h-[90vh] overflow-hidden transition-colors duration-300`}
+            className={`relative w-full ${maxWClass} bg-white dark:bg-[#1e293b] border border-zinc-200 dark:border-[#334155] rounded-radius-l flex flex-col max-h-[90vh] overflow-hidden transition-colors duration-300`}
           >
-            <div className="p-6 border-b border-zinc-200 dark:border-[#27272a] flex items-start justify-between">
+            <div className="p-6 border-b border-zinc-200 dark:border-[#334155] flex items-start justify-between">
               <div>
-                <h2 className="text-lg font-semibold tracking-tighter text-zinc-800 dark:text-[#e7e5e4]">{title}</h2>
-                {description && <p className="text-sm text-zinc-500 mt-1">{description}</p>}
+                <h2 className="text-lg font-semibold tracking-tighter text-zinc-800 dark:text-[#f8fafc]">{title}</h2>
+                {description && (
+                  <p className="text-sm text-zinc-500 dark:text-slate-400 mt-1">{description}</p>
+                )}
               </div>
               <button
                 onClick={onClose}
-                className="p-2 text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors flex-shrink-0"
+                className="p-2 text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-radius-m transition-colors flex-shrink-0"
               >
                 <X size={18} />
               </button>
@@ -75,7 +76,7 @@ export const Modal: FC<ModalProps> = ({
             </div>
 
             {footer && (
-              <div className="p-5 border-t border-zinc-200 dark:border-[#27272a] bg-zinc-50 dark:bg-[#09090b] flex items-center justify-end gap-3 rounded-b-2xl">
+              <div className="p-5 border-t border-zinc-200 dark:border-[#334155] bg-zinc-50 dark:bg-[#0f172a] text-zinc-600 dark:text-slate-400 flex items-center justify-end gap-3 rounded-b-radius-l">
                 {footer}
               </div>
             )}

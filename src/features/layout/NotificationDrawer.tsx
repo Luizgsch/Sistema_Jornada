@@ -128,7 +128,7 @@ export function NotificationDrawer({ open, onClose }: NotificationDrawerProps) {
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: '100%', opacity: 0 }}
             transition={{ type: 'spring', damping: 28, stiffness: 220 }}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-zinc-900 border-l border-zinc-800 z-[91] flex flex-col shadow-2xl"
+            className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-zinc-900 border-l border-zinc-800 z-[91] flex flex-col min-h-0 shadow-2xl rounded-tl-radius-l rounded-bl-radius-l"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-800 shrink-0">
@@ -136,14 +136,14 @@ export function NotificationDrawer({ open, onClose }: NotificationDrawerProps) {
                 <Bell size={16} className="text-zinc-400" />
                 <h2 className="font-bold text-[#e7e5e4] text-base">Alertas ativos</h2>
                 {criticalCount > 0 && (
-                  <span className="inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[11px] font-black bg-rose-500 text-white animate-pulse">
+                  <span className="inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-radius-m text-[11px] font-black bg-rose-500 text-white animate-pulse">
                     {criticalCount}
                   </span>
                 )}
               </div>
               <button
                 onClick={onClose}
-                className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800 transition"
+                className="p-1.5 rounded-radius-m text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800 transition"
               >
                 <X size={16} />
               </button>
@@ -159,7 +159,7 @@ export function NotificationDrawer({ open, onClose }: NotificationDrawerProps) {
             </div>
 
             {/* List */}
-            <div className="flex-1 overflow-y-auto custom-scrollbar py-3 space-y-1.5 px-3">
+            <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar py-3 space-y-1.5 px-3 pr-2">
               {notifications.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-16 gap-3">
                   <BellOff size={28} className="text-zinc-700" />
@@ -178,7 +178,7 @@ export function NotificationDrawer({ open, onClose }: NotificationDrawerProps) {
                       exit={{ opacity: 0, x: 16, height: 0 }}
                       transition={{ delay: i * 0.04 }}
                       className={cn(
-                        'group flex items-start gap-3 p-3.5 rounded-xl border transition-all',
+                        'group flex items-start gap-3 p-3.5 rounded-radius-m border transition-all',
                         cfg.ring, cfg.bg
                       )}
                     >
@@ -193,7 +193,7 @@ export function NotificationDrawer({ open, onClose }: NotificationDrawerProps) {
                       </div>
                       <button
                         onClick={() => setDismissed((d) => [...d, n.id])}
-                        className="shrink-0 p-1 rounded opacity-0 group-hover:opacity-100 text-zinc-600 hover:text-zinc-400 hover:bg-zinc-800 transition"
+                        className="shrink-0 p-1 rounded-radius-s opacity-0 group-hover:opacity-100 text-zinc-600 hover:text-zinc-400 hover:bg-zinc-800 transition"
                         title="Dispensar"
                       >
                         <X size={12} />

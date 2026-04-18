@@ -1,4 +1,5 @@
-import { Wrench } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { Wrench, Cake, LayoutGrid } from 'lucide-react';
 import {
   SGDashboardFinanceiroView,
   SGNotasFiscaisView,
@@ -19,6 +20,7 @@ import { SGDashboardFullView } from '@/features/servicos-gerais/shared/SGDashboa
 import { SGVoucherView } from '@/features/servicos-gerais/shared/SGVoucherView';
 import { useAuth } from '@/features/auth/AuthContext';
 import type { TipoUsuario } from '@/infrastructure/mock/mockLogin';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/Card';
 
 export type SGPageId =
   | 'sg-dashboard'
@@ -31,7 +33,9 @@ export type SGPageId =
   | 'sg-fechamento-attos'
   | 'sg-satisfacao-attos'
   | 'sg-chamados-manusis'
-  | 'sg-cafe-abastecimento'
+  | 'sg-engajamento-cafe'
+  | 'sg-engajamento-aniversariantes'
+  | 'sg-engajamento-mural'
   | 'sg-voucher-natal';
 
 const titles: Record<SGPageId, { title: string; subtitle: string }> = {
@@ -75,9 +79,17 @@ const titles: Record<SGPageId, { title: string; subtitle: string }> = {
     title: 'Chamados Manusis',
     subtitle: 'Monitoramento de prazos vencidos e próximos ao vencimento.',
   },
-  'sg-cafe-abastecimento': {
+  'sg-engajamento-cafe': {
     title: 'Sociedade do Café',
     subtitle: 'Locais não abastecidos identificados a partir do Forms.',
+  },
+  'sg-engajamento-aniversariantes': {
+    title: 'Aniversariantes',
+    subtitle: 'Calendário de aniversários e lembretes para o time (protótipo).',
+  },
+  'sg-engajamento-mural': {
+    title: 'Mural',
+    subtitle: 'Recados e conteúdo social entre equipes (protótipo).',
   },
   'sg-voucher-natal': {
     title: 'Voucher de Natal',
@@ -87,6 +99,34 @@ const titles: Record<SGPageId, { title: string; subtitle: string }> = {
 
 function isSGPage(id: string): id is SGPageId {
   return id in titles;
+}
+
+function SGEngajamentoPlaceholderView({
+  title,
+  description,
+  Icon,
+}: {
+  title: string;
+  description: string;
+  Icon: LucideIcon;
+}) {
+  return (
+    <Card>
+      <CardHeader className="border-b border-zinc-100 dark:border-zinc-800 pb-4">
+        <CardTitle className="flex items-center gap-2">
+          <Icon className="text-primary shrink-0" size={20} aria-hidden />
+          {title}
+        </CardTitle>
+        <p className="text-sm text-muted-foreground mt-1">{description}</p>
+      </CardHeader>
+      <CardContent>
+        <p className="text-sm text-muted-foreground">
+          Módulo em definição. Quando ativo, ficará alinhado ao mesmo padrão visual do restante do Jornada (cards,
+          tipografia e botões).
+        </p>
+      </CardContent>
+    </Card>
+  );
 }
 
 interface ServicosGeraisPageProps {
@@ -108,7 +148,7 @@ export default function ServicosGeraisPage({ activePage }: ServicosGeraisPagePro
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 bg-amber-500/20 rounded-radius-m flex items-center justify-center shrink-0">
             <Wrench className="text-amber-600" size={24} />
           </div>
           <div>
@@ -128,7 +168,21 @@ export default function ServicosGeraisPage({ activePage }: ServicosGeraisPagePro
       {page === 'sg-fechamento-attos' && <SGFechamentoAttosView />}
       {page === 'sg-satisfacao-attos' && <SGSatisfacaoView />}
       {page === 'sg-chamados-manusis' && <SGChamadosView />}
-      {page === 'sg-cafe-abastecimento' && <SGCafeView />}
+      {page === 'sg-engajamento-cafe' && <SGCafeView />}
+      {page === 'sg-engajamento-aniversariantes' && (
+        <SGEngajamentoPlaceholderView
+          title="Aniversariantes"
+          description="Reconhecimento leve do calendário do time, sem competir com fluxos críticos de RH."
+          Icon={Cake}
+        />
+      )}
+      {page === 'sg-engajamento-mural' && (
+        <SGEngajamentoPlaceholderView
+          title="Mural"
+          description="Espaço colaborativo para avisos informais e cultura."
+          Icon={LayoutGrid}
+        />
+      )}
       {page === 'sg-voucher-natal' && <SGVoucherView />}
     </div>
   );

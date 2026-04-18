@@ -24,7 +24,7 @@ export default function RelatoriosPage() {
           <h1 className="text-3xl font-bold tracking-tight">Central de Relatórios</h1>
           <p className="text-muted-foreground mt-1">Geração e exportação de dados analíticos estruturados.</p>
         </div>
-        <button className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors ">
+        <button className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-radius-m font-medium hover:bg-primary/90 transition-colors ">
           <Plus size={18} />
           Novo Relatório Customizado
         </button>
@@ -39,10 +39,10 @@ export default function RelatoriosPage() {
               <input 
                 type="text" 
                 placeholder="Pesquisar relatório..." 
-                className="w-full pl-9 h-9 text-sm rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-primary/50"
+                className="w-full pl-9 h-9 text-sm rounded-radius-s border border-input focus:outline-none focus:ring-1 focus:ring-primary/50"
               />
             </div>
-            <button className="h-9 px-3 border rounded-md text-sm font-medium hover:bg-[#09090b] flex items-center gap-2">
+            <button className="h-9 px-3 border rounded-radius-s text-sm font-medium hover:bg-[#0f172a] flex items-center gap-2">
               <Filter size={14} />
               Filtrar por Categoria
             </button>
@@ -51,7 +51,7 @@ export default function RelatoriosPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm whitespace-nowrap">
-              <thead className="bg-[#09090b] border-b">
+              <thead className="bg-[#0f172a] border-b">
                 <tr className="text-muted-foreground font-medium text-[11px] uppercase tracking-wider">
                   <th className="py-4 px-6">Nome do Relatório</th>
                   <th className="py-4 px-6">Categoria</th>
@@ -68,7 +68,7 @@ export default function RelatoriosPage() {
                       {rel.nome}
                     </td>
                     <td className="py-4 px-6">
-                      <span className="px-2 py-1 text-[10px] font-bold uppercase rounded-md bg-zinc-800 text-zinc-400 border">
+                      <span className="px-2 py-1 text-[10px] font-bold uppercase rounded-radius-s bg-zinc-800 text-zinc-400 border">
                         {rel.categoria}
                       </span>
                     </td>
@@ -76,9 +76,9 @@ export default function RelatoriosPage() {
                     <td className="py-4 px-6 text-zinc-500 text-xs">{rel.ultimaAtualizacao}</td>
                     <td className="py-4 px-6 text-center">
                       {rel.status === "pronto" ? (
-                         <span className="px-2 py-1 text-[10px] font-bold uppercase rounded-md bg-emerald-50 text-emerald-600 border border-emerald-100">Pronto</span>
+                         <span className="px-2 py-1 text-[10px] font-bold uppercase rounded-radius-s bg-emerald-50 text-emerald-600 border border-emerald-100">Pronto</span>
                       ) : (
-                         <span className="px-2 py-1 text-[10px] font-bold uppercase rounded-md bg-amber-50 text-amber-600 border border-amber-100 flex items-center gap-1 justify-center w-max mx-auto">
+                         <span className="px-2 py-1 text-[10px] font-bold uppercase rounded-radius-s bg-amber-50 text-amber-600 border border-amber-100 flex items-center gap-1 justify-center w-max mx-auto">
                            <Loader2 size={10} className="animate-spin" /> Gerando
                          </span>
                       )}
@@ -88,15 +88,15 @@ export default function RelatoriosPage() {
                         <button 
                           onClick={() => rel.status === 'pronto' && setSelectedReport(rel)}
                           disabled={rel.status !== 'pronto'}
-                          className="p-2 hover:bg-zinc-700 rounded-lg text-zinc-400 disabled:opacity-30 transition-colors" 
+                          className="p-2 hover:bg-zinc-700 rounded-radius-m text-zinc-400 disabled:opacity-30 transition-colors" 
                           title="Visualizar Relatório"
                         >
                           <Eye size={16} />
                         </button>
-                        <button disabled={rel.status !== 'pronto'} className="p-2 hover:bg-zinc-700 rounded-lg text-zinc-400 disabled:opacity-30 transition-colors" title="Baixar PDF">
+                        <button disabled={rel.status !== 'pronto'} className="p-2 hover:bg-zinc-700 rounded-radius-m text-zinc-400 disabled:opacity-30 transition-colors" title="Baixar PDF">
                           <FileText size={16} />
                         </button>
-                        <button disabled={rel.status !== 'pronto'} className="p-2 hover:bg-zinc-700 rounded-lg text-zinc-400 disabled:opacity-30 transition-colors" title="Exportar Excel">
+                        <button disabled={rel.status !== 'pronto'} className="p-2 hover:bg-zinc-700 rounded-radius-m text-zinc-400 disabled:opacity-30 transition-colors" title="Exportar Excel">
                           <FileSpreadsheet size={16} />
                         </button>
                       </div>
@@ -124,9 +124,9 @@ export default function RelatoriosPage() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-5xl bg-[#18181b] rounded-2xl  overflow-hidden flex flex-col h-[85vh]"
+              className="relative w-full max-w-5xl bg-[#1e293b] rounded-radius-l  overflow-hidden flex flex-col h-[85vh]"
             >
-              <div className="p-6 border-b bg-[#09090b] text-white flex items-center justify-between">
+              <div className="p-6 border-b bg-[#0f172a] text-white flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                      <span className="px-2 py-0.5 text-[9px] font-bold uppercase rounded-full bg-primary/20 text-primary border border-primary/30">
@@ -138,41 +138,41 @@ export default function RelatoriosPage() {
                   <p className="text-xs text-zinc-600 mt-1">Período analisado: {selectedReport.periodo}</p>
                 </div>
                 <div className="flex items-center gap-3">
-                   <button className="flex items-center gap-2 px-3 py-1.5 bg-[#18181b]/10 hover:bg-[#18181b]/20 text-sm font-bold rounded-lg transition-colors">
+                   <button className="flex items-center gap-2 px-3 py-1.5 bg-[#1e293b]/10 hover:bg-[#1e293b]/20 text-sm font-bold rounded-radius-m transition-colors">
                       <Download size={14} /> PDF
                    </button>
-                   <button className="flex items-center gap-2 px-3 py-1.5 bg-[#18181b]/10 hover:bg-[#18181b]/20 text-sm font-bold rounded-lg transition-colors">
+                   <button className="flex items-center gap-2 px-3 py-1.5 bg-[#1e293b]/10 hover:bg-[#1e293b]/20 text-sm font-bold rounded-radius-m transition-colors">
                       <FileSpreadsheet size={14} /> Excel
                    </button>
-                   <button onClick={() => setSelectedReport(null)} className="p-2 hover:bg-[#18181b]/10 rounded-full transition-colors ml-2">
+                   <button onClick={() => setSelectedReport(null)} className="p-2 hover:bg-[#1e293b]/10 rounded-full transition-colors ml-2">
                      <X size={20} />
                    </button>
                 </div>
               </div>
               
               <div className="flex-1 overflow-y-auto p-8 space-y-8 bg-zinc-800/20">
-                <div className="p-6 border rounded-xl bg-[#18181b] flex flex-col items-center justify-center min-h-[400px]">
+                <div className="p-6 border rounded-radius-m bg-[#1e293b] flex flex-col items-center justify-center min-h-[400px]">
                    <FileText size={48} className="text-zinc-300 mb-4" />
                    <h3 className="text-lg font-bold text-zinc-300">Visualização do Relatório</h3>
                    <p className="text-zinc-500 text-sm max-w-md text-center mt-2 leading-relaxed">
                      Esta é uma pré-visualização simplificada. Os gráficos interativos e tabelas detalhadas estarão disponíveis na versão exportada (PDF ou Excel).
                    </p>
                    <div className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
-                      <div className="p-4 border border-dashed rounded-lg bg-[#09090b]">
-                         <div className="h-2 w-1/2 bg-zinc-700 rounded mb-2" />
-                         <div className="h-10 w-full bg-zinc-800 rounded" />
+                      <div className="p-4 border border-dashed rounded-radius-m bg-[#0f172a]">
+                         <div className="h-2 w-1/2 bg-zinc-700 rounded-radius-s mb-2" />
+                         <div className="h-10 w-full bg-zinc-800 rounded-radius-s" />
                       </div>
-                      <div className="p-4 border border-dashed rounded-lg bg-[#09090b]">
-                         <div className="h-2 w-1/3 bg-zinc-700 rounded mb-2" />
-                         <div className="h-10 w-full bg-zinc-800 rounded" />
+                      <div className="p-4 border border-dashed rounded-radius-m bg-[#0f172a]">
+                         <div className="h-2 w-1/3 bg-zinc-700 rounded-radius-s mb-2" />
+                         <div className="h-10 w-full bg-zinc-800 rounded-radius-s" />
                       </div>
-                      <div className="p-4 border border-dashed rounded-lg bg-[#09090b]">
-                         <div className="h-2 w-2/3 bg-zinc-700 rounded mb-2" />
-                         <div className="h-10 w-full bg-zinc-800 rounded" />
+                      <div className="p-4 border border-dashed rounded-radius-m bg-[#0f172a]">
+                         <div className="h-2 w-2/3 bg-zinc-700 rounded-radius-s mb-2" />
+                         <div className="h-10 w-full bg-zinc-800 rounded-radius-s" />
                       </div>
-                      <div className="p-4 border border-dashed rounded-lg bg-[#09090b]">
-                         <div className="h-2 w-1/2 bg-zinc-700 rounded mb-2" />
-                         <div className="h-10 w-full bg-zinc-800 rounded" />
+                      <div className="p-4 border border-dashed rounded-radius-m bg-[#0f172a]">
+                         <div className="h-2 w-1/2 bg-zinc-700 rounded-radius-s mb-2" />
+                         <div className="h-10 w-full bg-zinc-800 rounded-radius-s" />
                       </div>
                    </div>
                 </div>

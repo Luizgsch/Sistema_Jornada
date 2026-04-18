@@ -1,0 +1,587 @@
+       PROBLEMÁTICAS – JORNADA DA
+          APRENDIZAGEM SENAI
+
+
+RECRUTAMENTO E SELEÇÃO
+1. Uso excessivo de planilhas e processos manuais
+O setor de Recrutamento e Seleção depende de um grande volume de planilhas para
+executar tarefas do dia a dia. Cada uma delas cumpre uma função específica, mas são todas
+atualizadas manualmente, o que aumenta risco de erro, retrabalho e perda de tempo.
+
+1.1. Planilha de Vagas
+
+Nela são registradas informações de cada vaga aberta, como:
+
+   •   SLA
+   •   Código da vaga no sistema
+   •   Nome da pessoa substituída
+   •   Turno, escala e horário
+   •   Salário
+   •   Dados gerais do processo
+
+Essa planilha é atualizada vaga a vaga, com preenchimento manual de todos os campos.
+
+1.2. Planilha de Auxiliares
+
+Usada para acompanhar candidatos em processos seletivos operacionais. Contém:
+
+   •   Nome
+   •   CPF
+   •   Preferência de turno
+   •   Outras informações básicas
+
+Também é preenchida manualmente.
+
+1.3. Planilha de Uniformes
+
+Utilizada após o fechamento da vaga, com:
+   •   Tamanho de sapato, calça e camiseta
+   •   Outras informações necessárias para a entrega de uniforme
+
+Essa planilha depende totalmente da atualização da planilha de vagas.
+
+1.4. Planilha de Matrículas
+
+Criada após a aprovação e uniformização, contendo:
+
+   •   Matrícula no sistema de folha
+   •   Código interno para abertura de chamados
+   •   Liberação de acessos
+
+É mais uma etapa que exige coleta manual de dados que já existem em outras fontes.
+
+1.5. Planilha de Movimentação Interna
+
+Inclui registros de promoções, mudanças de setor, mudanças de função etc. É fundamental
+para histórico e controle, mas também depende 100% de digitação manual.
+
+1.6. Planilha de Desligamentos
+
+O Departamento Pessoal compartilha uma listagem de desligados, e o time de R&S precisa:
+
+   •   Repassar essas informações para outro arquivo maior
+   •   Atualizar indicadores de turnover área por área
+   •   Fazer Ctrl C + Ctrl V de diversos campos
+
+Esse processo gera muito retrabalho e risco de inconsistência entre bases.
+
+1.7. Ausência de Headcount Automatizado
+
+Hoje não há um headcount atualizado automaticamente.
+Para saber:
+
+   •   Quantas vagas um setor pode ter
+   •   Quantos colaboradores estão ativos
+   •   Quantos desligamentos ocorreram
+
+… é necessário acessar a folha de pagamento e construir manualmente esse controle.
+
+Isso gera perda de tempo e falta de visibilidade estratégica.
+
+
+
+
+2. Controle manual de quadros de equipes
+Os quadros operacionais são administrados manualmente, com edições frequentes para
+acompanhar:
+
+   •    Escalas
+   •    Saídas
+   •    Trocas de turno
+   •    Mudanças de função
+
+Hoje não existe integração entre quadro → vaga → uniforme → matrícula → admissão.
+
+
+
+
+3. Administração de temporários dependente de
+planilhas
+O controle de:
+
+   •    Colaboradores temporários
+   •    Datas de contrato
+   •    Renovações
+   •    Efetivações
+
+é feito majoritariamente em planilhas, gerando grande volume de monitoramento manual e
+risco de prazos serem perdidos.
+
+
+
+
+4. Ausência de indicadores automatizados
+Hoje não existe no RH uma visão rápida e automática para indicadores como:
+
+   •    Taxa de absenteísmo
+   •    Turnover geral e por área
+   •    Custo do turnover
+   •    Quantidade de homens e mulheres por setor
+   •    Acompanhamento de cotas (PCDs e Aprendizes)
+   •    Taxa de desistência em processos seletivos
+
+Para gerar qualquer dado, é necessário:
+
+   1.   Abrir múltiplas planilhas
+   2.   Copiar dados
+   3.   Tratar manualmente
+   4.   Consolidar tudo em outra planilha
+Esse trabalho consome tempo e reduz a capacidade analítica da área.
+
+
+
+
+5. Geração manual de documentos
+Dois documentos essenciais são totalmente manuais:
+
+5.1. Carta Proposta
+
+Para cada colaborador aprovado, é preciso digitar:
+
+    •    Nome
+    •    Função
+    •    Turno
+    •    Horário
+    •    Gestor
+    •    Salário
+    •    Benefícios
+
+Tudo retirado manualmente da planilha de vagas.
+
+5.2. Declaração de Abertura de Conta
+
+Exige:
+
+    •    Nome completo
+    •    CPF
+    •    Salário numérico
+    •    Salário por extenso
+
+Cada uma dessas informações é buscada e digitada manualmente.
+
+
+
+
+6. Falta de banco de indicações
+Hoje não existe um sistema de gestão de indicações.
+As informações ficam dispersas, são difíceis de rastrear e não há visibilidade clara da
+origem das recomendações.
+
+
+
+
+7. Falta de sistema para Descrição de Cargos
+Não há:
+
+   •      Base digital estruturada
+   •      Atualização automática por unidade/setor
+
+Todo o processo é manual e fragmentado.
+
+
+
+
+8. Triagem de perfis sem inteligência artificial
+O processo atual exige:
+
+   •      Analisar manualmente cada currículo
+   •      Comparar com requisitos técnicos
+   •      Conferir requisitos comportamentais
+   •      Validar histórico profissional
+
+Com um volume grande de candidatos, isso gera:
+
+   •      Lentidão
+   •      Risco de perder bons talentos
+   •      Gargalo no processo
+
+
+
+
+9. Uso descentralizado do WhatsApp (város
+números diferentes)
+Hoje existem vários números de WhatsApp para comunicação com candidatos.
+Isso gera:
+
+   •      Perda de mensagens
+   •      Dificuldade de rastreabilidade
+   •      Falta de padronização
+   •      Problemas na experiência do candidato
+   •      Alto risco de ruído
+
+A solução ideal seria um único número com automações, exemplo:
+
+   •      "Digite 1 para acompanhar processo seletivo"
+   •      "Digite 2 para falar com Recrutamento"
+   •      "Digite 3 para enviar documentos"
+DHO E COMUNICAÇÃO INTERNA
+
+1. Falta de indicadores e métricas automáticas
+Hoje o setor não possui indicadores estruturados ou automatizados para acompanhamento
+de Treinamento e Desenvolvimento. O principal indicador, Hora-Homem de Treinamento,
+é calculado de forma 100% manual, exigindo que o time:
+
+    •   Consulte planilhas e listas avulsas
+    •   Faça contagem de participantes
+    •   Some horas individualmente
+    •   Atualize arquivos manualmente
+
+Isso gera:
+
+    •   Perda de tempo
+    •   Alto risco de erro
+    •   Dificuldade de consolidação mensal
+    •   Baixa visibilidade estratégica sobre o investimento em treinamento
+
+
+
+
+2. Processos manuais e operacionais
+Grande parte das rotinas de treinamento é executada manualmente, como:
+
+2.1. Listas de presença
+
+    •   Necessidade de imprimir lista física para cada treinamento
+    •   Coleta de assinaturas em papel
+    •   Conferência manual
+    •   Digitação nome a nome no sistema
+
+Com o volume de treinamentos + a quantidade de colaboradores da Posigraf, isso se torna
+extremamente operacional.
+
+2.2. Lançamento de treinamentos
+
+Após cada capacitação, o time precisa lançar colaborador por colaborador no sistema.
+Não há automatização, o que gera riscos como:
+   •   Lançamento duplicado ou faltante
+   •   Perda de informação
+   •   Retrabalho frequente
+   •   Atrasos no fechamento mensal
+
+
+
+
+3. Alto uso de planilhas e risco de retrabalho
+DHO utiliza planilhas para:
+
+   •   Registrar treinamentos concluídos
+   •   Controlar prazos
+   •   Acompanhar pendências
+   •   Monitorar reciclagens
+
+Essas planilhas aumentam:
+
+   •   Risco de erro humano
+   •   Inconsistência de informações
+   •   Dependência de cada pessoa que preenche
+   •   Gargalo na comunicação com gestores
+
+Além disso, quando um arquivo quebra, perde fórmula ou fica inconsistente, todo processo
+se torna demorado e travado.
+
+
+
+
+4. Falta de trilhas automáticas para Recrutamento
+Interno e Movimentações
+Quando um colaborador é promovido ou movimentado internamente, hoje o time precisa:
+
+   •   Procurar manualmente no sistema quais treinamentos obrigatórios estão atrelados
+       ao novo cargo
+   •   Conferir se há treinamentos que nem estão cadastrados
+   •   Levantar manualmente a trilha necessária para aquele perfil
+
+O processo ideal seria:
+
+   •   Movimentou → sistema mostra automaticamente quais cursos são obrigatórios
+   •   Sistema dispara pendências e controla reciclagens
+
+Mas atualmente nada disso existe.
+5. Dificuldade para identificar quais cursos cada
+colaborador precisa realizar
+Hoje, para saber quais treinamentos alguém precisa fazer (tanto novos quanto reciclagens),
+é necessário:
+
+   •   Consultar planilhas
+   •   Buscar histórico individual no sistema
+   •   Conferir manualmente o cargo e seus requisitos
+   •   Validar com gestores
+   •   Reconciliar trilhas inconsistentes
+
+Isso torna o processo lento, sujeito a erro e dependente de conhecimento tácito do time.
+
+
+
+
+6. Ausência de sistema para solicitação de
+treinamentos
+Atualmente:
+
+   •   Não existe um portal, formulário ou sistema oficial para que gestores solicitem
+       treinamentos.
+   •   As demandas chegam por mensagens, WhatsApp, e-mails ou conversas informais.
+   •   Não há priorização automática, fila, registro ou geração de protocolo.
+
+O ideal seria um sistema onde o gestor pudesse:
+
+   •   Solicitar treinamentos
+   •   Acompanhar status
+   •   Ver histórico
+   •   Receber lembretes
+   •   Aprovar capacitações internas
+
+
+
+
+7. Falta de sistema para comunicados internos
+ligados ao T&D
+Hoje não existe uma forma automatizada para solicitar ou acompanhar:
+
+   •   Comunicados de treinamentos
+    •   Chamadas para cursos
+    •   Confirmações de presença
+    •   Publicações internas sobre capacitações
+
+Isso exige contato repetitivo entre áreas e aumenta o tempo operacional.
+
+
+
+
+8. Falta de sistema para solicitação de consultoria
+interna
+As demandas de consultoria comportamental, conflitos, alinhamentos e suporte aos
+gestores não possuem fluxo estruturado.
+As solicitações chegam por:
+
+    •   WhatsApp
+    •   Teams
+    •   Conversas informais
+    •   E-mails avulsos
+
+Isso gera:
+
+    •   Perda de histórico
+    •   Falta de rastreabilidade
+    •   Dificuldade em priorizar demandas
+    •   Baixa previsibilidade do volume de atendimentos
+
+
+
+
+Um sistema ideal permitiria:
+
+    •   Abrir solicitação
+    •   Registrar histórico
+    •   Anexar informações
+    •   Atribuir responsáveis
+    •   Controlar prazos
+    •   Integrar com a agenda
+
+
+
+
+SERVIÇOS GERAIS
+1 - Controle De Notas Fiscais
+Preciso ser alertada quando houver nota fiscal pendente ou quando for necessário solicitar
+NF ao fornecedor.
+
+Objetivo: Controlar pendências de NF
+
+Problema: Esquecimento de solicitar notas e atrasos
+
+Resultado esperado: Alerta de NF pendentes
+
+Validação: Nenhuma NF esquecida ou atrasada
+
+Impacto: Melhor controle financeiro
+
+
+2- Divisão Posigraf / Elo
+Preciso que os acessos ELO sejam separados automaticamente para evitar erro no
+faturamento.
+
+Objetivo: Separar automaticamente acessos ELO
+
+Problema: Separação manual para faturamento
+
+Resultado esperado: Identificação automática dos acessos ELO
+
+Validação: Faturamento separado sem conferência manual
+
+Impacto: Mais segurança no faturamento
+
+
+3- Faturamento Attos
+Copiar dados manualmente todos os dias para o faturamento. O processo precisa ser mais
+automático e confiável.
+
+Objetivo: Reduzir lançamento manual de acessos
+
+Problema: Dados copiados diariamente de PDF/Excel
+
+Resultado esperado: Informações integradas automaticamente
+
+Validação: Redução significativa de digitação manual
+
+Impacto: Ganho de tempo e menos erro
+4- Acessos Duplicados – Refeitório
+Preciso que os acessos duplicados sejam identificados automaticamente, sem que eu
+precise fazer conferência manual em Excel. O resultado precisa ser confiável e reduzir
+retrabalho.
+
+Objetivo: Eliminar conferência manual de acessos duplicados
+
+Problema: Verificação feita manualmente em Excel, com risco de erro
+
+Resultado esperado: Identificação automática de duplicidades
+
+Validação: Relatório sem divergências e sem conferência manual extensa
+
+Impacto: Redução de retrabalho e aumento de confiabilidade
+
+
+
+
+5- Controle De Compras
+Preciso de um controle mensal consolidado das compras de insumos para validar custos e
+acompanhar evolução dos gastos.
+
+Objetivo: Criar controle mensal consolidado de compras
+
+Problema: Falta visão clara dos custos recorrentes
+
+Resultado esperado: Controle organizado para apresentação mensal
+
+Validação: Relatório mensal claro e consolidado
+
+Impacto: Melhor gestão de custos
+
+
+
+
+6- Fechamento Attos
+Copiar dados manualmente para o faturamento. O processo precisa ser mais automático e
+confiável.
+
+Objetivo: Centralizar informações do fechamento
+
+Problema: Dados repetidos em várias planilhas
+
+Resultado esperado: Fonte única de informação
+Validação: Redução de planilhas paralelas
+
+Impacto: Menos divergência e mais organização
+
+
+
+
+7- Estacionamento + Vt
+Preciso que a planilha de estacionamento se conecte com a base de VT para identificar
+automaticamente quem usa os dois benefícios.
+
+Objetivo: Integrar base de estacionamento com VT
+
+Problema: Digitação manual e conferência manual de benefícios
+
+Resultado esperado: Cruzamento automático das bases
+
+Validação: Identificação imediata de quem usa ambos benefícios
+
+Impacto: Mais controle e menos retrabalho
+
+
+
+
+8- Armários Vestiário
+Preciso que o controle de armários esteja vinculado à base de desligados para identificar
+automaticamente armários disponíveis.
+
+Objetivo: Melhorar controle de ocupação de armários
+
+Problema: Cadastro manual e sem vínculo com desligados
+
+Resultado esperado: Identificação automática de armários disponíveis
+
+Validação: Nenhum armário vinculado a ex-colaborador
+
+Impacto: Melhor controle
+
+
+9- Pesquisa De Satisfação – Attos
+Quero que as informações da pesquisa alimentem automaticamente o indicador diário,
+incluindo o número de refeições realizadas. Não quero depender de digitação manual.
+
+Objetivo: Automatizar indicador diário de satisfação
+
+Problema: Dados chegam por WhatsApp e são lançados manualmente
+Resultado esperado: Indicador atualizado automaticamente por refeição
+
+Validação: Indicador diário atualizado sem digitação manual
+
+Impacto: Economia de tempo e maior precisão
+
+
+
+
+10- Sociedade Do Café – Abastecimento
+Preciso identificar rapidamente quais locais não foram abastecidos com base nas
+informações preenchidas no formulário do forms.
+
+Objetivo: Identificar falhas de abastecimento
+
+Problema: Dependência de análise manual do Forms
+
+Resultado esperado: Indicação automática de locais não abastecidos
+
+Validação: Falhas identificadas no mesmo dia
+
+Impacto: Melhor controle do fornecedor
+
+
+
+
+11- Chamados (Manusis)
+Preciso saber automaticamente quando um chamado estiver próximo do vencimento ou já
+vencido para que eu possa cobrar a área responsável.
+
+Objetivo: Monitorar prazos de chamados
+
+Problema: Não há alerta de vencimento
+
+Resultado esperado: Indicação clara de prazos vencidos
+
+Validação: Nenhum chamado ultrapassando prazo sem sinalização
+
+Impacto: Maior controle e cobrança eficaz
+
+
+
+
+12- Estacionamento + Vt
+Preciso que a planilha de estacionamento se conecte com a base de VT para identificar
+automaticamente quem usa os dois benefícios.
+Objetivo: Integrar base de estacionamento com VT
+
+Problema: Digitação manual e conferência manual de benefícios
+
+Resultado esperado: Cruzamento automático das bases
+
+Validação: Identificação imediata de quem usa ambos benefícios
+
+Impacto: Mais controle e menos retrabalho
+
+
+
+
+13- Voucher de Natal
+Objetivo: Implementar um voucher digital de Natal para colaboradores
+
+Problema: Não existe um modelo digital definido ou padronizado
+
+Resultado esperado: Sugestão de um modelo digital (ex.: QR Code) fornecido pelo time de
+TI
+
+Validação: Voucher funcional, validável e seguro para distribuição
+
+Impacto: Entrega moderna do benefício, redução de custos e melhor controle
+

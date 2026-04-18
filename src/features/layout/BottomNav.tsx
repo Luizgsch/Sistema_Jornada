@@ -6,7 +6,7 @@ import {
   Bell,
   Briefcase,
   UserCheck,
-  Coffee,
+  Car,
   GraduationCap,
   Inbox,
   Search,
@@ -24,7 +24,7 @@ interface BottomNavItem {
 }
 
 const navItemsHRAll: BottomNavItem[] = [
-  { id: 'command-center', icon: LayoutDashboard, label: 'Dashboard' },
+  { id: 'command-center', icon: LayoutDashboard, label: 'Início' },
   { id: 'vagas', icon: Briefcase, label: 'Vagas' },
   { id: 'candidatos', icon: Users, label: 'Candidatos' },
   { id: 'colaboradores', icon: UserCheck, label: 'Equipe' },
@@ -33,7 +33,7 @@ const navItemsHRAll: BottomNavItem[] = [
 const navItemsSGLogistica: BottomNavItem[] = [
   { id: 'sg-dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { id: 'sg-chamados-manusis', icon: ClipboardList, label: 'Chamados' },
-  { id: 'sg-cafe-abastecimento', icon: Coffee, label: 'Café' },
+  { id: 'sg-beneficios', icon: Car, label: 'Benefícios' },
   { id: 'sg-armarios', icon: Wrench, label: 'Armários' },
 ];
 
@@ -82,7 +82,7 @@ export function BottomNav({
       initial={{ y: 80 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', damping: 25, stiffness: 200, delay: 0.1 }}
-      className="md:hidden fixed bottom-0 left-0 right-0 z-[100] bg-white/95 dark:bg-[#09090b]/95 backdrop-blur-md border-t border-zinc-200 dark:border-zinc-800 transition-colors duration-300"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-[100] bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-md border-t border-zinc-200 dark:border-zinc-800 transition-colors duration-300"
     >
       <div className="flex items-center">
         {items.map((item) => {

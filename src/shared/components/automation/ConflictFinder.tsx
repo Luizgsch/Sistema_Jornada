@@ -39,11 +39,11 @@ export function ConflictFinder() {
   const reset = () => setStatus("idle");
 
   return (
-    <div className="rounded-2xl border border-[#27272a] bg-[#18181b] overflow-hidden">
+    <div className="rounded-radius-l border border-[#334155] bg-[#1e293b] overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between p-5 border-b border-[#27272a]">
+      <div className="flex items-center justify-between p-5 border-b border-[#334155]">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-amber-500/10 rounded-xl">
+          <div className="p-2.5 bg-amber-500/10 rounded-radius-m">
             <AlertTriangle size={20} className="text-amber-400" />
           </div>
           <div>
@@ -55,7 +55,7 @@ export function ConflictFinder() {
           {status === "done" && (
             <button
               onClick={reset}
-              className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors px-3 py-1.5 rounded-lg border border-[#27272a] hover:border-zinc-600"
+              className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors px-3 py-1.5 rounded-radius-m border border-[#334155] hover:border-zinc-600"
             >
               Redefinir
             </button>
@@ -63,7 +63,7 @@ export function ConflictFinder() {
           <button
             onClick={runAnalysis}
             disabled={status === "running"}
-            className="flex items-center gap-2 px-4 py-2 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-xl text-sm font-bold hover:bg-amber-500/20 transition-all disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-radius-m text-sm font-bold hover:bg-amber-500/20 transition-all disabled:opacity-50"
           >
             <RefreshCw size={14} className={status === "running" ? "animate-spin" : ""} />
             {status === "running" ? "Analisando..." : "Rodar Cruzamento"}
@@ -72,9 +72,9 @@ export function ConflictFinder() {
       </div>
 
       {/* Summary row */}
-      <div className="grid grid-cols-3 divide-x divide-[#27272a] border-b border-[#27272a]">
+      <div className="grid grid-cols-3 divide-x divide-zinc-200 dark:divide-[#334155] border-b border-zinc-200 dark:border-[#334155]">
         <div className="flex items-center gap-3 p-4">
-          <div className="p-2 bg-zinc-800 rounded-lg">
+          <div className="p-2 bg-zinc-800 rounded-radius-m">
             <Car size={16} className="text-zinc-400" />
           </div>
           <div>
@@ -83,7 +83,7 @@ export function ConflictFinder() {
           </div>
         </div>
         <div className="flex items-center gap-3 p-4">
-          <div className="p-2 bg-zinc-800 rounded-lg">
+          <div className="p-2 bg-zinc-800 rounded-radius-m">
             <Bus size={16} className="text-zinc-400" />
           </div>
           <div>
@@ -92,7 +92,7 @@ export function ConflictFinder() {
           </div>
         </div>
         <div className="flex items-center gap-3 p-4">
-          <div className={`p-2 rounded-lg ${status === "done" ? "bg-amber-500/10" : "bg-zinc-800"}`}>
+          <div className={`p-2 rounded-radius-m ${status === "done" ? "bg-amber-500/10" : "bg-zinc-800"}`}>
             <Users size={16} className={status === "done" ? "text-amber-400" : "text-zinc-600"} />
           </div>
           <div>
@@ -164,7 +164,7 @@ export function ConflictFinder() {
               </div>
 
               {conflicts.length === 0 ? (
-                <div className="flex items-center gap-3 p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-xl">
+                <div className="flex items-center gap-3 p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-radius-m">
                   <CheckCircle2 size={18} className="text-emerald-400" />
                   <p className="text-sm text-emerald-400 font-medium">Nenhuma inconsistência encontrada</p>
                 </div>
@@ -175,9 +175,9 @@ export function ConflictFinder() {
                     initial={{ opacity: 0, x: -12 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.08 }}
-                    className="flex items-center gap-4 p-4 bg-amber-500/5 border border-amber-500/20 rounded-xl"
+                    className="flex items-center gap-4 p-4 bg-amber-500/5 border border-amber-500/20 rounded-radius-m"
                   >
-                    <div className="p-2 bg-amber-500/10 rounded-lg text-amber-400 flex-shrink-0">
+                    <div className="p-2 bg-amber-500/10 rounded-radius-m text-amber-400 flex-shrink-0">
                       <AlertTriangle size={16} />
                     </div>
                     <div className="flex-1 min-w-0">

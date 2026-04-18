@@ -1,15 +1,24 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/shared/ui/Card";
 import { Search, Filter, Plus, Edit, Archive, Eye } from "lucide-react";
 import { StatusBadge } from "@/shared/ui/StatusBadge";
 import { mockRecrutamentoVagas } from "@/infrastructure/mock/mockRecrutamento";
 import { motion, AnimatePresence } from "framer-motion";
 import { AutomationStepper } from "@/shared/components/automation/AutomationStepper";
+import { cn } from "@/shared/lib/cn";
 
 export default function GestaoVagas() {
   const [showNewVaga, setShowNewVaga] = useState(false);
   const [showStepper, setShowStepper] = useState(false);
   const [stepperVaga, setStepperVaga] = useState("");
+  const [abaVagas, setAbaVagas] = useState<"ativas" | "arquivadas">("ativas");
+
+  const vagasVisiveis = useMemo(() => {
+    if (abaVagas === "arquivadas") {
+      return mockRecrutamentoVagas.filter((v) => v.status === "encerrado");
+    }
+    return mockRecrutamentoVagas.filter((v) => v.status !== "encerrado");
+  }, [abaVagas]);
 
   return (
     <div className="space-y-6">
@@ -28,7 +37,7 @@ export default function GestaoVagas() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowNewVaga(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl font-semibold text-sm hover:bg-primary/90 transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-radius-m font-semibold text-sm hover:bg-primary/90 transition-all"
           >
             <Plus size={16} />
             Nova Vaga
@@ -37,18 +46,44 @@ export default function GestaoVagas() {
       </div>
 
       <Card>
-        <CardHeader className="pb-3">
+        <CardHeader className="pb-3 space-y-4">
+          <div className="flex flex-wrap gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-3 -mb-1">
+            <button
+              type="button"
+              onClick={() => setAbaVagas("ativas")}
+              className={cn(
+                "px-3 py-1.5 rounded-radius-m text-sm font-semibold transition-colors",
+                abaVagas === "ativas"
+                  ? "bg-primary text-white"
+                  : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+              )}
+            >
+              Em aberto
+            </button>
+            <button
+              type="button"
+              onClick={() => setAbaVagas("arquivadas")}
+              className={cn(
+                "px-3 py-1.5 rounded-radius-m text-sm font-semibold transition-colors",
+                abaVagas === "arquivadas"
+                  ? "bg-primary text-white"
+                  : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+              )}
+            >
+              Vagas arquivadas
+            </button>
+          </div>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 dark:text-zinc-500" />
               <input
                 type="text"
                 placeholder="Pesquisar por cargo ou código..."
-                className="w-full pl-10 h-10 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 placeholder:text-zinc-400 dark:placeholder:text-zinc-600 text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                className="w-full pl-10 h-10 rounded-radius-m border border-zinc-200 dark:border-[#334155] bg-white dark:bg-[#0f172a] text-zinc-800 dark:text-[#f8fafc] placeholder:text-zinc-400 dark:placeholder:text-slate-500 text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
               />
             </div>
             <div className="flex items-center gap-2">
-              <button className="inline-flex items-center gap-2 h-10 px-3 border border-zinc-200 dark:border-zinc-700 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+              <button className="inline-flex items-center gap-2 h-10 px-3 border border-zinc-200 dark:border-zinc-700 rounded-radius-m text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
                 <Filter size={15} />
                 Filtros
               </button>
@@ -71,7 +106,7 @@ export default function GestaoVagas() {
                 </tr>
               </thead>
               <tbody>
-                {mockRecrutamentoVagas.map((vaga) => (
+                {vagasVisiveis.map((vaga) => (
                   <tr
                     key={vaga.id}
                     className="border-b border-zinc-100 dark:border-zinc-800 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/40 group"
@@ -89,14 +124,16 @@ export default function GestaoVagas() {
                       <div className="flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                         <ActionButton icon={Eye} title="Visualizar Candidatos" />
                         <ActionButton icon={Edit} title="Editar" />
-                        <ActionButton
-                          icon={Archive}
-                          title="Encerrar Vaga (dispara automações)"
-                          onClick={() => {
-                            setStepperVaga(vaga.cargo);
-                            setShowStepper(true);
-                          }}
-                        />
+                        {vaga.status !== "encerrado" ? (
+                          <ActionButton
+                            icon={Archive}
+                            title="Encerrar Vaga (dispara automações)"
+                            onClick={() => {
+                              setStepperVaga(vaga.cargo);
+                              setShowStepper(true);
+                            }}
+                          />
+                        ) : null}
                       </div>
                     </td>
                   </tr>
@@ -129,7 +166,7 @@ export default function GestaoVagas() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden flex flex-col max-h-[90vh] shadow-2xl"
+              className="relative w-full max-w-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-radius-l overflow-hidden flex flex-col max-h-[90vh] shadow-2xl"
             >
               <div className="p-5 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-zinc-900/80">
                 <h2 className="text-lg font-bold text-zinc-800 dark:text-[#e7e5e4]">Abertura de Nova Vaga</h2>
@@ -171,7 +208,7 @@ export default function GestaoVagas() {
               <div className="p-5 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/80 flex justify-end gap-3">
                 <button
                   onClick={() => setShowNewVaga(false)}
-                  className="px-5 py-2 border border-zinc-200 dark:border-zinc-700 rounded-xl font-semibold text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                  className="px-5 py-2 border border-zinc-200 dark:border-zinc-700 rounded-radius-m font-semibold text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
                 >
                   Cancelar
                 </button>
@@ -181,7 +218,7 @@ export default function GestaoVagas() {
                     setStepperVaga("Nova Vaga");
                     setShowStepper(true);
                   }}
-                  className="px-5 py-2 bg-primary text-white rounded-xl font-semibold text-sm hover:bg-primary/90 transition-all"
+                  className="px-5 py-2 bg-primary text-white rounded-radius-m font-semibold text-sm hover:bg-primary/90 transition-all"
                 >
                   Criar Vaga
                 </button>
@@ -197,7 +234,7 @@ export default function GestaoVagas() {
 function ActionButton({ icon: Icon, title, onClick }: any) {
   return (
     <button
-      className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-lg text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
+      className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-radius-m text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
       title={title}
       onClick={onClick}
     >
@@ -220,13 +257,13 @@ function FormSection({ title, children }: any) {
 function Field({ label, placeholder }: any) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[11px] font-bold text-zinc-500 dark:text-zinc-500 uppercase tracking-wide">
+      <label className="text-[11px] font-bold text-zinc-500 dark:text-slate-400 uppercase tracking-wide">
         {label}
       </label>
       <input
         type="text"
         placeholder={placeholder}
-        className="w-full h-10 px-3.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 placeholder:text-zinc-400 dark:placeholder:text-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+        className="w-full h-10 px-3.5 rounded-radius-m border border-zinc-200 dark:border-[#334155] bg-white dark:bg-[#0f172a] text-zinc-800 dark:text-[#f8fafc] placeholder:text-zinc-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
       />
     </div>
   );
@@ -235,10 +272,10 @@ function Field({ label, placeholder }: any) {
 function SelectField({ label, options }: any) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[11px] font-bold text-zinc-500 dark:text-zinc-500 uppercase tracking-wide">
+      <label className="text-[11px] font-bold text-zinc-500 dark:text-slate-400 uppercase tracking-wide">
         {label}
       </label>
-      <select className="w-full h-10 px-3.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none cursor-pointer">
+      <select className="w-full h-10 px-3.5 rounded-radius-m border border-zinc-200 dark:border-[#334155] bg-white dark:bg-[#0f172a] text-zinc-800 dark:text-[#f8fafc] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none cursor-pointer">
         {options.map((opt: any) => (
           <option key={opt}>{opt}</option>
         ))}
@@ -250,12 +287,12 @@ function SelectField({ label, options }: any) {
 function TextAreaField({ label, placeholder }: any) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[11px] font-bold text-zinc-500 dark:text-zinc-500 uppercase tracking-wide">
+      <label className="text-[11px] font-bold text-zinc-500 dark:text-slate-400 uppercase tracking-wide">
         {label}
       </label>
       <textarea
         placeholder={placeholder}
-        className="w-full h-24 p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 placeholder:text-zinc-400 dark:placeholder:text-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none"
+        className="w-full h-24 p-3.5 rounded-radius-m border border-zinc-200 dark:border-[#334155] bg-white dark:bg-[#0f172a] text-zinc-800 dark:text-[#f8fafc] placeholder:text-zinc-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none"
       />
     </div>
   );

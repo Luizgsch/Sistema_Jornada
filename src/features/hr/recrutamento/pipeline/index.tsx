@@ -55,10 +55,10 @@ export default function RecruitmentPipeline() {
             <input 
               type="text" 
               placeholder="Buscar candidato..." 
-              className="pl-10 h-10 w-64 rounded-lg border border-input bg-[#18181b] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="pl-10 h-10 w-64 rounded-radius-m border border-input bg-[#1e293b] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
-          <button className="h-10 px-4 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center gap-2">
+          <button className="h-10 px-4 bg-primary text-white rounded-radius-m font-medium hover:bg-primary/90 transition-colors flex items-center gap-2">
             <Plus size={18} />
             Novo Candidato
           </button>
@@ -79,16 +79,16 @@ export default function RecruitmentPipeline() {
                 <MoreVertical size={16} className="text-zinc-600 cursor-pointer" />
               </div>
               
-              <div className="flex-1 bg-zinc-800/30 rounded-xl p-3 space-y-3 min-h-[500px] border border-dashed border-[#27272a]">
+              <div className="flex-1 bg-zinc-800/30 rounded-radius-l p-3 space-y-3 min-h-[500px] border border-dashed border-[#334155]">
                 {getCandidatesByStage(stage.id).map((candidate) => (
                   <motion.div
                     key={candidate.id}
                     layoutId={candidate.id}
                     onClick={() => setSelectedCandidate(candidate)}
-                    className="bg-[#18181b] p-4 rounded-xl  border border-[#27272a] cursor-pointer hover:border-primary/50 hover: transition-all group"
+                    className="bg-[#1e293b] p-4 rounded-radius-m  border border-[#334155] cursor-pointer hover:border-primary/50 hover: transition-all group"
                   >
                     <div className="flex justify-between items-start mb-2">
-                      <span className="text-[10px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded uppercase tracking-wider">
+                      <span className="text-[10px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded-radius-s uppercase tracking-wider">
                         {candidate.cargo}
                       </span>
                       <span className="text-[10px] font-medium text-zinc-600">{candidate.origem}</span>
@@ -130,11 +130,11 @@ export default function RecruitmentPipeline() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 bottom-0 w-full max-w-lg bg-[#18181b]  z-[110] flex flex-col"
+              className="fixed right-0 top-0 bottom-0 w-full max-w-lg bg-[#1e293b]  z-[110] flex flex-col"
             >
-              <div className="p-8 border-b bg-[#09090b] flex items-start justify-between">
+              <div className="p-8 border-b bg-[#0f172a] flex items-start justify-between">
                 <div className="flex items-center gap-5">
-                  <div className="w-20 h-20 bg-[#09090b] rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-xl shadow-slate-900/20">
+                  <div className="w-20 h-20 bg-[#0f172a] rounded-radius-l flex items-center justify-center text-white text-2xl font-bold shadow-xl shadow-slate-900/20">
                     {selectedCandidate.nome.split(' ').map((n: any) => n[0]).join('')}
                   </div>
                   <div>
@@ -173,8 +173,8 @@ export default function RecruitmentPipeline() {
 
                 <div>
                   <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-600 mb-4">Currículo & Documentos</h3>
-                  <button className="flex items-center gap-3 w-full p-4 border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left group">
-                    <div className="p-2 bg-zinc-800 rounded-lg group-hover:bg-primary/10">
+                  <button className="flex items-center gap-3 w-full p-4 border rounded-radius-m hover:border-primary hover:bg-primary/5 transition-all text-left group">
+                    <div className="p-2 bg-zinc-800 rounded-radius-m group-hover:bg-primary/10">
                       <FileText size={20} className="text-zinc-400 group-hover:text-primary" />
                     </div>
                     <div>
@@ -184,7 +184,7 @@ export default function RecruitmentPipeline() {
                   </button>
                 </div>
 
-                <div className="p-6 bg-[#09090b] rounded-2xl text-white">
+                <div className="p-6 bg-[#0f172a] rounded-radius-l text-white">
                   <h4 className="font-bold mb-2">
                     {selectedCandidate.etapa === 'aprovado' ? 'Ação Necessária' : 'Observações do RH'}
                   </h4>
@@ -197,14 +197,14 @@ export default function RecruitmentPipeline() {
                   {selectedCandidate.etapa === 'aprovado' ? (
                     <button 
                       onClick={handleHire}
-                      className="w-full py-3 bg-emerald-500 text-white rounded-xl font-bold hover:bg-emerald-600 transition-colors  shadow-emerald-500/20 flex items-center justify-center gap-2"
+                      className="w-full py-3 bg-emerald-500 text-white rounded-radius-m font-bold hover:bg-emerald-600 transition-colors  shadow-emerald-500/20 flex items-center justify-center gap-2"
                     >
                       Iniciar Admissão
                     </button>
                   ) : (
                     <button 
                       onClick={() => info("Ação Temporária", "Avanço de etapa simulado na demonstração.")}
-                      className="w-full py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors  "
+                      className="w-full py-3 bg-primary text-white rounded-radius-m font-bold hover:bg-primary/90 transition-colors  "
                     >
                       Agendar Entrevista
                     </button>
@@ -229,8 +229,8 @@ export default function RecruitmentPipeline() {
 
 function ContactCard({ icon: Icon, label, value }: any) {
   return (
-    <div className="p-3 border rounded-xl flex items-center gap-3">
-      <div className="p-2 bg-zinc-800 rounded-lg text-zinc-400">
+    <div className="p-3 border rounded-radius-m flex items-center gap-3">
+      <div className="p-2 bg-zinc-800 rounded-radius-m text-zinc-400">
         <Icon size={16} />
       </div>
       <div>
@@ -243,7 +243,7 @@ function ContactCard({ icon: Icon, label, value }: any) {
 
 function ExperienceItem({ title, company, period }: any) {
   return (
-    <div className="relative pl-6 border-l-2 border-[#27272a]">
+    <div className="relative pl-6 border-l-2 border-[#334155]">
       <div className="absolute left-[-5px] top-1 w-2 h-2 rounded-full bg-primary" />
       <h4 className="text-sm font-bold text-[#e7e5e4]">{title}</h4>
       <p className="text-xs text-primary font-medium">{company}</p>

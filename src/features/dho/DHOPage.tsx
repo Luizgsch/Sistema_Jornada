@@ -72,7 +72,7 @@ export default function DHOPage({ activePage }: DHOPageProps) {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 bg-blue-500/20 rounded-radius-m flex items-center justify-center shrink-0">
             <Building2 className="text-blue-500" size={24} />
           </div>
           <div>

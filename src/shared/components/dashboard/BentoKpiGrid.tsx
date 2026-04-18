@@ -62,7 +62,7 @@ function SemiCircleProgress({ pct, color }: { pct: number; color: string }) {
 function SparkTooltip({ active, payload }: { active?: boolean; payload?: { value: number }[] }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-zinc-900 dark:bg-zinc-800 border border-zinc-700 rounded-lg px-2.5 py-1.5 text-xs shadow-xl">
+    <div className="bg-zinc-900 dark:bg-zinc-800 border border-zinc-700 rounded-radius-m px-2.5 py-1.5 text-xs shadow-xl">
       <span className="font-bold text-indigo-300">{payload[0].value}%</span>
     </div>
   );
@@ -89,7 +89,7 @@ function BentoCard({
       transition={{ duration: 0.35, delay: delay ?? 0 }}
       className={cn(
         colSpan === "2" ? "col-span-1 sm:col-span-2" : "col-span-1",
-        "group relative rounded-2xl border p-6",
+        "group relative rounded-radius-l border p-6",
         "bg-white dark:bg-zinc-900",
         "border-zinc-100 dark:border-zinc-800",
         "shadow-sm dark:shadow-none",
@@ -119,7 +119,7 @@ export function BentoKpiGrid() {
     <div className="space-y-8">
       {/* ── Barra de filtros ─────────────────────────────────────── */}
       <div className="flex flex-wrap items-center gap-3">
-        <div className="flex items-center gap-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-2 shadow-sm dark:shadow-none transition-colors">
+        <div className="flex items-center gap-2 rounded-radius-m border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-2 shadow-sm dark:shadow-none transition-colors">
           <CalendarDays size={15} className="text-zinc-400 dark:text-zinc-500 shrink-0" />
           <select
             value={periodo}
@@ -135,7 +135,7 @@ export function BentoKpiGrid() {
         </div>
         <button
           type="button"
-          className="flex items-center gap-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3.5 py-2 text-sm font-semibold text-zinc-600 dark:text-zinc-300 shadow-sm dark:shadow-none hover:border-indigo-400 dark:hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all"
+          className="flex items-center gap-2 rounded-radius-m border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3.5 py-2 text-sm font-semibold text-zinc-600 dark:text-zinc-300 shadow-sm dark:shadow-none hover:border-indigo-400 dark:hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all"
         >
           <SlidersHorizontal size={14} />
           Filtrar
@@ -156,7 +156,7 @@ export function BentoKpiGrid() {
                 <span className="text-3xl font-bold tracking-tight text-zinc-800 dark:text-[#e7e5e4]">
                   3.2%
                 </span>
-                <span className="flex items-center gap-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full mb-0.5">
+                <span className="flex items-center gap-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-radius-m mb-0.5">
                   <ArrowDownRight size={12} />
                   0.5%
                 </span>
@@ -165,7 +165,7 @@ export function BentoKpiGrid() {
                 Meta mensal: ≤ 3.0% · Tendência de queda
               </p>
             </div>
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-500/10">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-radius-m bg-indigo-50 dark:bg-indigo-500/10">
               <TrendingDown size={18} className="text-indigo-500 dark:text-indigo-400" />
             </div>
           </div>
@@ -209,7 +209,7 @@ export function BentoKpiGrid() {
                 <span className="text-3xl font-bold tracking-tight text-amber-600 dark:text-amber-400">
                   18 dias
                 </span>
-                <span className="flex items-center gap-0.5 text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-full mb-0.5">
+                <span className="flex items-center gap-0.5 text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-radius-m mb-0.5">
                   <ArrowUpRight size={12} />
                   acima da meta
                 </span>
@@ -218,7 +218,7 @@ export function BentoKpiGrid() {
                 Meta: até 15 dias úteis por vaga
               </p>
             </div>
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-50 dark:bg-amber-500/10">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-radius-m bg-amber-50 dark:bg-amber-500/10">
               <Clock size={18} className="text-amber-500 dark:text-amber-400" />
             </div>
           </div>
@@ -258,7 +258,7 @@ export function BentoKpiGrid() {
             <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-500 leading-tight">
               Vagas em Aberto
             </p>
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-teal-50 dark:bg-teal-500/10">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-radius-m bg-teal-50 dark:bg-teal-500/10">
               <Briefcase size={16} className="text-teal-500 dark:text-teal-400" />
             </div>
           </div>
@@ -266,7 +266,7 @@ export function BentoKpiGrid() {
             <span className="text-3xl font-bold tracking-tight text-zinc-800 dark:text-[#e7e5e4]">
               23
             </span>
-            <span className="flex items-center gap-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-full mb-0.5">
+            <span className="flex items-center gap-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-radius-m mb-0.5">
               <ArrowDownRight size={11} />2
             </span>
           </div>
@@ -281,7 +281,7 @@ export function BentoKpiGrid() {
             <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-500 leading-tight">
               Matrículas Ativas
             </p>
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-500/10">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-radius-m bg-blue-50 dark:bg-blue-500/10">
               <Users size={16} className="text-blue-500 dark:text-blue-400" />
             </div>
           </div>
@@ -289,7 +289,7 @@ export function BentoKpiGrid() {
             <span className="text-3xl font-bold tracking-tight text-zinc-800 dark:text-[#e7e5e4]">
               842
             </span>
-            <span className="flex items-center gap-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-full mb-0.5">
+            <span className="flex items-center gap-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-radius-m mb-0.5">
               <ArrowUpRight size={11} />12
             </span>
           </div>
@@ -304,7 +304,7 @@ export function BentoKpiGrid() {
             <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-500 leading-tight">
               Absenteísmo
             </p>
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-rose-50 dark:bg-rose-500/10">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-radius-m bg-rose-50 dark:bg-rose-500/10">
               <Activity size={16} className="text-rose-500 dark:text-rose-400" />
             </div>
           </div>
@@ -312,7 +312,7 @@ export function BentoKpiGrid() {
             <span className="text-3xl font-bold tracking-tight text-zinc-800 dark:text-[#e7e5e4]">
               4.7%
             </span>
-            <span className="flex items-center gap-0.5 text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded-full mb-0.5">
+            <span className="flex items-center gap-0.5 text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded-radius-m mb-0.5">
               <ArrowUpRight size={11} />1.5%
             </span>
           </div>
@@ -327,7 +327,7 @@ export function BentoKpiGrid() {
             <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-500 leading-tight">
               Taxa de Desistência
             </p>
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-amber-50 dark:bg-amber-500/10">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-radius-m bg-amber-50 dark:bg-amber-500/10">
               <TrendingDown size={16} className="text-amber-500 dark:text-amber-400" />
             </div>
           </div>
@@ -335,7 +335,7 @@ export function BentoKpiGrid() {
             <span className="text-3xl font-bold tracking-tight text-zinc-800 dark:text-[#e7e5e4]">
               12%
             </span>
-            <span className="flex items-center gap-0.5 text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded-full mb-0.5">
+            <span className="flex items-center gap-0.5 text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded-radius-m mb-0.5">
               <ArrowUpRight size={11} />1.5%
             </span>
           </div>

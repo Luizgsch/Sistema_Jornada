@@ -32,7 +32,7 @@ export default function QuadroEquipesPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-[#18181b] p-4 border border-[#27272a] rounded-xl  flex flex-col sm:flex-row gap-4 shrink-0">
+      <div className="bg-[#1e293b] p-4 border border-[#334155] rounded-radius-m  flex flex-col sm:flex-row gap-4 shrink-0">
         <div className="flex items-center gap-2 text-zinc-500 font-medium text-sm">
           <Filter size={18} /> Filtros:
         </div>
@@ -40,7 +40,7 @@ export default function QuadroEquipesPage() {
         <div className="flex items-center gap-2">
           <span className="text-sm text-zinc-500">Setor:</span>
           <select 
-            className="border-[#27272a] rounded-lg text-sm px-3 py-1.5 focus:ring-primary focus:border-primary"
+            className="border-[#334155] rounded-radius-m text-sm px-3 py-1.5 focus:ring-primary focus:border-primary"
             value={setorFiltro}
             onChange={(e) => setSetorFiltro(e.target.value)}
           >
@@ -51,7 +51,7 @@ export default function QuadroEquipesPage() {
         <div className="flex items-center gap-2">
           <span className="text-sm text-zinc-500">Turno:</span>
           <select 
-            className="border-[#27272a] rounded-lg text-sm px-3 py-1.5 focus:ring-primary focus:border-primary"
+            className="border-[#334155] rounded-radius-m text-sm px-3 py-1.5 focus:ring-primary focus:border-primary"
             value={turnoFiltro}
             onChange={(e) => setTurnoFiltro(e.target.value)}
           >
@@ -68,8 +68,8 @@ export default function QuadroEquipesPage() {
             const vagas = members.filter(m => m.isVagaAberta).length;
 
             return (
-              <div key={setor} className="w-80 flex flex-col bg-zinc-800/30 rounded-2xl border border-[#27272a] overflow-hidden">
-                <div className="p-4 bg-zinc-800 border-b border-[#27272a] flex items-center justify-between sticky top-0 z-10">
+              <div key={setor} className="w-80 flex flex-col bg-zinc-800/30 rounded-radius-l border border-[#334155] overflow-hidden">
+                <div className="p-4 bg-zinc-800 border-b border-[#334155] flex items-center justify-between sticky top-0 z-10">
                   <h3 className="font-bold text-zinc-200 tracking-tight">{setor}</h3>
                   <div className="flex gap-2">
                     <span className="px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-xs font-bold" title="Equipe Ativa">
@@ -83,7 +83,7 @@ export default function QuadroEquipesPage() {
                   </div>
                 </div>
                 
-                <div className="p-4 flex flex-col gap-3 overflow-y-auto h-full rounded-b-2xl custom-scrollbar">
+                <div className="p-4 flex flex-col gap-3 overflow-y-auto h-full rounded-b-radius-l custom-scrollbar">
                   {members.map(member => (
                     <Card 
                       key={member.id} 
@@ -91,7 +91,7 @@ export default function QuadroEquipesPage() {
                         " transition-all hover: cursor-pointer border-l-4",
                         member.isVagaAberta 
                           ? "border-l-amber-400 bg-amber-50/30" 
-                          : "border-l-primary bg-[#18181b] hover:-translate-y-0.5"
+                          : "border-l-primary bg-[#1e293b] hover:-translate-y-0.5"
                       )}
                     >
                       <CardContent className="p-4">
@@ -122,7 +122,7 @@ export default function QuadroEquipesPage() {
                             </span>
                             
                             {member.isVagaAberta && (
-                              <span className="text-[10px] font-bold text-amber-600 bg-amber-100 px-1.5 py-0.5 rounded">RECRUTANDO</span>
+                              <span className="text-[10px] font-bold text-amber-600 bg-amber-100 px-1.5 py-0.5 rounded-radius-s">RECRUTANDO</span>
                             )}
                           </div>
                         </div>
@@ -135,7 +135,7 @@ export default function QuadroEquipesPage() {
           })}
           
           {Object.keys(groupedBySetor).length === 0 && (
-            <div className="w-full flex flex-col items-center justify-center p-12 bg-[#18181b] rounded-xl border border-dashed border-zinc-700">
+            <div className="w-full flex flex-col items-center justify-center p-12 bg-[#1e293b] rounded-radius-m border border-dashed border-zinc-700">
               <LayoutGrid size={48} className="text-zinc-400 mb-4" />
               <p className="text-zinc-500 font-medium">Nenhum colaborador ou vaga encontrada para estes filtros.</p>
             </div>

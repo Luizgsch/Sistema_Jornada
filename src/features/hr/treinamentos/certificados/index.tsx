@@ -40,7 +40,7 @@ export default function CertificadosPage() {
           <h1 className="text-3xl font-bold tracking-tight">Gestão de Certificados</h1>
           <p className="text-muted-foreground mt-1">Acompanhamento e rastreamento de qualificações profissionais.</p>
         </div>
-        <button className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors ">
+        <button className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-radius-m font-medium hover:bg-primary/90 transition-colors ">
           <Plus size={18} />
           Registrar Certificado
         </button>
@@ -61,10 +61,10 @@ export default function CertificadosPage() {
               <input 
                 type="text" 
                 placeholder="Pesquisar certificado..." 
-                className="w-full pl-9 h-9 text-sm rounded-md border border-input focus:outline-none focus:ring-1 focus:ring-primary/50"
+                className="w-full pl-9 h-9 text-sm rounded-radius-s border border-input focus:outline-none focus:ring-1 focus:ring-primary/50"
               />
             </div>
-            <button className="h-9 px-3 border rounded-md text-sm font-medium hover:bg-[#09090b] flex items-center gap-2">
+            <button className="h-9 px-3 border rounded-radius-s text-sm font-medium hover:bg-[#0f172a] flex items-center gap-2">
               <Filter size={14} />
               Filtros
             </button>
@@ -73,7 +73,7 @@ export default function CertificadosPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm whitespace-nowrap">
-              <thead className="bg-[#09090b] border-b">
+              <thead className="bg-[#0f172a] border-b">
                 <tr className="text-muted-foreground font-medium text-[11px] uppercase tracking-wider">
                   <th className="py-4 px-6">Colaborador</th>
                   <th className="py-4 px-6">Curso / Certificação</th>
@@ -106,7 +106,7 @@ export default function CertificadosPage() {
                       <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button 
                           onClick={() => handleOpenDrawer(cert)}
-                          className="p-2 hover:bg-primary/10 text-primary rounded-lg transition-colors" 
+                          className="p-2 hover:bg-primary/10 text-primary rounded-radius-m transition-colors" 
                           title="Ver Perfil de Treinamento"
                         >
                           <Eye size={16} />
@@ -137,16 +137,16 @@ export default function CertificadosPage() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 bottom-0 w-full max-w-xl bg-[#18181b]  z-[110] flex flex-col"
+              className="fixed right-0 top-0 bottom-0 w-full max-w-xl bg-[#1e293b]  z-[110] flex flex-col"
             >
-              <div className="p-8 border-b bg-[#09090b] text-white flex items-start justify-between">
+              <div className="p-8 border-b bg-[#0f172a] text-white flex items-start justify-between">
                 <div>
                   <h2 className="text-2xl font-bold flex items-center gap-3">
                     <GraduationCap className="text-primary" size={28} />
                     Perfil de Treinamento
                   </h2>
                   <div className="mt-4 flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-xl font-bold">
+                    <div className="w-12 h-12 rounded-radius-m bg-primary flex items-center justify-center text-xl font-bold">
                        {selectedColab.nome.charAt(0)}
                     </div>
                     <div>
@@ -155,7 +155,7 @@ export default function CertificadosPage() {
                     </div>
                   </div>
                 </div>
-                <button onClick={() => setSelectedColab(null)} className="p-2 hover:bg-[#18181b]/10 rounded-full transition-colors">
+                <button onClick={() => setSelectedColab(null)} className="p-2 hover:bg-[#1e293b]/10 rounded-full transition-colors">
                   <X size={24} />
                 </button>
               </div>
@@ -164,8 +164,8 @@ export default function CertificadosPage() {
                 <Section title="Certificados Obtidos">
                   <div className="space-y-3">
                     {selectedColab.certificados.map((cert: any, i: number) => (
-                      <div key={i} className="flex items-center gap-4 p-4 rounded-xl border bg-[#18181b] ">
-                         <div className={`p-3 rounded-xl flex-shrink-0 ${cert.status === 'vencido' ? 'bg-rose-50 text-rose-500' : 'bg-emerald-50 text-emerald-500'}`}>
+                      <div key={i} className="flex items-center gap-4 p-4 rounded-radius-m border bg-[#1e293b] ">
+                         <div className={`p-3 rounded-radius-m flex-shrink-0 ${cert.status === 'vencido' ? 'bg-rose-50 text-rose-500' : 'bg-emerald-50 text-emerald-500'}`}>
                            {cert.status === 'vencido' ? <XOctagon size={24} /> : <Award size={24} />}
                          </div>
                          <div className="flex-1">
@@ -184,7 +184,7 @@ export default function CertificadosPage() {
                 <Section title="Trilhas em Andamento">
                   <div className="space-y-3">
                     {selectedColab.trilhas.map((trilha: any, i: number) => (
-                      <div key={i} className="p-4 rounded-xl border border-primary/20 bg-primary/5">
+                      <div key={i} className="p-4 rounded-radius-m border border-primary/20 bg-primary/5">
                          <div className="flex items-center justify-between mb-2">
                            <h4 className="font-bold text-sm text-primary flex items-center gap-2">
                              <ListTree size={16} /> {trilha.nome}
@@ -202,7 +202,7 @@ export default function CertificadosPage() {
                 <Section title="Histórico de Cursos">
                   <div className="space-y-3">
                     {selectedColab.cursos.map((curso: any, i: number) => (
-                      <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-[#18181b] border border-[#27272a]">
+                      <div key={i} className="flex items-center justify-between p-3 rounded-radius-m bg-[#1e293b] border border-[#334155]">
                          <div className="flex items-center gap-3">
                             <CheckCircle2 size={16} className="text-emerald-500" />
                             <span className="text-sm font-medium text-zinc-300">{curso.nome}</span>
@@ -226,7 +226,7 @@ function MetricCard({ title, value, icon: Icon, color }: any) {
     <Card className="border-none  h-full">
       <CardContent className="pt-6">
         <div className="flex items-center gap-4">
-           <div className={`p-3 rounded-2xl bg-[#09090b] ${color}`}>
+           <div className={`p-3 rounded-radius-l bg-[#0f172a] ${color}`}>
              <Icon size={24} />
            </div>
            <div>

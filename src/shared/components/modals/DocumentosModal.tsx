@@ -1,7 +1,7 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import { X, FileText, Download, Printer, CheckCircle2 } from 'lucide-react';
 import { useState } from 'react';
+import { FileText, Download, Printer, CheckCircle2 } from 'lucide-react';
 import { useToast } from '@/shared/ui/Toast';
+import { SideDrawer } from '@/shared/ui/SideDrawer';
 
 interface Candidato {
   nome: string;
@@ -26,15 +26,15 @@ export function DocumentosModal({ candidato, onClose }: DocumentosModalProps) {
   const [activeTab, setActiveTab] = useState('proposta');
   const { success } = useToast();
 
-  if (!candidato) return null;
-
-  const nome = candidato.nome;
-  const cargo = candidato.cargo;
+  const nome = candidato?.nome ?? "";
+  const cargo = candidato?.cargo ?? "";
 
   const handleDownload = () => {
+    if (!candidato) return;
     success('Documento gerado', `${TABS.find(t => t.id === activeTab)?.label} de ${nome} foi gerado com sucesso.`);
   };
   const handlePrint = () => {
+    if (!candidato) return;
     success('Enviado para impressão', `Imprimindo ${TABS.find(t => t.id === activeTab)?.label}...`);
   };
 
@@ -51,7 +51,7 @@ export function DocumentosModal({ candidato, onClose }: DocumentosModalProps) {
               de contratação para o cargo de <strong className="text-primary">{cargo}</strong>, conforme
               detalhado a seguir:
             </p>
-            <div className="bg-zinc-50 dark:bg-[#09090b] border border-zinc-200 dark:border-[#27272a] rounded-xl p-4 space-y-2">
+            <div className="bg-zinc-50 dark:bg-[#0f172a] border border-zinc-200 dark:border-[#334155] rounded-xl p-4 space-y-2">
               <div className="flex justify-between text-xs"><span className="font-semibold text-zinc-500 uppercase">Cargo</span><span className="font-bold text-zinc-700 dark:text-zinc-200">{cargo}</span></div>
               <div className="flex justify-between text-xs"><span className="font-semibold text-zinc-500 uppercase">Regime</span><span className="font-bold text-zinc-700 dark:text-zinc-200">CLT — Integral</span></div>
               <div className="flex justify-between text-xs"><span className="font-semibold text-zinc-500 uppercase">Salário</span><span className="font-bold text-emerald-600 dark:text-emerald-400">A combinar</span></div>
@@ -104,10 +104,10 @@ export function DocumentosModal({ candidato, onClose }: DocumentosModalProps) {
           <div className="space-y-4 text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed">
             <h3 className="text-lg font-bold text-zinc-800 dark:text-[#e7e5e4] text-center">CONTRATO DE ADMISSÃO</h3>
             <h4 className="text-sm font-bold text-center text-zinc-500">Via Contratação — Regime CLT</h4>
-            <p className="text-xs text-zinc-400 dark:text-zinc-500 text-center">São Paulo, {today}</p>
+            <p className="text-xs text-zinc-500 text-center">São Paulo, {today}</p>
 
             <div className="space-y-3">
-              <div className="bg-zinc-50 dark:bg-[#09090b] border border-zinc-200 dark:border-zinc-700 rounded-xl p-4 space-y-2">
+              <div className="bg-zinc-50 dark:bg-[#0f172a] border border-zinc-200 dark:border-zinc-700 rounded-xl p-4 space-y-2">
                 <p className="text-xs font-bold text-zinc-500 dark:text-zinc-600 uppercase">Contratante</p>
                 <p className="font-semibold text-zinc-800 dark:text-zinc-200">HR Core Soluções Ltda.</p>
                 <p className="text-xs text-zinc-500">CNPJ: XX.XXX.XXX/0001-XX | São Paulo - SP</p>
@@ -159,79 +159,59 @@ export function DocumentosModal({ candidato, onClose }: DocumentosModalProps) {
   };
 
   return (
-    <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-          onClick={onClose}
-        />
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 10 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 10 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 250 }}
-          className="relative w-full max-w-2xl max-h-[90vh] bg-white dark:bg-[#18181b] rounded-2xl flex flex-col z-10 overflow-hidden border border-zinc-200 dark:border-[#27272a] transition-colors duration-300"
-          onClick={e => e.stopPropagation()}
-        >
-          {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-zinc-200 dark:border-[#27272a] shrink-0">
-            <div>
-              <h2 className="text-xl font-bold text-zinc-800 dark:text-[#e7e5e4]">Geração de Documentos</h2>
-              <p className="text-sm text-zinc-500 mt-0.5">Candidato: <span className="font-semibold text-primary">{nome}</span></p>
-            </div>
+    <SideDrawer
+      open={!!candidato}
+      onClose={onClose}
+      title="Geração de documentos"
+      subtitle={candidato ? `Candidato: ${nome}` : undefined}
+      overlay="subtle"
+      zIndex={200}
+      footer={
+        <div className="flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-[#334155] text-zinc-600 dark:text-zinc-400 rounded-xl font-semibold text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+          >
+            <Printer size={16} /> Imprimir
+          </button>
+          <button
+            type="button"
+            onClick={handleDownload}
+            className="flex-1 min-w-[140px] flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors"
+          >
+            <Download size={16} /> Baixar PDF
+          </button>
+        </div>
+      }
+    >
+      {!candidato ? null : (
+      <div className="flex flex-col gap-4 min-h-0">
+        <div className="flex gap-1 shrink-0 border-b border-zinc-200 dark:border-[#334155] -mx-1 px-1 pb-3 overflow-x-auto">
+          {TABS.map(tab => (
             <button
-              onClick={onClose}
-              className="p-2 text-zinc-400 dark:text-zinc-600 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-full transition-colors"
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg border transition-all shrink-0 ${
+                activeTab === tab.id
+                  ? 'text-primary border-primary bg-primary/5'
+                  : 'text-zinc-500 border-transparent hover:text-zinc-700 dark:hover:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900/40'
+              }`}
             >
-              <X size={22} />
+              <tab.icon size={15} />
+              {tab.label}
             </button>
-          </div>
+          ))}
+        </div>
 
-          {/* Tabs */}
-          <div className="flex gap-1 px-6 pt-4 shrink-0 border-b border-zinc-200 dark:border-[#27272a]">
-            {TABS.map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-t-lg border-b-2 transition-all ${
-                  activeTab === tab.id
-                    ? 'text-primary border-primary bg-primary/5'
-                    : 'text-zinc-500 border-transparent hover:text-zinc-700 dark:hover:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900/40'
-                }`}
-              >
-                <tab.icon size={15} />
-                {tab.label}
-              </button>
-            ))}
+        <div className="rounded-xl border border-zinc-200 dark:border-[#334155] bg-zinc-50 dark:bg-zinc-800/20 p-5 min-h-[280px]">
+          <div className="bg-white dark:bg-[#1e293b] border border-zinc-200 dark:border-[#334155] rounded-xl p-6">
+            {renderPreview()}
           </div>
-
-          {/* Document Preview */}
-          <div className="flex-1 overflow-y-auto p-6 bg-zinc-50 dark:bg-zinc-800/20 custom-scrollbar">
-            <div className="bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-[#27272a] rounded-xl p-8 min-h-[400px]">
-              {renderPreview()}
-            </div>
-          </div>
-
-          {/* Footer Actions */}
-          <div className="p-4 border-t border-zinc-200 dark:border-[#27272a] bg-zinc-50 dark:bg-[#18181b] shrink-0 flex gap-3">
-            <button
-              onClick={handlePrint}
-              className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-[#27272a] text-zinc-600 dark:text-zinc-400 rounded-xl font-semibold text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-            >
-              <Printer size={16} /> Imprimir
-            </button>
-            <button
-              onClick={handleDownload}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors"
-            >
-              <Download size={16} /> Baixar PDF
-            </button>
-          </div>
-        </motion.div>
+        </div>
       </div>
-    </AnimatePresence>
+      )}
+    </SideDrawer>
   );
 }

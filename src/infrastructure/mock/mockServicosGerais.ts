@@ -69,6 +69,13 @@ export const mockCafeAbastecimento = [
   { local: 'Sala de treinamento', ultimoAbastecimento: '2026-03-28', ok: false },
 ];
 
+/** Próxima roda de café (comunidade) — exibido no dashboard como lembrete leve. */
+export const mockProximoCafeRoda = {
+  quando: 'Amanhã às 15h',
+  local: 'Copa Administrativo',
+  tema: 'Boas-vindas aos novos estagiários',
+} as const;
+
 export const mockVouchersNatal = [
   { id: 'VCH-2026-001', colaborador: 'Ana Souza', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-001', emitido: false },
   { id: 'VCH-2026-002', colaborador: 'Bruno Rezende', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-002', emitido: true },

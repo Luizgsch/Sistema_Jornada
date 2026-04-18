@@ -10,12 +10,14 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/Card";
 import type { HiringTrendData } from "@/shared/types";
 import { motion } from "framer-motion";
+import { useChartTheme } from "@/shared/components/charts/chartTheme";
 
 interface ContratacoesChartProps {
   data: HiringTrendData[];
 }
 
 export function ContratacoesChart({ data }: ContratacoesChartProps) {
+  const { gridStroke, axisTickFill, tooltipStyle } = useChartTheme();
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -30,21 +32,15 @@ export function ContratacoesChart({ data }: ContratacoesChartProps) {
           <div className="h-[300px] w-full mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridStroke} />
                 <XAxis
                   dataKey="mes"
                   axisLine={false}
                   tickLine={false}
-                  className="text-xs font-medium"
+                  tick={{ fill: axisTickFill, fontSize: 11 }}
                 />
-                <YAxis axisLine={false} tickLine={false} className="text-xs font-medium" />
-                <Tooltip
-                  contentStyle={{
-                    borderRadius: "8px",
-                    border: "1px solid #e2e8f0",
-                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                  }}
-                />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: axisTickFill, fontSize: 11 }} />
+                <Tooltip contentStyle={tooltipStyle} />
                 <Line
                   type="monotone"
                   dataKey="contratacoes"

@@ -54,7 +54,7 @@ export default function MatriculasPage() {
         <div className="flex items-center gap-2">
           <button
             onClick={triggerGeneration}
-            className="h-10 px-4 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center gap-2"
+            className="h-10 px-4 bg-primary text-white rounded-radius-m font-medium hover:bg-primary/90 transition-colors flex items-center gap-2"
           >
             <Hash size={18} />
             Gerar Matrícula Automática
@@ -76,15 +76,19 @@ export default function MatriculasPage() {
               <input 
                 type="text" 
                 placeholder="Buscar por matrícula ou nome..." 
-                className="w-full pl-10 h-10 rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="w-full pl-10 h-10 rounded-radius-s border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>
             <div className="flex items-center gap-2">
-              <button className="inline-flex items-center gap-2 h-10 px-3 border border-input rounded-md text-sm font-medium hover:bg-[#09090b]">
+              <button className="inline-flex items-center gap-2 h-10 px-3 border border-input rounded-radius-s text-sm font-medium hover:bg-[#0f172a]">
                 <Filter size={16} />
                 Filtrar
               </button>
-              <button className="inline-flex items-center gap-2 h-10 px-3 border border-input rounded-md text-sm font-medium hover:bg-[#09090b]">
+              <button
+                type="button"
+                title="Integração com folha e sistemas externos"
+                className="inline-flex items-center gap-2 h-10 px-3 border border-input rounded-radius-s text-sm font-medium text-muted-foreground bg-transparent hover:bg-[#0f172a] hover:text-foreground transition-colors"
+              >
                 <Download size={16} />
                 Exportar Folha
               </button>
@@ -94,7 +98,7 @@ export default function MatriculasPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm whitespace-nowrap">
-              <thead className="bg-[#09090b] border-y border-[#27272a]">
+              <thead className="bg-[#0f172a] border-y border-[#334155]">
                 <tr className="text-muted-foreground font-medium">
                   <th className="py-3 px-6">Matrícula</th>
                   <th className="py-3 px-6">Colaborador</th>
@@ -143,9 +147,9 @@ export default function MatriculasPage() {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", damping: 22, stiffness: 260 }}
-              className="relative w-full max-w-md bg-[#18181b] border border-[#27272a] rounded-2xl overflow-hidden shadow-2xl"
+              className="relative w-full max-w-md bg-[#1e293b] border border-[#334155] rounded-radius-l overflow-hidden shadow-2xl"
             >
-              <div className="p-6 bg-[#09090b] border-b border-[#27272a]">
+              <div className="p-6 bg-[#0f172a] border-b border-[#334155]">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-primary bg-primary/10 px-2.5 py-1 rounded-full border border-primary/20">
                     <Loader2 size={10} className={isFinished ? "hidden" : "animate-spin"} />
@@ -166,15 +170,15 @@ export default function MatriculasPage() {
                       initial={{ opacity: 0.25 }}
                       animate={{ opacity: isDone || isActive ? 1 : 0.3 }}
                       transition={{ duration: 0.4 }}
-                      className={`flex items-center gap-4 p-4 rounded-xl border transition-all duration-500 ${
+                      className={`flex items-center gap-4 p-4 rounded-radius-m border transition-all duration-500 ${
                         isDone
                           ? "bg-emerald-500/5 border-emerald-500/20"
                           : isActive
                           ? "bg-primary/5 border-primary/20"
-                          : "border-[#27272a]"
+                          : "border-[#334155]"
                       }`}
                     >
-                      <div className={`flex-shrink-0 p-2 rounded-lg transition-all duration-400 ${
+                      <div className={`flex-shrink-0 p-2 rounded-radius-m transition-all duration-400 ${
                         isDone ? "bg-emerald-500/10 text-emerald-400"
                           : isActive ? "bg-primary/10 text-primary"
                           : "bg-zinc-800 text-zinc-600"
@@ -206,7 +210,7 @@ export default function MatriculasPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="px-6 pb-6"
                   >
-                    <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-3 mb-4">
+                    <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-radius-m flex items-center gap-3 mb-4">
                       <PartyPopper size={20} className="text-emerald-400 flex-shrink-0" />
                       <p className="text-sm font-bold text-emerald-400">
                         Matrícula <span className="font-mono">MAT-2026-004</span> gerada! Todos os sistemas notificados.
@@ -214,7 +218,7 @@ export default function MatriculasPage() {
                     </div>
                     <button
                       onClick={() => setShowStepper(false)}
-                      className="w-full py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors"
+                      className="w-full py-3 bg-primary text-white rounded-radius-m font-bold hover:bg-primary/90 transition-colors"
                     >
                       Concluir
                     </button>
@@ -238,7 +242,7 @@ function StatCard({ title, value, icon: Icon }: any) {
             <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{title}</p>
             <h4 className="text-2xl font-bold mt-1">{value}</h4>
           </div>
-          <div className="p-3 bg-primary/10 rounded-xl text-primary">
+          <div className="p-3 bg-primary/10 rounded-radius-m text-primary">
             <Icon size={20} />
           </div>
         </div>

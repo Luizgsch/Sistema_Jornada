@@ -1,14 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/Card";
 import { Badge, Progress } from "@/shared/ui/Common";
+import { StatusBadge } from "@/shared/ui/StatusBadge";
 import type { CandidateData } from "@/shared/types";
 import { motion } from "framer-motion";
 import { User, MoreHorizontal, Search, FileText } from "lucide-react";
 
 interface CandidateMatchTableProps {
   candidates: CandidateData[];
+  /** Só ative na listagem principal do banco de talentos; no hub / resumos, omita (padrão: false). */
+  showExport?: boolean;
 }
 
-export function CandidateMatchTable({ candidates }: CandidateMatchTableProps) {
+export function CandidateMatchTable({ candidates, showExport = false }: CandidateMatchTableProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -27,19 +30,24 @@ export function CandidateMatchTable({ candidates }: CandidateMatchTableProps) {
               <input
                 type="text"
                 placeholder="Filtrar..."
-                className="pl-8 h-9 w-[150px] lg:w-[250px] rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900 px-3 py-1 text-xs text-zinc-800 dark:text-zinc-200 placeholder:text-zinc-400 dark:placeholder:text-zinc-600 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+                className="pl-8 h-9 w-[150px] lg:w-[250px] rounded-radius-s border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900 px-3 py-1 text-xs text-zinc-800 dark:text-zinc-200 placeholder:text-zinc-400 dark:placeholder:text-zinc-600 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
               />
             </div>
-            <button className="inline-flex items-center justify-center rounded-md text-xs font-medium h-9 px-3 border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">
-              Exportar
-            </button>
+            {showExport ? (
+              <button
+                type="button"
+                className="inline-flex items-center justify-center rounded-radius-s text-xs font-medium h-9 px-3 border border-zinc-200 dark:border-zinc-700 bg-transparent dark:bg-transparent text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+              >
+                Exportar
+              </button>
+            ) : null}
           </div>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto -mx-2 md:mx-0">
             <div className="inline-block min-w-full align-middle">
               <table className="w-full min-w-[800px]">
-                <thead className="bg-zinc-50 dark:bg-[#09090b] border-y border-zinc-200 dark:border-zinc-800">
+                <thead className="bg-zinc-50 dark:bg-[#0f172a] border-y border-zinc-200 dark:border-zinc-800">
                   <tr>
                     <th className="h-10 px-4 text-left align-middle font-bold text-zinc-500 dark:text-zinc-500 text-xs uppercase tracking-wide">Nome</th>
                     <th className="h-10 px-4 text-left align-middle font-bold text-zinc-500 dark:text-zinc-500 text-xs uppercase tracking-wide">Match Score</th>
@@ -75,22 +83,14 @@ export function CandidateMatchTable({ candidates }: CandidateMatchTableProps) {
                         </div>
                       </td>
                       <td className="p-4 align-middle">
-                        <Badge
-                          variant={
-                            candidate.status === "Alta prioridade" ? "success" :
-                            candidate.status === "Entrevista" ? "default" :
-                            candidate.status === "Reprovado" ? "destructive" : "outline"
-                          }
-                        >
-                          {candidate.status}
-                        </Badge>
+                        <StatusBadge status={candidate.status} />
                       </td>
                       <td className="p-4 align-middle text-right">
                         <div className="flex items-center justify-end space-x-2">
-                          <button className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors" title="Ver Currículo">
+                          <button className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-radius-s transition-colors" title="Ver Currículo">
                             <FileText size={16} className="text-zinc-400 dark:text-zinc-500" />
                           </button>
-                          <button className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors">
+                          <button className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-radius-s transition-colors">
                             <MoreHorizontal size={16} className="text-zinc-400 dark:text-zinc-500" />
                           </button>
                         </div>

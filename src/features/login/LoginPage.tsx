@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Card, CardContent } from '@/shared/ui/Card';
 import { usuariosMock, getSistemasPorTipo, type Usuario, type TipoUsuario } from '@/infrastructure/mock/mockLogin';
-import { LogIn, Users, Shield, LayoutDashboard, Wrench, Building2 } from 'lucide-react';
+import { LogIn, Users, Shield, LayoutDashboard, Wrench, Building2, Loader2 } from 'lucide-react';
+import { delay } from '@/shared/lib/delay';
 import { motion } from 'framer-motion';
 import { PosigrafLogo } from '@/shared/components/brand/PosigrafLogo';
 import { cn } from '@/shared/lib/cn';
@@ -20,19 +21,32 @@ interface LoginPageProps {
 
 export default function LoginPage({ onLogin }: LoginPageProps) {
   const [selectedUser, setSelectedUser] = useState<Usuario | null>(null);
+  /** `u:${id}` entrada direta; `s:${sistemaId}` escolha de módulo */
+  const [authBusyKey, setAuthBusyKey] = useState<string | null>(null);
 
-  const handleSelectUser = (usuario: Usuario) => {
+  const handleSelectUser = async (usuario: Usuario) => {
     const sistemasUsuario = getSistemasPorTipo(usuario.tipo);
     if (sistemasUsuario.length === 1) {
-      onLogin(usuario, sistemasUsuario[0].id);
+      setAuthBusyKey(`u:${usuario.id}`);
+      try {
+        await delay(720);
+        onLogin(usuario, sistemasUsuario[0].id);
+      } finally {
+        setAuthBusyKey(null);
+      }
     } else {
       setSelectedUser(usuario);
     }
   };
 
-  const handleSelectSistema = (sistemaId: string) => {
-    if (selectedUser) {
+  const handleSelectSistema = async (sistemaId: string) => {
+    if (!selectedUser) return;
+    setAuthBusyKey(`s:${sistemaId}`);
+    try {
+      await delay(680);
       onLogin(selectedUser, sistemaId);
+    } finally {
+      setAuthBusyKey(null);
     }
   };
 
@@ -40,15 +54,16 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
 
   if (!selectedUser) {
     return (
-      <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden bg-zinc-50 dark:bg-[#09090b] transition-colors duration-300">
-        <div
-          className="pointer-events-none absolute inset-0 opacity-60 dark:opacity-90"
-          style={{
-            background:
-              'radial-gradient(ellipse 80% 60% at 20% 0%, rgba(13,148,136,0.2), transparent 55%), radial-gradient(ellipse 70% 50% at 100% 100%, rgba(15,23,42,0.15), transparent 50%)',
-          }}
-        />
-        <motion.div
+      <div className="h-full min-h-0 w-full overflow-y-auto overflow-x-hidden bg-zinc-50 dark:bg-[#0f172a] transition-colors duration-300">
+        <div className="min-h-full relative flex items-center justify-center p-4">
+          <div
+            className="pointer-events-none absolute inset-0 opacity-60 dark:opacity-90"
+            style={{
+              background:
+                'radial-gradient(ellipse 80% 60% at 20% 0%, rgba(13,148,136,0.2), transparent 55%), radial-gradient(ellipse 70% 50% at 100% 100%, rgba(15,23,42,0.15), transparent 50%)',
+            }}
+          />
+          <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md relative z-10"
@@ -64,7 +79,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
             <p className="text-zinc-500 mt-2 text-sm">RH, DHO e Serviços Gerais — selecione seu perfil para continuar</p>
           </div>
 
-          <Card className="border-zinc-200 dark:border-[#27272a]">
+          <Card className="border-zinc-200 dark:border-[#334155]">
             <CardContent className="p-6 pt-6 sm:pt-6 space-y-4">
               <div className="flex items-center gap-3 mb-4">
                 <Users className="text-primary" size={20} />
@@ -76,13 +91,15 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                 return (
                   <motion.button
                     key={usuario.id}
+                    type="button"
+                    disabled={authBusyKey !== null}
                     initial={{ opacity: 0, x: -8 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.07 }}
                     onClick={() => handleSelectUser(usuario)}
-                    className="w-full flex items-center gap-3.5 p-3.5 bg-zinc-50 dark:bg-zinc-800/30 hover:bg-zinc-100 dark:hover:bg-zinc-700/60 rounded-xl transition-all group text-left border border-zinc-100 dark:border-zinc-800/60 hover:border-zinc-200 dark:hover:border-zinc-600"
+                    className="w-full flex items-center gap-3.5 p-3.5 bg-zinc-50 dark:bg-zinc-800/30 hover:bg-zinc-100 dark:hover:bg-zinc-700/60 rounded-radius-m transition-all group text-left border border-zinc-100 dark:border-zinc-800/60 hover:border-zinc-200 dark:hover:border-zinc-600 disabled:pointer-events-none disabled:opacity-[0.85]"
                   >
-                    <div className={cn('w-11 h-11 rounded-xl flex items-center justify-center font-black text-lg shrink-0', cfg.avatarClass)}>
+                    <div className={cn('w-11 h-11 rounded-radius-m flex items-center justify-center font-black text-lg shrink-0', cfg.avatarClass)}>
                       {usuario.nome.charAt(0)}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -94,7 +111,11 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                       </div>
                       <p className="text-xs text-zinc-400 mt-0.5 truncate">{cfg.description}</p>
                     </div>
-                    <LogIn className="text-zinc-400 dark:text-zinc-600 group-hover:text-primary transition-colors shrink-0" size={16} />
+                    {authBusyKey === `u:${usuario.id}` ? (
+                      <Loader2 className="text-primary shrink-0 animate-spin" size={16} aria-hidden />
+                    ) : (
+                      <LogIn className="text-zinc-400 dark:text-zinc-600 group-hover:text-primary transition-colors shrink-0" size={16} />
+                    )}
                   </motion.button>
                 );
               })}
@@ -106,30 +127,32 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
             Ambiente de demonstração - Selecione um perfil para testar
           </p>
         </motion.div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden bg-zinc-50 dark:bg-[#09090b] transition-colors duration-300">
-      <div
-        className="pointer-events-none absolute inset-0 opacity-60 dark:opacity-90"
-        style={{
-          background:
-            'radial-gradient(ellipse 80% 60% at 20% 0%, rgba(13,148,136,0.2), transparent 55%), radial-gradient(ellipse 70% 50% at 100% 100%, rgba(15,23,42,0.15), transparent 50%)',
-        }}
-      />
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md relative z-10"
-      >
+    <div className="h-full min-h-0 w-full overflow-y-auto overflow-x-hidden bg-zinc-50 dark:bg-[#0f172a] transition-colors duration-300">
+      <div className="min-h-full relative flex items-center justify-center p-4">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-60 dark:opacity-90"
+          style={{
+            background:
+              'radial-gradient(ellipse 80% 60% at 20% 0%, rgba(13,148,136,0.2), transparent 55%), radial-gradient(ellipse 70% 50% at 100% 100%, rgba(15,23,42,0.15), transparent 50%)',
+          }}
+        />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-md relative z-10"
+        >
         {(() => {
           const cfg = roleConfig[selectedUser.tipo];
           return (
             <div className="text-center mb-8">
               <div className="flex justify-center mb-4">
-                <div className={cn('h-14 w-14 rounded-2xl flex items-center justify-center text-2xl font-black border', cfg.avatarClass, cfg.badgeClass.replace('bg-', 'border-').split(' ')[0])}>
+                <div className={cn('h-14 w-14 rounded-radius-l flex items-center justify-center text-2xl font-black border', cfg.avatarClass, cfg.badgeClass.replace('bg-', 'border-').split(' ')[0])}>
                   {selectedUser.nome.charAt(0)}
                 </div>
               </div>
@@ -145,7 +168,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
           );
         })()}
 
-        <Card className="border-zinc-200 dark:border-[#27272a]">
+        <Card className="border-zinc-200 dark:border-[#334155]">
           <CardContent className="p-6 pt-6 sm:pt-6">
             <div className="flex items-center gap-3 mb-6">
               <Users className="text-primary" size={20} />
@@ -162,20 +185,26 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                 return (
                   <motion.button
                     key={sistema.id}
+                    type="button"
+                    disabled={authBusyKey !== null}
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.08 }}
                     onClick={() => handleSelectSistema(sistema.id)}
-                    className="w-full flex items-center gap-4 p-4 bg-zinc-50 dark:bg-zinc-800/30 hover:bg-zinc-100 dark:hover:bg-zinc-700/60 rounded-xl transition-all group text-left border border-zinc-200 dark:border-zinc-800/50 hover:border-primary/40 dark:hover:border-primary/60"
+                    className="w-full flex items-center gap-4 p-4 bg-zinc-50 dark:bg-zinc-800/30 hover:bg-zinc-100 dark:hover:bg-zinc-700/60 rounded-radius-m transition-all group text-left border border-zinc-200 dark:border-zinc-800/50 hover:border-primary/40 dark:hover:border-primary/60 disabled:pointer-events-none disabled:opacity-[0.85]"
                   >
-                    <div className={cn('w-12 h-12 rounded-xl flex items-center justify-center shrink-0', bgColor)}>
+                    <div className={cn('w-12 h-12 rounded-radius-m flex items-center justify-center shrink-0', bgColor)}>
                       <SisIcon className={iconColor} size={22} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-bold text-zinc-800 dark:text-white">{sistema.label}</p>
                       <p className="text-xs text-zinc-500 mt-0.5 leading-relaxed">{sistema.descricao}</p>
                     </div>
-                    <LogIn className="text-zinc-400 dark:text-zinc-600 group-hover:text-primary transition-colors shrink-0" size={18} />
+                    {authBusyKey === `s:${sistema.id}` ? (
+                      <Loader2 className="text-primary shrink-0 animate-spin" size={18} aria-hidden />
+                    ) : (
+                      <LogIn className="text-zinc-400 dark:text-zinc-600 group-hover:text-primary transition-colors shrink-0" size={18} />
+                    )}
                   </motion.button>
                 );
               })}
@@ -184,12 +213,15 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
         </Card>
 
         <button
+          type="button"
+          disabled={authBusyKey !== null}
           onClick={() => setSelectedUser(null)}
-          className="w-full mt-4 py-3 text-zinc-500 hover:text-zinc-700 dark:hover:text-[#e7e5e4] transition-colors"
+          className="w-full mt-4 py-3 text-zinc-500 hover:text-zinc-700 dark:hover:text-[#e7e5e4] transition-colors disabled:opacity-50"
         >
           ← Voltar para lista de usuários
         </button>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 }

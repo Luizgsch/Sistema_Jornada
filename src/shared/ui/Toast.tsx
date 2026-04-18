@@ -119,7 +119,7 @@ function ToastItem({ toast, onRemove }: { toast: ToastMessage; onRemove: () => v
       animate={{ opacity: 1, x: 0, scale: 1 }}
       exit={{ opacity: 0, x: 24, scale: 0.96 }}
       transition={{ duration: 0.22, ease: 'easeOut' }}
-      className={`relative w-full overflow-hidden rounded-xl border border-[#27272a] border-l-4 ${config.accent} bg-[#18181b] pointer-events-auto flex items-start gap-3 p-4 shadow-xl shadow-black/30`}
+      className={`relative w-full overflow-hidden rounded-radius-m border border-[#334155] border-l-4 ${config.accent} bg-[#1e293b] pointer-events-auto flex items-start gap-3 p-4 shadow-xl shadow-black/30`}
     >
       <div className={`mt-0.5 flex-shrink-0 ${config.iconClass}`}>{config.icon}</div>
       <div className="flex-1 min-w-0">
@@ -130,7 +130,7 @@ function ToastItem({ toast, onRemove }: { toast: ToastMessage; onRemove: () => v
       </div>
       <button
         onClick={onRemove}
-        className="p-1 text-zinc-600 hover:text-zinc-300 rounded-md transition-colors flex-shrink-0 mt-0.5"
+        className="p-1 text-zinc-600 hover:text-zinc-300 rounded-radius-s transition-colors flex-shrink-0 mt-0.5"
       >
         <X size={14} />
       </button>

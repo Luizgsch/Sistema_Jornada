@@ -1,32 +1,28 @@
-# Role: Senior UI/UX Designer (Specialist in Dark Interfaces & Bento Box)
-# Strategy: Refactor "Sistema Posigraf" to High-End Tech Aesthetic (Linear/Apple Style)
+# Role: Frontend Engineer & UX Designer (Accessibility Specialist)
+# Strategy: Dynamic Theme Switching & Visual Ergonomics - "Sistema Posigraf"
 
-## 1. Direção Visual & Estética
-Transforme a interface atual em um Dashboard Minimalista e Sofisticado. O objetivo é transmitir autoridade tecnológica e clareza absoluta de dados críticos.
+## 1. O Conceito: Conforto em Turnos 24h
+O sistema deve oferecer um alternador de tema (Light/Dark) para se adaptar à luminosidade do ambiente de trabalho (escritório vs. chão de fábrica). A transição deve ser fluida, profissional e persistente, garantindo que a escolha do usuário seja respeitada em cada acesso.
 
-## 2. Design System (Dark Mode Específico)
-- **Background Principal:** `#09090b` (Zinc-950).
-- **Cards (Bento Boxes):** `#18181b` (Zinc-900) com `rounded-xl`.
-- **Bordas:** `1px solid #27272a` (Zinc-800) - extremamente sutis.
-- **Tipografia:** Use 'Inter' ou 'Geist'. 
-    - Títulos: `font-semibold`, `tracking-tighter`, cor `Stone-200` (#e7e5e4).
-    - Descrições: `text-sm`, cor `Stone-500`.
-- **Minimalismo:** Remova sombras externas (box-shadow) pesadas. O contraste deve vir apenas da variação tonal entre o fundo e os cards.
+## 2. Especificações Técnicas (React + Tailwind CSS)
 
-## 3. Layout Bento Box (Grid System)
-Organize as funcionalidades (DHO, RH, Serviços Gerais) em uma grade dinâmica:
-- Use `display: grid` com `gap-6` ou `gap-8`.
-- Distribua as métricas em tamanhos variados (`col-span-1`, `col-span-2`, `row-span-2`) para criar ritmo visual.
-- Cada funcionalidade ou KPI deve ser um card isolado e independente.
+### A. Lógica de Estado e Persistência
+- Implemente um `ThemeContext` ou utilize um Hook que controle a classe `.dark` no elemento `<html>`.
+- **LocalStorage:** Salve a preferência do usuário (`theme: 'dark' | 'light'`) para que o tema seja mantido após o refresh da página ou novo login.
 
-## 4. Alertas Neon (Sinalização de Crise)
-Para SLAs vencidos ou falhas críticas identificadas no documento SENAI:
-- Não utilize blocos de cores sólidas.
-- Use **Cores Neon com Glow**: Texto em `#ff0033` (Erro) ou `#39ff14` (Sucesso).
-- Aplique uma sombra interna suave ou `drop-shadow` neon apenas no dado crítico para fazê-lo "saltar" do fundo escuro.
+### B. Interface e Micro-interações (Header Component)
+- **Localização:** O botão de alternância deve ser posicionado no canto direito do Header, ao lado do Centro de Alertas (Sino).
+- **Estilo:** Use um 'Ghost Button' arredondado com `hover:bg-zinc-100` (Light) e `dark:hover:bg-zinc-800` (Dark).
+- **Ícones Animados:** Utilize a biblioteca `lucide-react` para os ícones `Sun` e `Moon`. 
+- **Animação:** Use `framer-motion` para criar um efeito de rotação (90deg) e escala (0 a 1) ao trocar entre os ícones, tornando a interação visualmente satisfatória.
 
-## 5. Instruções de Implementação para a IA
-- Refatore o Tailwind CSS de todos os componentes existentes para seguir esta paleta de cinzas profundos (Zinc/Stone).
-- Elimine divisores de linha desnecessários; use o `gap` do grid para separar as informações.
-- Garanta que o "Respiro" (Padding `p-8`) seja mantido dentro de cada Bento Box.
-- O resultado final deve ser uma interface escura, elegante e altamente legível.
+### C. Design System Dual (Paleta de Cores)
+- **Modo Escuro (Dark):** Background `#09090b` (Zinc-950), Cards `#18181b` (Zinc-900), Textos `Stone-200`.
+- **Modo Claro (Light):** Background `White` puro, Cards com bordas `Zinc-200`, Textos `Zinc-900`.
+- **Suavização Global:** Aplique `transition-all duration-300` nas classes de layout para que a mudança de cores em cards, tabelas e menus seja um fade elegante, não um corte abrupto.
+
+## 3. Instruções de Execução para a IA (Agente de UI)
+- Refatore o componente de Header para incluir o `ThemeToggle`.
+- Garanta que todos os componentes desenvolvidos anteriormente (Bento Boxes, Tabelas, Dashboards) possuam variantes `dark:` para todas as cores de fundo, bordas e textos.
+- **Foco em Ergonomia:** O Modo Claro deve ser nítido e limpo; o Modo Escuro deve ser profundo e sofisticado (estilo Apple/Linear).
+- O objetivo é demonstrar domínio técnico sobre manipulação de DOM e persistência de dados no Frontend.

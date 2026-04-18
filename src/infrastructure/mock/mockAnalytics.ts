@@ -48,6 +48,25 @@ export const mockTurnoverHistory = [
   { mes: 'Abr', taxa: 2.5 },
 ];
 
+export const mockTrainingVolumeHistory = [
+  { mes: 'Jan', realizados: 22 },
+  { mes: 'Fev', realizados: 28 },
+  { mes: 'Mar', realizados: 35 },
+  { mes: 'Abr', realizados: 31 },
+];
+
+export const mockTrainingStatusDistribution = [
+  { name: 'Concluídos', value: 55 },
+  { name: 'Em andamento', value: 30 },
+  { name: 'Não iniciados', value: 15 },
+];
+
+export const mockTrainingModalityMix = [
+  { name: 'Presencial', value: 42 },
+  { name: 'Online ao vivo', value: 35 },
+  { name: 'E-learning', value: 23 },
+];
+
 export const mockRelatorios = [
   { id: "REL-001", nome: "Efetividade do Funil de Recrutamento", categoria: "Recrutamento", periodo: "Últimos 30 dias", ultimaAtualizacao: "Hoje", status: "pronto" },
   { id: "REL-002", nome: "Headcount e Custos por Setor", categoria: "Colaboradores", periodo: "Ano atual", ultimaAtualizacao: "Ontem", status: "pronto" },

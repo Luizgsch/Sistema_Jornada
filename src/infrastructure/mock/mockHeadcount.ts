@@ -48,6 +48,28 @@ export const mockHeadcountDistribucao = mockHeadcountTable.map(item => ({
   value: item.ativos
 }));
 
+/** Série estendida só para o donut "por setor" (>6 categorias → fatia Outros no UI). */
+export const mockHeadcountDistribucaoEnriquecida = [
+  ...mockHeadcountDistribucao,
+  { name: "Jurídico", value: 5 },
+  { name: "Qualidade", value: 4 },
+  { name: "Compras", value: 3 },
+];
+
+/** Composição demográfica (donuts Headcount) */
+export const mockHeadcountGenero = [
+  { name: "Masculino", value: 118 },
+  { name: "Feminino", value: 74 },
+];
+
+export const mockHeadcountEscolaridade = [
+  { name: "Superior completo", value: 98 },
+  { name: "Superior incompleto", value: 42 },
+  { name: "Técnico", value: 28 },
+  { name: "Médio", value: 18 },
+  { name: "Pós / MBA", value: 6 },
+];
+
 export const mockOrgChart = {
   diretoria: {
     nome: "Diretoria Executiva",

@@ -31,7 +31,9 @@ const SG_LOGISTICA_PAGES = [
   'sg-armarios',
   'sg-satisfacao-attos',
   'sg-chamados-manusis',
-  'sg-cafe-abastecimento',
+  'sg-engajamento-cafe',
+  'sg-engajamento-aniversariantes',
+  'sg-engajamento-mural',
 ] as const;
 
 const SG_ADMIN_PAGES = [
@@ -45,7 +47,9 @@ const SG_ADMIN_PAGES = [
   'sg-fechamento-attos',
   'sg-satisfacao-attos',
   'sg-chamados-manusis',
-  'sg-cafe-abastecimento',
+  'sg-engajamento-cafe',
+  'sg-engajamento-aniversariantes',
+  'sg-engajamento-mural',
   'sg-voucher-natal',
 ] as const;
 

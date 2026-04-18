@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/shared/ui/Card";
-import { Search, Upload, FileText, CheckCircle, XCircle, Brain, Zap, Eye, Download } from "lucide-react";
+import { Search, Upload, FileText, CheckCircle, XCircle, Brain, Zap, Eye } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const mockCurriculos = [
@@ -99,7 +99,7 @@ export default function TriagemIAPage() {
         <div className="flex items-center gap-2">
           <button 
             onClick={() => setShowUpload(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors "
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-radius-m font-medium hover:bg-primary/90 transition-colors "
           >
             <Upload size={18} />
             Enviar Currículos
@@ -111,7 +111,7 @@ export default function TriagemIAPage() {
         <Card className="border-none ">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-[#09090b] text-primary">
+              <div className="p-3 rounded-radius-l bg-[#0f172a] text-primary">
                 <FileText size={24} />
               </div>
               <div>
@@ -124,7 +124,7 @@ export default function TriagemIAPage() {
         <Card className="border-none ">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-[#09090b] text-emerald-500">
+              <div className="p-3 rounded-radius-l bg-[#0f172a] text-emerald-500">
                 <CheckCircle size={24} />
               </div>
               <div>
@@ -137,7 +137,7 @@ export default function TriagemIAPage() {
         <Card className="border-none ">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-[#09090b] text-amber-500">
+              <div className="p-3 rounded-radius-l bg-[#0f172a] text-amber-500">
                 <Brain size={24} />
               </div>
               <div>
@@ -150,7 +150,7 @@ export default function TriagemIAPage() {
         <Card className="border-none ">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl bg-[#09090b] text-rose-500">
+              <div className="p-3 rounded-radius-l bg-[#0f172a] text-rose-500">
                 <XCircle size={24} />
               </div>
               <div>
@@ -170,7 +170,7 @@ export default function TriagemIAPage() {
         <select 
           value={vagaSelecionada}
           onChange={(e) => setVagaSelecionada(e.target.value)}
-          className="h-10 px-4 rounded-lg border border-input bg-[#18181b] font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 w-full sm:w-auto min-w-[200px]"
+          className="h-10 px-4 rounded-radius-m border border-input bg-[#1e293b] font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 w-full sm:w-auto min-w-[200px]"
         >
           <option value="VAG-001">Dev Backend Senior - VAG-001</option>
           <option value="VAG-002">Analista de Dados Pleno - VAG-002</option>
@@ -186,17 +186,13 @@ export default function TriagemIAPage() {
               <input 
                 type="text" 
                 placeholder="Buscar por nome ou cargo..." 
-                className="w-full pl-10 h-10 rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="w-full pl-10 h-10 rounded-radius-s border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>
             <div className="flex items-center gap-2">
-              <button className="inline-flex items-center gap-2 h-10 px-3 border border-input rounded-md text-sm font-medium hover:bg-[#09090b]">
+              <button className="inline-flex items-center gap-2 h-10 px-3 border border-input rounded-radius-s text-sm font-medium hover:bg-[#0f172a]">
                 <Zap size={16} />
                 Processar Todos
-              </button>
-              <button className="inline-flex items-center gap-2 h-10 px-3 border border-input rounded-md text-sm font-medium hover:bg-[#09090b]">
-                <Download size={16} />
-                Exportar
               </button>
             </div>
           </div>
@@ -204,7 +200,7 @@ export default function TriagemIAPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm whitespace-nowrap">
-              <thead className="bg-[#09090b] border-y border-[#27272a]">
+              <thead className="bg-[#0f172a] border-y border-[#334155]">
                 <tr className="text-muted-foreground font-medium">
                   <th className="py-3 px-6">Candidato</th>
                   <th className="py-3 px-6">Currículo</th>
@@ -245,7 +241,7 @@ export default function TriagemIAPage() {
                       </div>
                     </td>
                     <td className="py-4 px-6">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-bold ${
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-radius-s text-xs font-bold ${
                         curriculo.score >= 80 
                           ? "bg-emerald-100 text-emerald-700"
                           : curriculo.score >= 60
@@ -259,7 +255,7 @@ export default function TriagemIAPage() {
                     <td className="py-4 px-6 text-center">
                       <button 
                         onClick={() => setSelectedCurriculo(curriculo)}
-                        className="p-2 hover:bg-zinc-800 rounded-lg text-zinc-400 transition-colors"
+                        className="p-2 hover:bg-zinc-800 rounded-radius-m text-zinc-400 transition-colors"
                         title="Ver Detalhes"
                       >
                         <Eye size={16} />
@@ -287,11 +283,11 @@ export default function TriagemIAPage() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-3xl bg-[#18181b] rounded-2xl  overflow-hidden flex flex-col max-h-[90vh]"
+              className="relative w-full max-w-3xl bg-[#1e293b] rounded-radius-l  overflow-hidden flex flex-col max-h-[90vh]"
             >
-              <div className="p-6 border-b flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#09090b]">
+              <div className="p-6 border-b flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#0f172a]">
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-[#09090b] rounded-2xl flex items-center justify-center text-white text-xl font-bold shrink-0">
+                  <div className="w-14 h-14 bg-[#0f172a] rounded-radius-l flex items-center justify-center text-white text-xl font-bold shrink-0">
                     {selectedCurriculo.nome.split(' ').map((n: string) => n[0]).join('')}
                   </div>
                   <div>
@@ -305,7 +301,7 @@ export default function TriagemIAPage() {
               </div>
               
               <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                <div className="flex items-center justify-between p-4 bg-[#09090b] rounded-xl">
+                <div className="flex items-center justify-between p-4 bg-[#0f172a] rounded-radius-m">
                   <div className="flex items-center gap-3">
                     <Brain size={24} className="text-primary" />
                     <div>
@@ -321,20 +317,20 @@ export default function TriagemIAPage() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="p-4 border rounded-xl">
+                  <div className="p-4 border rounded-radius-m">
                     <h4 className="text-sm font-bold text-emerald-600 mb-3 flex items-center gap-2">
                       <CheckCircle size={16} />
                       Competências Encontradas
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {selectedCurriculo.competenciasEncontradas.map((comp: string) => (
-                        <span key={comp} className="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded">
+                        <span key={comp} className="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-radius-s">
                           {comp}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <div className="p-4 border rounded-xl">
+                  <div className="p-4 border rounded-radius-m">
                     <h4 className="text-sm font-bold text-rose-600 mb-3 flex items-center gap-2">
                       <XCircle size={16} />
                       Competências Faltantes
@@ -342,7 +338,7 @@ export default function TriagemIAPage() {
                     <div className="flex flex-wrap gap-2">
                       {selectedCurriculo.competenciasFaltantes.length > 0 ? (
                         selectedCurriculo.competenciasFaltantes.map((comp: string) => (
-                          <span key={comp} className="px-2 py-1 bg-rose-100 text-rose-700 text-xs font-medium rounded">
+                          <span key={comp} className="px-2 py-1 bg-rose-100 text-rose-700 text-xs font-medium rounded-radius-s">
                             {comp}
                           </span>
                         ))
@@ -353,7 +349,7 @@ export default function TriagemIAPage() {
                   </div>
                 </div>
 
-                <div className="p-4 bg-[#09090b] rounded-xl overflow-x-auto">
+                <div className="p-4 bg-[#0f172a] rounded-radius-m overflow-x-auto">
                   <h4 className="text-sm font-bold text-zinc-300 mb-3">Informações do Candidato</h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 text-sm min-w-[200px]">
                     <div>
@@ -376,14 +372,14 @@ export default function TriagemIAPage() {
                 </div>
               </div>
 
-              <div className="p-6 border-t bg-[#09090b] flex justify-end gap-3">
+              <div className="p-6 border-t bg-[#0f172a] flex justify-end gap-3">
                 <button 
                   onClick={() => setSelectedCurriculo(null)}
-                  className="px-6 py-2 border rounded-xl font-bold hover:bg-[#18181b] transition-colors"
+                  className="px-6 py-2 border rounded-radius-m font-bold hover:bg-[#1e293b] transition-colors"
                 >
                   Fechar
                 </button>
-                <button className="px-6 py-2 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all  ">
+                <button className="px-6 py-2 bg-primary text-white rounded-radius-m font-bold hover:bg-primary/90 transition-all  ">
                   Avançar para Entrevista
                 </button>
               </div>
@@ -406,9 +402,9 @@ export default function TriagemIAPage() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-md bg-[#18181b] rounded-2xl  overflow-hidden"
+              className="relative w-full max-w-md bg-[#1e293b] rounded-radius-l  overflow-hidden"
             >
-              <div className="p-6 border-b bg-[#09090b]">
+              <div className="p-6 border-b bg-[#0f172a]">
                 <h2 className="text-xl font-bold">Enviar Currículos</h2>
                 <p className="text-sm text-muted-foreground">Selecione uma vaga para análise</p>
               </div>
@@ -416,28 +412,28 @@ export default function TriagemIAPage() {
               <div className="p-6 space-y-4">
                 <div>
                   <label className="text-xs font-bold text-zinc-500 uppercase">Vaga Target</label>
-                  <select className="w-full mt-1 h-11 px-4 rounded-xl border border-[#27272a] focus:outline-none focus:ring-2 focus:ring-primary/20 bg-[#18181b]">
+                  <select className="w-full mt-1 h-11 px-4 rounded-radius-m border border-[#334155] focus:outline-none focus:ring-2 focus:ring-primary/20 bg-[#1e293b]">
                     <option>Dev Backend Senior - VAG-001</option>
                     <option>Analista de Dados Pleno - VAG-002</option>
                   </select>
                 </div>
                 
-                <div className="border-2 border-dashed border-[#27272a] rounded-xl p-8 text-center hover:border-primary/50 transition-colors cursor-pointer">
+                <div className="border-2 border-dashed border-[#334155] rounded-radius-m p-8 text-center hover:border-primary/50 transition-colors cursor-pointer">
                   <Upload size={40} className="mx-auto text-zinc-600 mb-4" />
                   <p className="font-medium text-zinc-300">Clique ou arraste arquivos aqui</p>
                   <p className="text-sm text-muted-foreground mt-1">PDF, DOC ou DOCX (max 5MB)</p>
                 </div>
 
-                <div className="text-sm text-muted-foreground bg-[#09090b] p-3 rounded-lg">
+                <div className="text-sm text-muted-foreground bg-[#0f172a] p-3 rounded-radius-m">
                   <Brain size={14} className="inline mr-2" />
                   A IA analisará automaticamente competências, experiência e formação.
                 </div>
               </div>
 
-              <div className="p-6 border-t bg-[#09090b] flex justify-end gap-3">
+              <div className="p-6 border-t bg-[#0f172a] flex justify-end gap-3">
                 <button 
                   onClick={() => setShowUpload(false)}
-                  className="px-6 py-2 border rounded-xl font-bold hover:bg-[#18181b] transition-colors"
+                  className="px-6 py-2 border rounded-radius-m font-bold hover:bg-[#1e293b] transition-colors"
                 >
                   Cancelar
                 </button>
@@ -446,7 +442,7 @@ export default function TriagemIAPage() {
                     alert('Upload simulado! A IA está processando os currículos...');
                     setShowUpload(false);
                   }}
-                  className="px-6 py-2 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all"
+                  className="px-6 py-2 bg-primary text-white rounded-radius-m font-bold hover:bg-primary/90 transition-all"
                 >
                   Processar com IA
                 </button>

@@ -9,6 +9,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { Usuario, SistemaAcesso } from "@/infrastructure/mock/mockLogin";
 import type { SistemaAtual } from "@/domain/auth/roles";
 import { useToast } from "@/shared/ui/Toast";
+import { SideDrawer } from "@/shared/ui/SideDrawer";
+import { cn } from "@/shared/lib/cn";
 
 const ALERT_COUNT = 6;
 
@@ -59,7 +61,8 @@ export function DashboardLayout({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCommandOpen, setIsCommandOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const { warning } = useToast();
+  const [isProfileDrawerOpen, setIsProfileDrawerOpen] = useState(false);
+  const { warning, success } = useToast();
   const notificationFired = useRef(false);
 
   const openCommand = useCallback(() => setIsCommandOpen(true), []);
@@ -91,8 +94,10 @@ export function DashboardLayout({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const lockMainScroll = isMobileMenuOpen || isNotificationsOpen || isCommandOpen;
+
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-[#09090b] flex overflow-x-hidden transition-colors duration-300">
+    <div className="h-full min-h-0 w-full max-w-[100vw] bg-zinc-50 dark:bg-[#0f172a] flex overflow-hidden transition-colors duration-300">
       {/* Mobile Sidebar / Drawer */}
       <AnimatePresence>
         {isMobileMenuOpen && (
@@ -109,7 +114,7 @@ export function DashboardLayout({
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed left-0 top-0 bottom-0 w-72 bg-white dark:bg-slate-950 z-[70] lg:hidden transition-colors duration-300"
+              className="fixed left-0 top-0 bottom-0 w-72 bg-white dark:bg-[#0f172a] z-[70] lg:hidden transition-colors duration-300"
             >
               <Sidebar 
                 mobile 
@@ -137,8 +142,8 @@ export function DashboardLayout({
         />
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col lg:ml-72 w-full transition-[margin] duration-300 min-w-0">
+      {/* Main Content Area — única coluna com scroll vertical (desktop); fundo não rola */}
+      <div className="flex-1 flex flex-col min-h-0 lg:ml-72 w-full transition-[margin] duration-300 min-w-0">
         <Topbar 
           onMenuClick={() => setIsMobileMenuOpen(true)} 
           usuario={usuario}
@@ -146,10 +151,16 @@ export function DashboardLayout({
           sistemaAtual={sistemaAtual}
           onSearchOpen={openCommand}
           onNotificationsOpen={() => setIsNotificationsOpen(true)}
+          onProfileClick={() => setIsProfileDrawerOpen(true)}
           alertCount={ALERT_COUNT}
         />
-        <main className="flex-1 p-4 md:p-8 pb-24 md:pb-8">
-          <div className="max-w-7xl mx-auto space-y-8">
+        <main
+          className={cn(
+            "flex-1 min-h-0 overflow-y-auto overscroll-y-contain p-4 md:p-8 pb-24 md:pb-8",
+            lockMainScroll && "overflow-hidden overscroll-none touch-none"
+          )}
+        >
+          <div className="max-w-7xl mx-auto space-y-8 min-w-0">
             {children}
           </div>
         </main>
@@ -162,6 +173,7 @@ export function DashboardLayout({
         sistemaAtual={sistemaAtual}
         alertCount={ALERT_COUNT}
         onBellClick={() => setIsNotificationsOpen(true)}
+        onSearchClick={openCommand}
       />
 
       {/* Global Command Palette */}
@@ -172,6 +184,67 @@ export function DashboardLayout({
         open={isNotificationsOpen}
         onClose={() => setIsNotificationsOpen(false)}
       />
+
+      <SideDrawer
+        open={isProfileDrawerOpen}
+        onClose={() => setIsProfileDrawerOpen(false)}
+        title="Meu perfil"
+        subtitle="Edição rápida — alterações são apenas demonstrativas."
+        overlay="subtle"
+        zIndex={120}
+        footer={
+          <div className="flex flex-wrap justify-end gap-3">
+            <button
+              type="button"
+              onClick={() => setIsProfileDrawerOpen(false)}
+              className="px-5 py-2.5 rounded-xl font-semibold text-sm border border-zinc-300 bg-white text-zinc-800 hover:bg-zinc-50 dark:border-[#334155] dark:bg-[#1e293b] dark:text-[#f8fafc] dark:hover:bg-slate-800 transition-colors"
+            >
+              Fechar
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                success("Perfil", "Dados atualizados na demonstração (sem persistência).");
+                setIsProfileDrawerOpen(false);
+              }}
+              className="px-5 py-2.5 rounded-xl font-semibold text-sm bg-primary text-white hover:bg-primary/90 transition-colors"
+            >
+              Salvar
+            </button>
+          </div>
+        }
+      >
+        {usuario ? (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-1.5">Nome exibido</label>
+              <input
+                type="text"
+                defaultValue={usuario.nome}
+                className="w-full h-10 rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-primary/25 dark:border-[#334155] dark:bg-[#0f172a] dark:text-[#f8fafc]"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-1.5">E-mail</label>
+              <input
+                type="email"
+                defaultValue={usuario.email}
+                className="w-full h-10 rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-primary/25 dark:border-[#334155] dark:bg-[#0f172a] dark:text-[#f8fafc]"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-1.5">Setor</label>
+              <input
+                type="text"
+                defaultValue={usuario.setor}
+                className="w-full h-10 rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-primary/25 dark:border-[#334155] dark:bg-[#0f172a] dark:text-[#f8fafc]"
+              />
+            </div>
+          </div>
+        ) : (
+          <p className="text-sm text-zinc-500">Nenhum usuário autenticado.</p>
+        )}
+      </SideDrawer>
 
     </div>
   );

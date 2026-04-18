@@ -31,7 +31,7 @@ exist.
 **2. Self-anneal when things break**
 - Read error message and stack trace
 - Fix the script and test it again (unless it uses paid tokens/credits/etc—in which case you check
-w user first)
+w user first).
 
 - Update the directive with what you learned (API limits, timing, edge cases)
 - Example: you hit an API rate limit → you then look into API → find a batch endpoint that would

@@ -9,10 +9,13 @@ import {
   mockChamadosManusis,
   mockCafeAbastecimento,
   mockVouchersNatal,
+  mockProximoCafeRoda,
 } from '@/infrastructure/mock/mockServicosGerais';
-import { FileWarning, GitMerge, Coffee, ClipboardList } from 'lucide-react';
+import { FileWarning, GitMerge, ClipboardList, UsersRound } from 'lucide-react';
+import { usePageNav } from '@/features/navigation/PageNavContext';
 
 export function SGDashboardFullView() {
+  const { navigateTo } = usePageNav();
   const nfPendente = mockNotasFiscais.filter((n) => n.coluna !== 'recebida').length;
   const nfAtrasada = mockNotasFiscais.filter((n) => n.coluna === 'atrasada').length;
   const divAcessos = mockConciliacaoAcessos.filter((a) => a.duplicado || a.refeitorioDuplicado).length;
@@ -48,17 +51,17 @@ export function SGDashboardFullView() {
             </p>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
-            <div className="flex items-center justify-between p-3 rounded-lg bg-[#09090b] border border-[#27272a]">
+            <div className="flex items-center justify-between p-3 rounded-radius-m bg-[#0f172a] border border-[#334155]">
               <span className="text-zinc-400">Cruzamento VT × Estacionamento</span>
               <span className="font-bold text-amber-700">
                 {mockCruzamentoBeneficios.filter((b) => b.redundancia).length} redundâncias
               </span>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-lg bg-[#09090b] border border-[#27272a]">
+            <div className="flex items-center justify-between p-3 rounded-radius-m bg-[#0f172a] border border-[#334155]">
               <span className="text-zinc-400">Satisfação refeição (hoje)</span>
               <span className="font-bold text-emerald-700">{mockSatisfacaoAttos.indicadorDia} / 5</span>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-lg bg-[#09090b] border border-[#27272a]">
+            <div className="flex items-center justify-between p-3 rounded-radius-m bg-[#0f172a] border border-[#334155]">
               <span className="text-zinc-400">Vouchers Natal emitidos</span>
               <span className="font-bold text-zinc-200">
                 {mockVouchersNatal.filter((v) => v.emitido).length} / {mockVouchersNatal.length}
@@ -81,16 +84,39 @@ export function SGDashboardFullView() {
               Revisar {divAcessos} linha(s) com duplicidade ou classificação Elo/Posigraf.
             </p>
             <p className="flex gap-2">
-              <Coffee className="text-amber-700 shrink-0" size={18} />
-              {cafeFalha} ponto(s) de café sem abastecimento confirmado (Forms).
-            </p>
-            <p className="flex gap-2">
               <ClipboardList className="text-rose-600 shrink-0" size={18} />
               {chamadosAlerta} chamado(s) Manusis vencido(s) ou próximo(s) do prazo.
             </p>
           </CardContent>
         </Card>
       </div>
+
+      <Card className="border border-zinc-200 dark:border-zinc-800">
+        <CardContent className="pt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex items-start gap-3 min-w-0">
+            <div className="p-2 rounded-radius-m bg-primary/10 text-primary shrink-0">
+              <UsersRound size={18} aria-hidden />
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Engajamento</p>
+              <p className="font-medium text-zinc-800 dark:text-zinc-100 mt-0.5">
+                Próximo café agendado: <span className="text-primary">{mockProximoCafeRoda.quando}</span>
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {mockProximoCafeRoda.local} · {mockProximoCafeRoda.tema}
+                {cafeFalha > 0 ? ` · ${cafeFalha} ponto(s) de abastecimento pendente(s)` : ''}
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => navigateTo('sg-engajamento-cafe')}
+            className="shrink-0 inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-radius-m bg-primary text-white hover:bg-primary/90 transition-colors"
+          >
+            Abrir painel
+          </button>
+        </CardContent>
+      </Card>
     </div>
   );
 }
