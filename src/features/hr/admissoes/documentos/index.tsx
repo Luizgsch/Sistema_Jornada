@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/shared/ui/Card";
-import { Search, Filter, FileText, CheckCircle, Eye, UserPlus, Sparkles, History, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Search, Filter, FileText, CheckCircle, Eye, UserPlus, Sparkles, History, AlertCircle, CheckCircle2, ThumbsDown } from "lucide-react";
+import { FilterChipsBar, type FilterChipModel } from "@/shared/components/filters/FilterChipsBar";
+import { cn } from "@/shared/lib/cn";
 import { StatusBadge } from "@/shared/ui/StatusBadge";
 import { EmptyState } from "@/shared/ui/EmptyState";
 import { motion, AnimatePresence } from "framer-motion";
 import { SmartDrop } from "@/shared/components/automation/SmartDrop";
 import { SideDrawer } from "@/shared/ui/SideDrawer";
+import { Button } from "@/shared/ui/Button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/Tooltip";
+import { useToast } from "@/shared/ui/Toast";
 
 type DocStatus = "aprovado" | "pendente" | "reprovado" | "analise";
 
@@ -129,11 +134,125 @@ const checklistPorCandidato: Record<string, DocItem[]> = {
 /** Simula fila pessoal do colaborador no portal; vazio = «tudo em dia». */
 const mockPendenciasColaboradorPortal: { id: string; titulo: string; prazo: string }[] = [];
 
+type DocListTab = "pendentes" | "validados";
+
+type DocListaFilters = {
+  busca: string;
+  setor: string;
+  responsavel: string;
+};
+
+const defaultDocListaFilters: DocListaFilters = {
+  busca: "",
+  setor: "Todos",
+  responsavel: "Todos",
+};
+
+function candidatoNaAba(
+  c: (typeof mockCandidates)[number],
+  tab: DocListTab
+): boolean {
+  if (tab === "pendentes") return c.status === "pendente" || c.status === "analise";
+  return c.status === "completo";
+}
+
 export default function DocumentosAdmissionais() {
+  const { success } = useToast();
   const [selectedCandidate, setSelectedCandidate] = useState<(typeof mockCandidates)[number] | null>(null);
   const [showSmartDrop, setShowSmartDrop] = useState(true);
   const [statusCandidate, setStatusCandidate] = useState<(typeof mockCandidates)[number] | null>(null);
   const [statusDoc, setStatusDoc] = useState<DocItem | null>(null);
+  /** Sub-fluxo dentro do mesmo painel: visualização × justificativa de reprovação (sem segundo modal). */
+  const [docReviewPhase, setDocReviewPhase] = useState<"view" | "reprovar">("view");
+  const [motivoReprovarDraft, setMotivoReprovarDraft] = useState("");
+
+  const [docListTab, setDocListTab] = useState<DocListTab>("pendentes");
+  const [filtersByTab, setFiltersByTab] = useState<Record<DocListTab, DocListaFilters>>({
+    pendentes: { ...defaultDocListaFilters },
+    validados: { ...defaultDocListaFilters },
+  });
+  const [filtrosDrawerOpen, setFiltrosDrawerOpen] = useState(false);
+
+  const listaFilters = filtersByTab[docListTab];
+  const setListaFilters = useCallback((patch: Partial<DocListaFilters>) => {
+    setFiltersByTab((prev) => ({
+      ...prev,
+      [docListTab]: { ...prev[docListTab], ...patch },
+    }));
+  }, [docListTab]);
+
+  const clearAllListaFilters = useCallback(() => {
+    setListaFilters({ ...defaultDocListaFilters });
+  }, [setListaFilters]);
+
+  useEffect(() => {
+    setDocReviewPhase("view");
+    setMotivoReprovarDraft("");
+  }, [statusDoc?.id]);
+
+  const resetStatusDrawer = useCallback(() => {
+    setStatusCandidate(null);
+    setStatusDoc(null);
+    setDocReviewPhase("view");
+    setMotivoReprovarDraft("");
+  }, []);
+
+  const podeDecidirDoc =
+    statusDoc && (statusDoc.status === "pendente" || statusDoc.status === "analise");
+
+  const setoresOpcoes = useMemo(() => {
+    const u = [...new Set(mockCandidates.map((c) => c.setor))];
+    return ["Todos", ...u];
+  }, []);
+
+  const responsaveisOpcoes = useMemo(() => {
+    const u = [...new Set(mockCandidates.map((c) => c.responsavel))];
+    return ["Todos", ...u];
+  }, []);
+
+  const candidatosFiltrados = useMemo(() => {
+    const { busca, setor, responsavel } = listaFilters;
+    const q = busca.trim().toLowerCase();
+    const qDigits = q.replace(/\D/g, "");
+    return mockCandidates.filter((c) => {
+      if (!candidatoNaAba(c, docListTab)) return false;
+      if (setor !== "Todos" && c.setor !== setor) return false;
+      if (responsavel !== "Todos" && c.responsavel !== responsavel) return false;
+      if (!q) return true;
+      return (
+        c.nome.toLowerCase().includes(q) ||
+        c.cargo.toLowerCase().includes(q) ||
+        (qDigits.length > 0 && c.cpf.replace(/\D/g, "").includes(qDigits))
+      );
+    });
+  }, [docListTab, listaFilters]);
+
+  const filterChips: FilterChipModel[] = useMemo(() => {
+    const chips: FilterChipModel[] = [];
+    const b = listaFilters.busca.trim();
+    if (b) {
+      chips.push({
+        id: "busca",
+        label: `Busca: ${b}`,
+        onRemove: () => setListaFilters({ busca: "" }),
+      });
+    }
+    if (listaFilters.setor !== "Todos") {
+      chips.push({
+        id: "setor",
+        label: `Setor: ${listaFilters.setor}`,
+        onRemove: () => setListaFilters({ setor: "Todos" }),
+      });
+    }
+    if (listaFilters.responsavel !== "Todos") {
+      chips.push({
+        id: "resp",
+        label: `Responsável: ${listaFilters.responsavel}`,
+        onRemove: () => setListaFilters({ responsavel: "Todos" }),
+      });
+    }
+    return chips;
+  }, [listaFilters, setListaFilters]);
 
   const docsDoPainel = statusCandidate ? checklistPorCandidato[statusCandidate.id] ?? [] : [];
 
@@ -215,24 +334,92 @@ export default function DocumentosAdmissionais() {
         </CardContent>
       </Card>
 
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div
+          className="inline-flex rounded-lg border border-[#334155] bg-[#0f172a]/40 p-1 w-fit"
+          role="tablist"
+          aria-label="Visão da documentação"
+        >
+          <button
+            type="button"
+            role="tab"
+            aria-selected={docListTab === "pendentes"}
+            onClick={() => setDocListTab("pendentes")}
+            className={cn(
+              "px-4 py-2 text-sm font-semibold rounded-md transition-colors",
+              docListTab === "pendentes"
+                ? "bg-primary text-white shadow-sm"
+                : "text-zinc-400 hover:text-[#e7e5e4]"
+            )}
+          >
+            Documentos pendentes
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={docListTab === "validados"}
+            onClick={() => setDocListTab("validados")}
+            className={cn(
+              "px-4 py-2 text-sm font-semibold rounded-md transition-colors",
+              docListTab === "validados"
+                ? "bg-primary text-white shadow-sm"
+                : "text-zinc-400 hover:text-[#e7e5e4]"
+            )}
+          >
+            Validados
+          </button>
+        </div>
+        <p className="text-xs text-muted-foreground max-w-xl">
+          Cada aba mantém seus próprios filtros: ao mudar de contexto, os campos refletem apenas o que vale para a lista atual.
+        </p>
+      </div>
+
       <Card>
-        <CardHeader className="pb-3 px-6">
+        <CardHeader className="pb-3 px-6 space-y-3">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
                 type="text"
+                value={listaFilters.busca}
+                onChange={(e) => setListaFilters({ busca: e.target.value })}
                 placeholder="Pesquisar por nome ou CPF..."
                 className="w-full pl-10 h-10 rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>
-            <div className="flex items-center gap-2">
-              <button className="inline-flex items-center gap-2 h-10 px-3 border border-input rounded-md text-sm font-medium hover:bg-[#0f172a]">
+            <div className="flex flex-wrap items-center gap-2">
+              <label htmlFor="doc-filtro-setor" className="sr-only">
+                Setor
+              </label>
+              <select
+                id="doc-filtro-setor"
+                value={listaFilters.setor}
+                onChange={(e) => setListaFilters({ setor: e.target.value })}
+                className="h-10 rounded-md border border-input bg-background px-3 text-sm min-w-[10rem] focus:outline-none focus:ring-2 focus:ring-primary/20"
+              >
+                {setoresOpcoes.map((s) => (
+                  <option key={s} value={s}>
+                    {s === "Todos" ? "Todos os setores" : s}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                onClick={() => setFiltrosDrawerOpen(true)}
+                className="relative inline-flex items-center gap-2 h-10 px-3 border border-input rounded-md text-sm font-medium hover:bg-[#0f172a]"
+              >
                 <Filter size={16} />
                 Filtros
+                {!filtrosDrawerOpen && listaFilters.responsavel !== "Todos" ? (
+                  <span
+                    className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-amber-400 ring-2 ring-[#0f172a]"
+                    aria-hidden
+                  />
+                ) : null}
               </button>
             </div>
           </div>
+          <FilterChipsBar chips={filterChips} onClearAll={clearAllListaFilters} />
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
@@ -248,7 +435,22 @@ export default function DocumentosAdmissionais() {
                 </tr>
               </thead>
               <tbody>
-                {mockCandidates.map((candidate) => (
+                {candidatosFiltrados.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="py-12 px-6 text-center text-sm text-muted-foreground">
+                      Nenhum registro com os filtros atuais nesta aba. Ajuste a busca ou use{" "}
+                      <button
+                        type="button"
+                        className="font-semibold text-primary underline-offset-2 hover:underline"
+                        onClick={clearAllListaFilters}
+                      >
+                        limpar filtros
+                      </button>
+                      .
+                    </td>
+                  </tr>
+                ) : null}
+                {candidatosFiltrados.map((candidate) => (
                   <tr key={candidate.id} className="border-b hover:bg-zinc-800/20 transition-colors group">
                     <td className="py-4 px-6">
                       <div className="flex flex-col">
@@ -278,14 +480,19 @@ export default function DocumentosAdmissionais() {
                           <History size={14} />
                           Ver status
                         </button>
-                        <button
-                          type="button"
-                          onClick={() => setSelectedCandidate(candidate)}
-                          className="inline-flex items-center justify-center p-2 rounded-lg text-primary hover:bg-primary/5 transition-colors"
-                          title="Gerar documentos"
-                        >
-                          <FileText size={18} />
-                        </button>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <button
+                              type="button"
+                              onClick={() => setSelectedCandidate(candidate)}
+                              className="inline-flex items-center justify-center p-2 rounded-lg text-primary hover:bg-primary/5 transition-colors"
+                              aria-label="Gerar documentos admissionais"
+                            >
+                              <FileText size={18} />
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent>Gerar documentos admissionais</TooltipContent>
+                        </Tooltip>
                       </div>
                     </td>
                   </tr>
@@ -297,19 +504,63 @@ export default function DocumentosAdmissionais() {
       </Card>
 
       <SideDrawer
+        open={filtrosDrawerOpen}
+        onClose={() => setFiltrosDrawerOpen(false)}
+        title="Filtros adicionais"
+        subtitle="Refine a fila por responsável interno (demonstração)."
+        overlay="subtle"
+        footer={
+          <div className="flex flex-wrap justify-end gap-2">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => {
+                setListaFilters({ responsavel: "Todos" });
+              }}
+              className="rounded-xl px-5 py-2.5 font-semibold"
+            >
+              Redefinir painel
+            </Button>
+            <Button type="button" onClick={() => setFiltrosDrawerOpen(false)} className="rounded-xl px-5 py-2.5 font-semibold">
+              Aplicar e fechar
+            </Button>
+          </div>
+        }
+      >
+        <div className="space-y-2">
+          <label htmlFor="doc-filtro-resp" className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+            Responsável na conferência
+          </label>
+          <select
+            id="doc-filtro-resp"
+            value={listaFilters.responsavel}
+            onChange={(e) => setListaFilters({ responsavel: e.target.value })}
+            className="w-full h-11 rounded-lg border border-[#334155] bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+          >
+            {responsaveisOpcoes.map((r) => (
+              <option key={r} value={r}>
+                {r === "Todos" ? "Todos os responsáveis" : r}
+              </option>
+            ))}
+          </select>
+        </div>
+      </SideDrawer>
+
+      <SideDrawer
         open={!!selectedCandidate}
         onClose={() => setSelectedCandidate(null)}
         title="Gerador de documentos"
         subtitle={selectedCandidate ? `Colaborador: ${selectedCandidate.nome}` : undefined}
         overlay="subtle"
         footer={
-          <button
+          <Button
             type="button"
+            variant="ghost"
             onClick={() => setSelectedCandidate(null)}
-            className="w-full sm:w-auto sm:ml-auto px-5 py-2.5 rounded-xl font-semibold text-sm border border-[#334155] text-zinc-300 hover:bg-zinc-800 transition-colors"
+            className="w-full rounded-xl px-5 py-2.5 font-semibold sm:ml-auto sm:w-auto"
           >
             Fechar
-          </button>
+          </Button>
         }
       >
         {selectedCandidate ? (
@@ -345,15 +596,20 @@ export default function DocumentosAdmissionais() {
 
       <SideDrawer
         open={!!statusCandidate}
-        onClose={() => {
-          setStatusCandidate(null);
-          setStatusDoc(null);
-        }}
-        title={statusDoc ? statusDoc.nome : "Status da documentação"}
+        onClose={resetStatusDrawer}
+        title={
+          statusDoc
+            ? docReviewPhase === "reprovar"
+              ? `Reprovar: ${statusDoc.nome}`
+              : statusDoc.nome
+            : "Status da documentação"
+        }
         subtitle={
           statusCandidate
             ? statusDoc
-              ? `${statusCandidate.nome} · detalhe do item`
+              ? docReviewPhase === "reprovar"
+                ? `${statusCandidate.nome} · informe o motivo (mesmo painel)`
+                : `${statusCandidate.nome} · detalhe do item`
               : `${statusCandidate.nome} — conferência sem sair da lista`
             : undefined
         }
@@ -361,24 +617,25 @@ export default function DocumentosAdmissionais() {
         footer={
           <div className="flex flex-wrap gap-2 justify-end">
             {statusDoc ? (
-              <button
+              <Button
                 type="button"
-                onClick={() => setStatusDoc(null)}
-                className="px-5 py-2.5 rounded-xl font-semibold text-sm border border-[#334155] text-zinc-300 hover:bg-zinc-800 transition-colors"
+                variant="ghost"
+                onClick={() => {
+                  if (docReviewPhase === "reprovar") {
+                    setDocReviewPhase("view");
+                    setMotivoReprovarDraft("");
+                  } else {
+                    setStatusDoc(null);
+                  }
+                }}
+                className="rounded-xl px-5 py-2.5 font-semibold"
               >
-                Voltar à lista
-              </button>
+                {docReviewPhase === "reprovar" ? "Voltar ao documento" : "Voltar à lista"}
+              </Button>
             ) : null}
-            <button
-              type="button"
-              onClick={() => {
-                setStatusCandidate(null);
-                setStatusDoc(null);
-              }}
-              className="px-5 py-2.5 rounded-xl font-semibold text-sm bg-primary text-white hover:bg-primary/90 transition-colors"
-            >
+            <Button type="button" onClick={resetStatusDrawer} className="rounded-xl px-5 py-2.5 font-semibold">
               Fechar
-            </button>
+            </Button>
           </div>
         }
       >
@@ -407,32 +664,117 @@ export default function DocumentosAdmissionais() {
           </div>
         ) : null}
         {statusDoc ? (
-          <div className="space-y-6">
-            {statusDoc.status === "reprovado" && statusDoc.motivoReprovacao ? (
-              <div className="rounded-xl border border-rose-500/25 bg-rose-500/5 p-4">
-                <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 text-sm font-bold mb-2">
-                  <AlertCircle size={16} />
-                  Motivo da reprovação
+          <AnimatePresence mode="wait">
+            {docReviewPhase === "reprovar" ? (
+              <motion.div
+                key="reprovar"
+                initial={{ opacity: 0, x: 16 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -12 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-4"
+              >
+                <p className="text-xs text-zinc-500">
+                  Descreva o motivo da reprovação. O candidato receberá esta mensagem por e-mail (demonstração).
+                </p>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+                  Justificativa obrigatória
+                </label>
+                <textarea
+                  value={motivoReprovarDraft}
+                  onChange={(e) => setMotivoReprovarDraft(e.target.value)}
+                  rows={5}
+                  placeholder="Ex.: documento ilegível, dados divergentes da ficha de registro..."
+                  className="w-full rounded-xl border border-[#334155] bg-[#0f172a] px-3 py-2.5 text-sm text-[#e7e5e4] placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-y min-h-[120px]"
+                />
+                <Button
+                  type="button"
+                  disabled={motivoReprovarDraft.trim().length < 8}
+                  onClick={() => {
+                    success("Reprovação registrada", "O candidato será notificado com o motivo informado.");
+                    setStatusDoc(null);
+                    setDocReviewPhase("view");
+                    setMotivoReprovarDraft("");
+                  }}
+                  className="w-full sm:w-auto sm:ml-auto flex items-center justify-center gap-2 rounded-xl bg-rose-600 text-white hover:bg-rose-600/90 disabled:opacity-40"
+                >
+                  <ThumbsDown size={16} />
+                  Confirmar reprovação
+                </Button>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="detail"
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 12 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-6"
+              >
+                <div className="rounded-xl border border-[#334155] bg-[#0f172a]/50 p-4 flex gap-3">
+                  <div className="shrink-0 p-2 rounded-lg bg-zinc-800 text-zinc-400">
+                    <FileText size={20} />
+                  </div>
+                  <div className="min-w-0 space-y-1">
+                    <p className="text-xs font-bold uppercase tracking-wider text-zinc-500">Pré-visualização</p>
+                    <p className="text-sm text-zinc-400 leading-relaxed">
+                      Área reservada ao PDF ou imagem enviada pelo candidato. Na demonstração, apenas o status e o histórico abaixo são exibidos.
+                    </p>
+                  </div>
                 </div>
-                <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">{statusDoc.motivoReprovacao}</p>
-              </div>
-            ) : null}
-            <div>
-              <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-3 flex items-center gap-2">
-                <History size={14} />
-                Histórico
-              </h3>
-              <ul className="space-y-3 border-l-2 border-[#334155] pl-4 ml-1">
-                {statusDoc.historico.map((h, i) => (
-                  <li key={i} className="relative">
-                    <span className="absolute -left-[21px] top-1.5 h-2 w-2 rounded-full bg-primary" />
-                    <p className="text-[11px] font-mono text-zinc-500">{h.quando}</p>
-                    <p className="text-sm text-zinc-300 mt-0.5">{h.texto}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+
+                {podeDecidirDoc ? (
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        success("Documento aprovado", "O item foi marcado como aprovado na conferência.");
+                        setStatusDoc(null);
+                      }}
+                      className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 text-white hover:bg-emerald-600/90"
+                    >
+                      <CheckCircle size={16} />
+                      Aprovar documento
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setDocReviewPhase("reprovar")}
+                      className="inline-flex items-center gap-2 rounded-xl border-rose-500/40 text-rose-400 hover:bg-rose-500/10"
+                    >
+                      <ThumbsDown size={16} />
+                      Reprovar…
+                    </Button>
+                  </div>
+                ) : null}
+
+                {statusDoc.status === "reprovado" && statusDoc.motivoReprovacao ? (
+                  <div className="rounded-xl border border-rose-500/25 bg-rose-500/5 p-4">
+                    <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 text-sm font-bold mb-2">
+                      <AlertCircle size={16} />
+                      Motivo da reprovação
+                    </div>
+                    <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">{statusDoc.motivoReprovacao}</p>
+                  </div>
+                ) : null}
+                <div>
+                  <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-3 flex items-center gap-2">
+                    <History size={14} />
+                    Histórico
+                  </h3>
+                  <ul className="space-y-3 border-l-2 border-[#334155] pl-4 ml-1">
+                    {statusDoc.historico.map((h, i) => (
+                      <li key={i} className="relative">
+                        <span className="absolute -left-[21px] top-1.5 h-2 w-2 rounded-full bg-primary" />
+                        <p className="text-[11px] font-mono text-zinc-500">{h.quando}</p>
+                        <p className="text-sm text-zinc-300 mt-0.5">{h.texto}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         ) : null}
       </SideDrawer>
     </div>

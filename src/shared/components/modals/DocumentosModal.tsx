@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FileText, Download, Printer, CheckCircle2 } from 'lucide-react';
 import { useToast } from '@/shared/ui/Toast';
 import { SideDrawer } from '@/shared/ui/SideDrawer';
+import { Button } from '@/shared/ui/Button';
 
 interface Candidato {
   nome: string;
@@ -168,20 +169,16 @@ export function DocumentosModal({ candidato, onClose }: DocumentosModalProps) {
       zIndex={200}
       footer={
         <div className="flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={handlePrint}
-            className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-[#334155] text-zinc-600 dark:text-zinc-400 rounded-xl font-semibold text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-          >
+          <Button type="button" variant="outline" onClick={handlePrint} className="gap-2 rounded-xl px-4 py-2.5 font-semibold">
             <Printer size={16} /> Imprimir
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
             onClick={handleDownload}
-            className="flex-1 min-w-[140px] flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors"
+            className="min-w-[140px] flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 font-semibold"
           >
             <Download size={16} /> Baixar PDF
-          </button>
+          </Button>
         </div>
       }
     >

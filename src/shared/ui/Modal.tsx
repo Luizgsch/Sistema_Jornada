@@ -2,6 +2,7 @@ import type { FC, ReactNode } from "react";
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/Tooltip";
 
 interface ModalProps {
   isOpen: boolean;
@@ -58,17 +59,24 @@ export const Modal: FC<ModalProps> = ({
           >
             <div className="p-6 border-b border-zinc-200 dark:border-[#334155] flex items-start justify-between">
               <div>
-                <h2 className="text-lg font-semibold tracking-tighter text-zinc-800 dark:text-[#f8fafc]">{title}</h2>
+                <h2 className="text-lg font-bold tracking-tight text-zinc-900 dark:text-white">{title}</h2>
                 {description && (
                   <p className="text-sm text-zinc-500 dark:text-slate-400 mt-1">{description}</p>
                 )}
               </div>
-              <button
-                onClick={onClose}
-                className="p-2 text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-radius-m transition-colors flex-shrink-0"
-              >
-                <X size={18} />
-              </button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="p-2 text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-radius-m transition-colors flex-shrink-0"
+                    aria-label="Fechar modal"
+                  >
+                    <X size={18} />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Fechar</TooltipContent>
+              </Tooltip>
             </div>
 
             <div className="p-6 overflow-y-auto custom-scrollbar">

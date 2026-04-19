@@ -36,10 +36,34 @@ export const mockPipelineCandidatos = [
   { id: "C-5", nome: "Lucas Rocha", experiencia: "6 anos", cargo: "Dev Frontend", origem: "Indeed", etapa: "teste-tecnico" },
 ];
 
-export const mockBancoCandidatos = [
+export type CadastroCandidatoStatus = "completo" | "incompleto";
+
+/** Candidatos no banco — CPF e documentos podem ser preenchidos após o primeiro save (cadastro progressivo). */
+export type BancoCandidatoMock = {
+  id: string;
+  nome: string;
+  email: string;
+  cargo: string;
+  cidade: string;
+  experiencia: string;
+  origem: string;
+  status: string;
+  resumo: string;
+  competencias: string[];
+  telefone?: string;
+  cadastroStatus?: CadastroCandidatoStatus;
+  cpf?: string;
+  /** LinkedIn, portfolio ou link para currículo (PDF / Drive). */
+  linkCurriculoOuLinkedin?: string;
+  /** Referência opcional à vaga (id ou título). */
+  vagaVinculada?: string;
+};
+
+export const mockBancoCandidatos: BancoCandidatoMock[] = [
   {
     id: "B-1",
     nome: "Carlos Magno",
+    cpf: "321.654.987-01",
     telefone: "(11) 98888-7777",
     cidade: "São Paulo",
     cargo: "Dev Java",
@@ -50,10 +74,12 @@ export const mockBancoCandidatos = [
     resumo:
       "Especialista em APIs e microsserviços; liderou squads em e-commerce. Busca posição sênior com foco em arquitetura limpa.",
     competencias: ["Java", "Spring Boot", "Kafka", "AWS"],
+    cadastroStatus: "completo",
   },
   {
     id: "B-2",
     nome: "Beatriz Nogueira",
+    cpf: "412.983.776-22",
     telefone: "(21) 97777-6666",
     cidade: "Rio de Janeiro",
     cargo: "UX Designer",
@@ -64,10 +90,12 @@ export const mockBancoCandidatos = [
     resumo:
       "Design de produto B2B, pesquisa com usuários e handoff próximo a engenharia. Portfólio com cases em fintech.",
     competencias: ["Figma", "Pesquisa UX", "Design System", "Prototipação"],
+    cadastroStatus: "completo",
   },
   {
     id: "B-3",
     nome: "Andre Silva",
+    cpf: "529.184.330-44",
     telefone: "(31) 96666-5555",
     cidade: "Belo Horizonte",
     cargo: "Product Owner",
@@ -78,10 +106,12 @@ export const mockBancoCandidatos = [
     resumo:
       "Discovery contínuo, OKRs e priorização em squads ágeis. Experiência forte em produtos internos de RH e analytics.",
     competencias: ["Scrum", "Métricas", "Roadmap", "Stakeholders"],
+    cadastroStatus: "completo",
   },
   {
     id: "B-4",
     nome: "Fernanda Duarte",
+    cpf: "183.902.114-55",
     telefone: "(48) 95555-4444",
     cidade: "Florianópolis",
     cargo: "Analista de RH",
@@ -91,10 +121,12 @@ export const mockBancoCandidatos = [
     email: "fernanda.duarte@email.com",
     resumo: "BP, folha e recrutamento em indústria; integração com admissão digital.",
     competencias: ["Folha", "LGPD", "Employer branding", "Entrevistas"],
+    cadastroStatus: "completo",
   },
   {
     id: "B-5",
     nome: "Paulo Henrique",
+    cpf: "067.441.992-66",
     telefone: "(85) 94444-3333",
     cidade: "Fortaleza",
     cargo: "Dev Frontend",
@@ -104,10 +136,12 @@ export const mockBancoCandidatos = [
     email: "paulo.henrique@email.com",
     resumo: "Perfil júnior; não atingiu critério técnico da vaga sênior.",
     competencias: ["React", "TypeScript", "Git"],
+    cadastroStatus: "completo",
   },
   {
     id: "B-6",
     nome: "Larissa Menezes",
+    cpf: "998.120.334-77",
     telefone: "(19) 93333-2222",
     cidade: "Campinas",
     cargo: "Analista de Dados",
@@ -117,10 +151,12 @@ export const mockBancoCandidatos = [
     email: "larissa.menezes@email.com",
     resumo: "SQL e dashboards; aguardando entrevista com gestor.",
     competencias: ["SQL", "Power BI", "Python"],
+    cadastroStatus: "completo",
   },
   {
     id: "B-7",
     nome: "Otávio Rezende",
+    cpf: "245.667.801-88",
     telefone: "(61) 92222-1111",
     cidade: "Brasília",
     cargo: "Coordenador de Logística",
@@ -130,6 +166,23 @@ export const mockBancoCandidatos = [
     email: "otavio.rezende@email.com",
     resumo: "Candidato arquivado após 12 meses sem manifestação de interesse.",
     competencias: ["WMS", "Indicadores", "Equipes"],
+    cadastroStatus: "completo",
+  },
+  {
+    id: "B-8",
+    nome: "Rafael Mendes",
+    email: "rafael.mendes@email.com",
+    telefone: "(11) 98877-6655",
+    cidade: "São Paulo",
+    cargo: "Analista de Dados Pleno",
+    experiencia: "—",
+    origem: "LinkedIn",
+    status: "disponivel",
+    resumo: "Cadastro iniciado pelo RH; CPF e documentos ainda não informados.",
+    competencias: [],
+    cadastroStatus: "incompleto",
+    linkCurriculoOuLinkedin: "https://linkedin.com/in/rafaelmendes",
+    vagaVinculada: "VAG-002",
   },
 ];
 

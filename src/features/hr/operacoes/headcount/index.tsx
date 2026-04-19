@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
 import { Users, Building2, Network, PieChart as PieChartIcon, Search } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/Card';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
@@ -20,8 +21,11 @@ import {
   outrosSliceFill,
   sequentialBrandPalette,
 } from '@/shared/lib/chartDonut';
+import { useInitialSimulatedLoading } from '@/shared/hooks/useSimulatedLoading';
+import { HeadcountPageSkeleton } from '@/shared/components/skeletons/pageSkeletons';
 
 export default function HeadcountPage() {
+  const pageLoading = useInitialSimulatedLoading(560);
   const { isDark } = useTheme();
   const sliceStroke = donutSliceStroke(isDark);
   const legendStyle = donutLegendStyle(isDark);
@@ -61,8 +65,15 @@ export default function HeadcountPage() {
   const totalAtivos = mockHeadcountTable.reduce((acc, curr) => acc + curr.ativos, 0);
   const totalDisponiveis = mockHeadcountTable.reduce((acc, curr) => acc + curr.disponiveis, 0);
 
+  if (pageLoading) return <HeadcountPageSkeleton />;
+
   return (
-    <div className="space-y-8 pb-10">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.28 }}
+      className="space-y-8 pb-10"
+    >
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
@@ -77,8 +88,8 @@ export default function HeadcountPage() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total de Colaboradores</p>
-                <h3 className="text-3xl font-bold mt-1 text-[#e7e5e4]">{totalAtivos}</h3>
+                <h3 className="text-3xl font-bold tabular-nums tracking-tight text-[#e7e5e4] dark:text-white">{totalAtivos}</h3>
+                <p className="text-sm font-normal text-muted-foreground mt-1">Total de Colaboradores</p>
               </div>
               <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                 <Users size={24} />
@@ -91,8 +102,8 @@ export default function HeadcountPage() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Vagas em Aberto</p>
-                <h3 className="text-3xl font-bold mt-1 text-[#e7e5e4]">{totalDisponiveis}</h3>
+                <h3 className="text-3xl font-bold tabular-nums tracking-tight text-[#e7e5e4] dark:text-white">{totalDisponiveis}</h3>
+                <p className="text-sm font-normal text-muted-foreground mt-1">Vagas em Aberto</p>
               </div>
               <div className="h-12 w-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600">
                 <Search size={24} />
@@ -105,8 +116,8 @@ export default function HeadcountPage() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Departamentos</p>
-                <h3 className="text-3xl font-bold mt-1 text-[#e7e5e4]">{mockHeadcountTable.length}</h3>
+                <h3 className="text-3xl font-bold tabular-nums tracking-tight text-[#e7e5e4] dark:text-white">{mockHeadcountTable.length}</h3>
+                <p className="text-sm font-normal text-muted-foreground mt-1">Departamentos</p>
               </div>
               <div className="h-12 w-12 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-600">
                 <Building2 size={24} />
@@ -119,7 +130,7 @@ export default function HeadcountPage() {
       <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
         <Card className="h-full">
           <CardHeader>
-            <CardTitle className="text-lg font-bold flex items-center gap-2">
+            <CardTitle className="text-lg font-semibold flex items-center gap-2">
               <PieChartIcon className="text-primary" size={20} />
               Composição por gênero
             </CardTitle>
@@ -163,7 +174,7 @@ export default function HeadcountPage() {
 
         <Card className="h-full">
           <CardHeader>
-            <CardTitle className="text-lg font-bold flex items-center gap-2">
+            <CardTitle className="text-lg font-semibold flex items-center gap-2">
               <PieChartIcon className="text-primary" size={20} />
               Distribuição por escolaridade
             </CardTitle>
@@ -210,7 +221,7 @@ export default function HeadcountPage() {
         {/* Distribuição Chart */}
         <Card className="h-full">
           <CardHeader>
-            <CardTitle className="text-lg font-bold flex items-center gap-2">
+            <CardTitle className="text-lg font-semibold flex items-center gap-2">
               <PieChartIcon className="text-primary" size={20} />
               Distribuição por Setor
             </CardTitle>
@@ -251,7 +262,7 @@ export default function HeadcountPage() {
         {/* Organograma Simples */}
         <Card className="flex flex-col h-full overflow-hidden bg-zinc-800/20">
           <CardHeader className="bg-[#1e293b] border-b border-[#334155] pb-4">
-            <CardTitle className="text-lg font-bold flex items-center gap-2">
+            <CardTitle className="text-lg font-semibold flex items-center gap-2">
               <Network className="text-primary" size={20} />
               Organograma Resumido
             </CardTitle>
@@ -292,7 +303,7 @@ export default function HeadcountPage() {
 
       {/* Table Section */}
       <div className="space-y-4">
-        <h3 className="text-xl font-bold tracking-tight mt-6">Detalhamento de Vagas Operacionais</h3>
+        <h3 className="text-xl font-bold tracking-tight mt-6 text-[#e7e5e4] dark:text-white">Detalhamento de Vagas Operacionais</h3>
         <div className="bg-[#1e293b] rounded-radius-l  border border-[#334155] overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
@@ -323,10 +334,10 @@ export default function HeadcountPage() {
 
                   return (
                     <tr key={idx} className="border-b border-[#334155] hover:bg-zinc-800/20 transition-colors">
-                      <td className="px-6 py-4 font-semibold text-[#e7e5e4]">{item.setor}</td>
-                      <td className="px-6 py-4 text-center font-bold text-blue-600">{item.ativos}</td>
-                      <td className="px-6 py-4 text-center text-zinc-400 font-medium">{item.aprovadas}</td>
-                      <td className="px-6 py-4 text-center text-emerald-600 font-medium">{item.ocupadas}</td>
+                      <td className="px-6 py-4 font-semibold text-[#e7e5e4] dark:text-white">{item.setor}</td>
+                      <td className="px-6 py-4 text-center font-bold tabular-nums text-blue-600 dark:text-blue-400">{item.ativos}</td>
+                      <td className="px-6 py-4 text-center text-zinc-400 font-normal">{item.aprovadas}</td>
+                      <td className="px-6 py-4 text-center text-emerald-600 dark:text-emerald-400 font-normal">{item.ocupadas}</td>
                       <td className="px-6 py-4 text-center">
                         {item.disponiveis > 0 ? (
                             <span className="inline-flex w-7 h-7 bg-amber-100 text-amber-700 font-bold rounded-full items-center justify-center">
@@ -355,6 +366,6 @@ export default function HeadcountPage() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

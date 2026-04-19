@@ -40,43 +40,48 @@ export function StatCard({
         "shadow-sm dark:shadow-none",
         "transition-[border-color,box-shadow] duration-300",
         "hover:border-indigo-300/50 dark:hover:border-indigo-500/35",
+        "flex h-full flex-col gap-2 xl:flex-row xl:items-start xl:justify-between xl:gap-4",
         className
       )}
     >
-      <div className="flex items-start justify-between gap-2">
-        <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-          {label}
-        </p>
-        {Icon && (
-          <div
+      <div className="min-w-0 flex-1">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="text-3xl font-bold tabular-nums tracking-tight text-zinc-800 dark:text-white">
+              {value}
+            </p>
+            <p className="mt-1 text-sm font-normal text-zinc-500 dark:text-zinc-400">{label}</p>
+          </div>
+          {Icon && (
+            <div
+              className={cn(
+                "flex h-7 w-7 shrink-0 items-center justify-center rounded-radius-m bg-zinc-100 dark:bg-zinc-800/80",
+                iconClassName
+              )}
+            >
+              <Icon size={14} className="text-zinc-500 dark:text-zinc-400" />
+            </div>
+          )}
+        </div>
+        {delta && (
+          <p
             className={cn(
-              "flex h-7 w-7 shrink-0 items-center justify-center rounded-radius-m bg-zinc-100 dark:bg-zinc-800/80",
-              iconClassName
+              "mt-1 inline-flex w-fit rounded-radius-m px-1.5 py-0.5 text-[11px] font-semibold",
+              delta.positive === true &&
+                "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
+              delta.positive === false &&
+                "bg-rose-500/10 text-rose-700 dark:text-rose-400",
+              delta.positive === undefined && "bg-zinc-500/10 text-zinc-600 dark:text-zinc-400"
             )}
           >
-            <Icon size={14} className="text-zinc-500 dark:text-zinc-400" />
-          </div>
+            {delta.text}
+          </p>
         )}
       </div>
-      <p className="mt-2 text-3xl font-bold tabular-nums tracking-tight text-zinc-800 dark:text-[#e7e5e4]">
-        {value}
-      </p>
-      {delta && (
-        <p
-          className={cn(
-            "mt-1 inline-flex w-fit rounded-radius-m px-1.5 py-0.5 text-[11px] font-semibold",
-            delta.positive === true &&
-              "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
-            delta.positive === false &&
-              "bg-rose-500/10 text-rose-700 dark:text-rose-400",
-            delta.positive === undefined && "bg-zinc-500/10 text-zinc-600 dark:text-zinc-400"
-          )}
-        >
-          {delta.text}
-        </p>
-      )}
       {hint && (
-        <p className="mt-2 text-[11px] leading-snug text-zinc-500 dark:text-zinc-500">{hint}</p>
+        <p className="text-[11px] leading-snug text-zinc-500 dark:text-zinc-500 xl:max-w-[13rem] xl:shrink-0 xl:text-right">
+          {hint}
+        </p>
       )}
     </motion.div>
   );

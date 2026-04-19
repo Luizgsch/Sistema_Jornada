@@ -43,12 +43,12 @@ export function OperationHealthWidget({
         </p>
         <Activity size={12} className="text-zinc-400" aria-hidden />
       </div>
-      <div className="mt-4 flex items-start gap-3">
+      <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
         <span
-          className={cn("mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full", ring[status])}
+          className={cn("mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full sm:mt-2", ring[status])}
           title={status}
         />
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1 sm:max-w-none lg:max-w-[min(100%,28rem)] xl:max-w-none">
           <p className="text-lg font-bold leading-tight text-zinc-800 dark:text-[#e7e5e4]">{titulo}</p>
           <p className="mt-1 text-[11px] leading-snug text-zinc-500 dark:text-zinc-500">{detalhe}</p>
         </div>

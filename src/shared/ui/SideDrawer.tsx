@@ -2,6 +2,7 @@ import type { FC, ReactNode } from "react";
 import { useEffect, useId } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/Tooltip";
 import { cn } from "@/shared/lib/cn";
 
 export type SideDrawerOverlay = "subtle" | "transparent";
@@ -98,7 +99,7 @@ export const SideDrawer: FC<SideDrawerProps> = ({
               <div className="min-w-0 flex-1">
                 <h2
                   id={titleId}
-                  className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-[#e7e5e4]"
+                  className="text-lg font-bold tracking-tight text-zinc-900 dark:text-white"
                 >
                   {title}
                 </h2>
@@ -106,14 +107,19 @@ export const SideDrawer: FC<SideDrawerProps> = ({
                   <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-500">{subtitle}</p>
                 ) : null}
               </div>
-              <button
-                type="button"
-                onClick={onClose}
-                className="shrink-0 rounded-radius-s p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-800 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
-                aria-label="Fechar"
-              >
-                <X size={18} />
-              </button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="shrink-0 rounded-radius-s p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-800 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+                    aria-label="Fechar painel"
+                  >
+                    <X size={18} />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Fechar</TooltipContent>
+              </Tooltip>
             </div>
 
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-4 custom-scrollbar">

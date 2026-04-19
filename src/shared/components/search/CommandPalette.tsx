@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search,
   User,
+  Users,
   Briefcase,
   FileText,
   ArrowRight,
@@ -10,14 +11,24 @@ import {
   Zap,
   Hash,
   ClipboardList,
+  Settings,
 } from 'lucide-react';
 import { mockCandidates } from '@/infrastructure/mock/mockCandidatos';
 import { mockNotasFiscais, mockChamadosManusis } from '@/infrastructure/mock/mockServicosGerais';
 import { mockRecrutamentoVagas } from '@/infrastructure/mock/mockRecrutamento';
+import { mockOperacoesColaboradores } from '@/infrastructure/mock/mockOperacoes';
 import { getStatusPresentation } from '@/shared/lib/recrutamentoStatusStyles';
 import { useAuth } from '@/features/auth/AuthContext';
+import { useDebouncedValue } from '@/shared/hooks/useDebouncedValue';
+import { highlightMatch } from '@/shared/lib/highlightMatch';
 
-type ResultCategory = 'candidatos' | 'vagas' | 'notas-fiscais' | 'chamados';
+type ResultCategory =
+  | 'pessoas-candidatos'
+  | 'pessoas-colaboradores'
+  | 'vagas'
+  | 'configuracoes'
+  | 'notas-fiscais'
+  | 'chamados';
 
 interface SearchResult {
   id: string;
@@ -30,11 +41,22 @@ interface SearchResult {
 }
 
 const CATEGORY_META: Record<ResultCategory, { label: string; icon: React.ElementType; color: string; dot: string }> = {
-  candidatos:     { label: 'Candidatos',    icon: User,          color: 'text-blue-400',   dot: 'bg-blue-500/60' },
-  vagas:          { label: 'Vagas Abertas', icon: Briefcase,     color: 'text-amber-400',  dot: 'bg-amber-500/60' },
-  'notas-fiscais':{ label: 'Notas Fiscais', icon: FileText,      color: 'text-emerald-400',dot: 'bg-emerald-500/60' },
-  chamados:       { label: 'Chamados',      icon: ClipboardList, color: 'text-rose-400',   dot: 'bg-rose-500/60' },
+  'pessoas-candidatos':      { label: 'Pessoas · Candidatos',     icon: User,          color: 'text-blue-400',    dot: 'bg-blue-500/60' },
+  'pessoas-colaboradores':   { label: 'Pessoas · Colaboradores',  icon: Users,         color: 'text-sky-400',     dot: 'bg-sky-500/60' },
+  vagas:                     { label: 'Vagas',                    icon: Briefcase,     color: 'text-amber-400',   dot: 'bg-amber-500/60' },
+  configuracoes:             { label: 'Configurações',            icon: Settings,      color: 'text-violet-400',  dot: 'bg-violet-500/60' },
+  'notas-fiscais':           { label: 'Notas fiscais',            icon: FileText,      color: 'text-emerald-400', dot: 'bg-emerald-500/60' },
+  chamados:                  { label: 'Chamados',                 icon: ClipboardList, color: 'text-rose-400',    dot: 'bg-rose-500/60' },
 };
+
+const CATEGORY_ORDER: ResultCategory[] = [
+  'pessoas-candidatos',
+  'pessoas-colaboradores',
+  'vagas',
+  'configuracoes',
+  'notas-fiscais',
+  'chamados',
+];
 
 interface CommandPaletteProps {
   open: boolean;
@@ -58,12 +80,23 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
       mockCandidates.forEach((c) => {
         results.push({
           id: `cand-${c.id}`,
-          category: 'candidatos',
+          category: 'pessoas-candidatos',
           title: c.nome,
           subtitle: c.skills.join(', ') || 'Sem habilidades cadastradas',
           badge: getStatusPresentation(c.status).label,
           badgeColor: getStatusPresentation(c.status).badgeClass,
           pinned: c.status === 'Alta prioridade',
+        });
+      });
+      mockOperacoesColaboradores.forEach((colab) => {
+        results.push({
+          id: `colab-${colab.matricula}`,
+          category: 'pessoas-colaboradores',
+          title: colab.nome,
+          subtitle: `${colab.cargo} · ${colab.setor} · ${colab.matricula}`,
+          badge: colab.contrato,
+          badgeColor: 'bg-zinc-800 text-zinc-400 border-zinc-700',
+          pinned: colab.status === 'vencendo',
         });
       });
       mockRecrutamentoVagas.forEach((v) => {
@@ -75,6 +108,21 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
           badge: getStatusPresentation(v.status).label,
           badgeColor: getStatusPresentation(v.status).badgeClass,
           pinned: v.status === 'aberta',
+        });
+      });
+      const configItens: Omit<SearchResult, 'category'>[] = [
+        { id: 'cfg-cc', title: 'Início (Command Center)', subtitle: 'Painel principal do RH' },
+        { id: 'cfg-colab', title: 'Colaboradores', subtitle: 'Operações RH · cadastro e perfil' },
+        { id: 'cfg-banco', title: 'Banco de Candidatos', subtitle: 'Recrutamento · base de talentos' },
+        { id: 'cfg-cursos', title: 'Catálogo de Cursos', subtitle: 'Treinamentos · catálogo DHO' },
+        { id: 'cfg-vagas', title: 'Vagas', subtitle: 'Recrutamento · posições abertas' },
+        { id: 'cfg-pipeline', title: 'Pipeline', subtitle: 'Recrutamento · funil de seleção' },
+      ];
+      configItens.forEach((row) => {
+        results.push({
+          ...row,
+          category: 'configuracoes',
+          pinned: false,
         });
       });
     }
@@ -115,14 +163,16 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
     [ALL_RESULTS]
   );
 
-  const isSearching = query.trim().length > 0;
+  const debouncedQuery = useDebouncedValue(query, 300);
+  const isSearching = debouncedQuery.trim().length > 0;
+  const qLower = debouncedQuery.trim().toLowerCase();
 
   const filtered = isSearching
     ? ALL_RESULTS.filter(
         (r) =>
-          r.title.toLowerCase().includes(query.toLowerCase()) ||
-          r.subtitle.toLowerCase().includes(query.toLowerCase()) ||
-          (r.badge && r.badge.toLowerCase().includes(query.toLowerCase()))
+          r.title.toLowerCase().includes(qLower) ||
+          r.subtitle.toLowerCase().includes(qLower) ||
+          (r.badge && r.badge.toLowerCase().includes(qLower))
       )
     : DEFAULT_RESULTS;
 
@@ -132,7 +182,12 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
     return acc;
   }, {});
 
-  const flatList = Object.values(grouped).flat();
+  const orderedGroups = useMemo(
+    () => CATEGORY_ORDER.map((key) => [key, grouped[key] ?? []] as const).filter(([, items]) => items.length > 0),
+    [grouped]
+  );
+
+  const flatList = orderedGroups.flatMap(([, items]) => items);
 
   const handleClose = useCallback(() => {
     setQuery('');
@@ -146,7 +201,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
 
   useEffect(() => {
     setActiveIndex(0);
-  }, [query]);
+  }, [debouncedQuery]);
 
   // Scroll active item into view
   useEffect(() => {
@@ -187,7 +242,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
             transition={{ duration: 0.18, ease: 'easeOut' }}
             className="fixed top-[12vh] left-1/2 -translate-x-1/2 w-full max-w-xl z-[201] px-4"
           >
-            <div className="bg-zinc-900 border border-zinc-800 rounded-radius-l shadow-2xl shadow-black/50 overflow-hidden">
+            <div className="bg-zinc-900/95 backdrop-blur-md border border-zinc-800 rounded-radius-l shadow-2xl shadow-black/50 overflow-hidden">
 
               {/* Search input */}
               <div className="flex items-center gap-3 px-4 py-3.5 border-b border-zinc-800">
@@ -196,7 +251,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                   ref={inputRef}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Buscar candidatos, vagas, notas fiscais..."
+                  placeholder="Pessoas, vagas, configurações, notas fiscais..."
                   className="flex-1 bg-transparent text-sm text-zinc-100 placeholder:text-zinc-600 outline-none"
                 />
                 <div className="flex items-center gap-2 shrink-0">
@@ -230,11 +285,11 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                   <div className="flex flex-col items-center justify-center py-12 text-zinc-700 select-none">
                     <Hash size={28} className="mb-3 opacity-30" />
                     <p className="text-sm">Nenhum resultado para</p>
-                    <p className="text-sm font-semibold text-zinc-500 mt-0.5">"{query}"</p>
+                    <p className="text-sm font-semibold text-zinc-500 mt-0.5">"{debouncedQuery.trim()}"</p>
                   </div>
                 ) : (
-                  (Object.entries(grouped) as [string, SearchResult[]][]).map(([category, items]) => {
-                    const meta = CATEGORY_META[category as keyof typeof CATEGORY_META];
+                  orderedGroups.map(([category, items]) => {
+                    const meta = CATEGORY_META[category as ResultCategory];
                     const Icon = meta.icon;
 
                     return (
@@ -266,9 +321,11 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
 
                               <div className="flex-1 min-w-0">
                                 <p className={`text-sm font-medium truncate ${item.pinned ? 'text-zinc-100' : 'text-zinc-300'}`}>
-                                  {item.title}
+                                  {isSearching ? highlightMatch(item.title, debouncedQuery.trim()) : item.title}
                                 </p>
-                                <p className="text-xs text-zinc-600 truncate mt-0.5">{item.subtitle}</p>
+                                <p className="text-xs text-zinc-600 truncate mt-0.5">
+                                  {isSearching ? highlightMatch(item.subtitle, debouncedQuery.trim()) : item.subtitle}
+                                </p>
                               </div>
 
                               {item.badge && (

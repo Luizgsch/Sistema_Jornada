@@ -172,6 +172,7 @@ export default function UniformesPage() {
                             <Edit size={16} />
                           </button>
                           <Button
+                            variant="ghost"
                             size="sm"
                             className="h-8 text-xs font-bold"
                             isLoading={submittingMatricula === colab.matricula}

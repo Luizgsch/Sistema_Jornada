@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, Fragment } from 'react'
 import LoginPage from '@/features/login/LoginPage'
 import HRCommandCenter from '@/features/hr/command-center'
 import AdmissoesDashboard from '@/features/hr/admissoes/dashboard'
@@ -36,6 +36,7 @@ import { getSistemasPorTipo, type Usuario } from '@/infrastructure/mock/mockLogi
 import { AuthProvider, useAuth } from '@/features/auth/AuthContext'
 import { type SistemaAtual, getFirstAllowedPage } from '@/domain/auth/roles'
 import { ThemeProvider } from '@/features/theme/ThemeContext'
+import { TooltipProvider } from '@/shared/ui/Tooltip'
 
 type LoggedInAppProps = {
   activePage: string;
@@ -126,6 +127,24 @@ function LoggedInApp({
         return <IndicadoresPage />;
       case 'relatorios':
         return <RelatoriosPage />;
+      case 'operacoes-epis':
+        return (
+          <div className="p-8">
+            <h1 className="text-3xl font-bold">EPIs</h1>
+            <p className="mt-2 text-muted-foreground">
+              Controle de EPIs e conformidade — módulo em preparação para o Sistema Jornada.
+            </p>
+          </div>
+        );
+      case 'beneficios-operacionais':
+        return (
+          <div className="p-8">
+            <h1 className="text-3xl font-bold">Benefícios operacionais</h1>
+            <p className="mt-2 text-muted-foreground">
+              Visão consolidada de benefícios para operações — em preparação.
+            </p>
+          </div>
+        );
       default:
         return (
           <div className="p-8">
@@ -147,7 +166,7 @@ function LoggedInApp({
         usuario={usuario}
         onLogout={onLogout}
       >
-        {renderPage()}
+        <Fragment key={sistemaAtual}>{renderPage()}</Fragment>
       </DashboardLayout>
     </PageNavProvider>
   );
@@ -175,15 +194,18 @@ function App() {
   if (!isLoggedIn || !usuario) {
     return (
       <ThemeProvider>
-        <ToastProvider>
-          <LoginPage onLogin={handleLogin} />
-        </ToastProvider>
+        <TooltipProvider>
+          <ToastProvider>
+            <LoginPage onLogin={handleLogin} />
+          </ToastProvider>
+        </TooltipProvider>
       </ThemeProvider>
     );
   }
 
   return (
     <ThemeProvider>
+    <TooltipProvider>
     <ToastProvider>
       <AuthProvider usuario={usuario}>
         <LoggedInApp
@@ -199,6 +221,7 @@ function App() {
         />
       </AuthProvider>
     </ToastProvider>
+    </TooltipProvider>
     </ThemeProvider>
   );
 }

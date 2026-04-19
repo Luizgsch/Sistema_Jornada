@@ -16,6 +16,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { mockPipelineCandidatos } from "@/infrastructure/mock/mockRecrutamento";
 import { useToast } from "@/shared/ui/Toast";
 import { AutomationStepper } from "@/shared/components/automation/AutomationStepper";
+import { useDrawerContentReady } from "@/shared/hooks/useSimulatedLoading";
+import { PipelineCandidateDrawerHeaderSkeleton, PipelineCandidateDrawerBodySkeleton } from "@/shared/components/skeletons/pageSkeletons";
 
 
 const stages = [
@@ -41,6 +43,8 @@ export default function RecruitmentPipeline() {
     setSelectedCandidate(null);
     setShowStepper(true);
   };
+
+  const drawerReady = useDrawerContentReady(!!selectedCandidate, selectedCandidate?.id ?? null, 400);
 
   return (
     <div className="h-full flex flex-col space-y-6">
@@ -133,7 +137,15 @@ export default function RecruitmentPipeline() {
               className="fixed right-0 top-0 bottom-0 w-full max-w-lg bg-[#1e293b]  z-[110] flex flex-col"
             >
               <div className="p-8 border-b bg-[#0f172a] flex items-start justify-between">
-                <div className="flex items-center gap-5">
+                {!drawerReady ? (
+                  <PipelineCandidateDrawerHeaderSkeleton />
+                ) : (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.25 }}
+                  className="flex items-center gap-5"
+                >
                   <div className="w-20 h-20 bg-[#0f172a] rounded-radius-l flex items-center justify-center text-white text-2xl font-bold shadow-xl shadow-slate-900/20">
                     {selectedCandidate.nome.split(' ').map((n: any) => n[0]).join('')}
                   </div>
@@ -151,13 +163,23 @@ export default function RecruitmentPipeline() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
+                )}
                 <button onClick={() => setSelectedCandidate(null)} className="p-2 hover:bg-zinc-700 rounded-full transition-colors">
                   <Plus className="rotate-45" size={24} />
                 </button>
               </div>
 
               <div className="flex-1 overflow-y-auto p-8 space-y-8">
+                {!drawerReady ? (
+                  <PipelineCandidateDrawerBodySkeleton />
+                ) : (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.28 }}
+                  className="space-y-8"
+                >
                 <div className="grid grid-cols-2 gap-4">
                   <ContactCard icon={Mail} label="E-mail" value="candidato@email.com" />
                   <ContactCard icon={Phone} label="Telefone" value="(21) 98765-4321" />
@@ -210,6 +232,8 @@ export default function RecruitmentPipeline() {
                     </button>
                   )}
                 </div>
+                </motion.div>
+                )}
               </div>
             </motion.div>
           </>

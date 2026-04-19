@@ -34,14 +34,11 @@ export function KpiCard({ label, value, change, trend, delay = 0, urgency }: Kpi
             : ""
         )}
       >
-        <p className="text-xs font-semibold text-zinc-500 dark:text-zinc-500 uppercase tracking-widest leading-tight">
-          {label}
-        </p>
         <div className="flex items-end justify-between gap-2">
           <h3
             className={cn(
-              "text-3xl font-bold tracking-tight leading-none",
-              isCritical ? "neon-error" : "text-zinc-800 dark:text-[#e7e5e4]"
+              "text-3xl font-bold tabular-nums tracking-tight leading-none",
+              isCritical ? "neon-error" : "text-zinc-800 dark:text-white"
             )}
           >
             {value}
@@ -66,6 +63,7 @@ export function KpiCard({ label, value, change, trend, delay = 0, urgency }: Kpi
             </div>
           )}
         </div>
+        <p className="text-sm font-normal text-zinc-500 dark:text-zinc-400 leading-snug">{label}</p>
       </div>
     </motion.div>
   );

@@ -1,18 +1,17 @@
 import type { ReactNode } from "react";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 import { BottomNav } from "./BottomNav";
-import { NotificationDrawer } from "./NotificationDrawer";
+import { NotificationDrawer, getUnreadActionableCount } from "./NotificationDrawer";
 import { CommandPalette } from "@/shared/components/search/CommandPalette";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Usuario, SistemaAcesso } from "@/infrastructure/mock/mockLogin";
 import type { SistemaAtual } from "@/domain/auth/roles";
 import { useToast } from "@/shared/ui/Toast";
 import { SideDrawer } from "@/shared/ui/SideDrawer";
+import { Button } from "@/shared/ui/Button";
 import { cn } from "@/shared/lib/cn";
-
-const ALERT_COUNT = 6;
 
 const DELAYED_NOTIFICATIONS: Record<string, { title: string; description: string }> = {
   rh: {
@@ -62,8 +61,32 @@ export function DashboardLayout({
   const [isCommandOpen, setIsCommandOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isProfileDrawerOpen, setIsProfileDrawerOpen] = useState(false);
+  const [notificationReadIds, setNotificationReadIds] = useState<string[]>([]);
+  const [notificationDismissedIds, setNotificationDismissedIds] = useState<string[]>([]);
   const { warning, success } = useToast();
   const notificationFired = useRef(false);
+
+  const tipoUsuario = usuario?.tipo ?? "admin";
+  const alertCount = useMemo(
+    () => getUnreadActionableCount(tipoUsuario, notificationReadIds, notificationDismissedIds),
+    [tipoUsuario, notificationReadIds, notificationDismissedIds]
+  );
+
+  const handleNotificationNavigate = useCallback(
+    (pageId: string, targetSistema?: SistemaAtual) => {
+      if (targetSistema && targetSistema !== sistemaAtual) {
+        onSistemaChange?.(targetSistema);
+      }
+      onPageChange?.(pageId);
+      setIsNotificationsOpen(false);
+    },
+    [onPageChange, onSistemaChange, sistemaAtual]
+  );
+
+  useEffect(() => {
+    setNotificationReadIds([]);
+    setNotificationDismissedIds([]);
+  }, [usuario?.id]);
 
   const openCommand = useCallback(() => setIsCommandOpen(true), []);
   const closeCommand = useCallback(() => setIsCommandOpen(false), []);
@@ -152,7 +175,7 @@ export function DashboardLayout({
           onSearchOpen={openCommand}
           onNotificationsOpen={() => setIsNotificationsOpen(true)}
           onProfileClick={() => setIsProfileDrawerOpen(true)}
-          alertCount={ALERT_COUNT}
+          alertCount={alertCount}
         />
         <main
           className={cn(
@@ -160,7 +183,8 @@ export function DashboardLayout({
             lockMainScroll && "overflow-hidden overscroll-none touch-none"
           )}
         >
-          <div className="max-w-7xl mx-auto space-y-8 min-w-0">
+          {/* ~1440px cap + centralização; grids internos ganham colunas em telas largas */}
+          <div className="mx-auto w-full max-w-[90rem] space-y-8 min-w-0">
             {children}
           </div>
         </main>
@@ -171,7 +195,7 @@ export function DashboardLayout({
         activePage={activePage}
         onPageChange={onPageChange}
         sistemaAtual={sistemaAtual}
-        alertCount={ALERT_COUNT}
+        alertCount={alertCount}
         onBellClick={() => setIsNotificationsOpen(true)}
         onSearchClick={openCommand}
       />
@@ -183,6 +207,11 @@ export function DashboardLayout({
       <NotificationDrawer
         open={isNotificationsOpen}
         onClose={() => setIsNotificationsOpen(false)}
+        readIds={notificationReadIds}
+        dismissedIds={notificationDismissedIds}
+        onReadIdsChange={setNotificationReadIds}
+        onDismissedIdsChange={setNotificationDismissedIds}
+        onNavigate={handleNotificationNavigate}
       />
 
       <SideDrawer
@@ -194,23 +223,19 @@ export function DashboardLayout({
         zIndex={120}
         footer={
           <div className="flex flex-wrap justify-end gap-3">
-            <button
-              type="button"
-              onClick={() => setIsProfileDrawerOpen(false)}
-              className="px-5 py-2.5 rounded-xl font-semibold text-sm border border-zinc-300 bg-white text-zinc-800 hover:bg-zinc-50 dark:border-[#334155] dark:bg-[#1e293b] dark:text-[#f8fafc] dark:hover:bg-slate-800 transition-colors"
-            >
+            <Button type="button" variant="ghost" onClick={() => setIsProfileDrawerOpen(false)} className="rounded-xl px-5 py-2.5 font-semibold">
               Fechar
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               onClick={() => {
                 success("Perfil", "Dados atualizados na demonstração (sem persistência).");
                 setIsProfileDrawerOpen(false);
               }}
-              className="px-5 py-2.5 rounded-xl font-semibold text-sm bg-primary text-white hover:bg-primary/90 transition-colors"
+              className="rounded-xl px-5 py-2.5 font-semibold"
             >
               Salvar
-            </button>
+            </Button>
           </div>
         }
       >

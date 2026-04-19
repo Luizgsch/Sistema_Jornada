@@ -5,6 +5,7 @@ import type { SistemaAtual } from "@/domain/auth/roles";
 import { getAmbienteBadge } from "@/domain/auth/roles";
 import { PosigrafLogo } from "@/shared/components/brand/PosigrafLogo";
 import { ThemeToggle } from "@/shared/ui/ThemeToggle";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/Tooltip";
 
 interface TopbarProps {
   onMenuClick: () => void;
@@ -35,12 +36,19 @@ export function Topbar({ onMenuClick, usuario, onLogout, sistemaAtual = 'hr-core
       className="h-16 shrink-0 border-b border-zinc-200 dark:border-[#334155] bg-white/90 dark:bg-[#0f172a]/90 backdrop-blur-md z-40 flex items-center justify-between px-4 md:px-8 transition-colors duration-300"
     >
       <div className="flex items-center space-x-4 min-w-0">
-        <button
-          onClick={onMenuClick}
-          className="p-2 -ml-2 rounded-radius-m lg:hidden text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-        >
-          <Menu size={22} />
-        </button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              onClick={onMenuClick}
+              className="p-2 -ml-2 rounded-radius-m lg:hidden text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+              aria-label="Abrir menu de navegação"
+            >
+              <Menu size={22} />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>Abrir menu</TooltipContent>
+        </Tooltip>
 
         <div className="hidden lg:flex items-center pr-4 mr-1 border-r border-zinc-200 dark:border-[#334155] shrink-0">
           <PosigrafLogo variant="compact" className="opacity-80" />
@@ -58,13 +66,19 @@ export function Topbar({ onMenuClick, usuario, onLogout, sistemaAtual = 'hr-core
         </div>
 
         {/* Mobile search icon — hidden on desktop */}
-        <button
-          onClick={onSearchOpen}
-          className="md:hidden p-2 rounded-radius-m text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-          aria-label="Buscar"
-        >
-          <Search size={20} />
-        </button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              onClick={onSearchOpen}
+              className="md:hidden p-2 rounded-radius-m text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+              aria-label="Buscar"
+            >
+              <Search size={20} />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>Busca global</TooltipContent>
+        </Tooltip>
       </div>
 
       <div className="flex items-center space-x-2 md:space-x-3">
@@ -75,22 +89,44 @@ export function Topbar({ onMenuClick, usuario, onLogout, sistemaAtual = 'hr-core
             {ambiente.label}
           </span>
         )}
-        <button className="hidden sm:flex p-2 rounded-full text-zinc-500 dark:text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
-          <HelpCircle size={18} />
-        </button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              className="hidden sm:flex p-2 rounded-full text-zinc-500 dark:text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+              aria-label="Ajuda e atalhos"
+            >
+              <HelpCircle size={18} />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>Ajuda e atalhos</TooltipContent>
+        </Tooltip>
 
         {/* Theme Toggle — ao lado do sino */}
         <ThemeToggle />
 
-        <button
-          onClick={onNotificationsOpen}
-          className="p-2 rounded-full text-zinc-500 dark:text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors relative"
-        >
-          <Bell size={18} />
-          {alertCount > 0 && (
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full border-2 border-white dark:border-[#0f172a]" />
-          )}
-        </button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              onClick={onNotificationsOpen}
+              className="p-2 rounded-full text-zinc-500 dark:text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors relative"
+              aria-label={
+                alertCount > 0
+                  ? `Notificações — ${alertCount} alerta(s) crítico(s) ou de tarefa não lidos`
+                  : 'Notificações'
+              }
+            >
+              <Bell size={18} />
+              {alertCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 min-w-[1.125rem] h-[1.125rem] px-0.5 flex items-center justify-center rounded-full bg-rose-500 text-[9px] font-bold text-white border-2 border-white dark:border-[#0f172a] leading-none tabular-nums">
+                  {alertCount > 99 ? '99+' : alertCount}
+                </span>
+              )}
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>Notificações e alertas</TooltipContent>
+        </Tooltip>
 
         <div className="hidden lg:flex items-center text-xs font-medium text-zinc-500 dark:text-zinc-600 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-[#334155] px-3 py-1.5 rounded-radius-m capitalize">
           {currentDate}
@@ -114,14 +150,19 @@ export function Topbar({ onMenuClick, usuario, onLogout, sistemaAtual = 'hr-core
             <ChevronDown size={13} className="text-zinc-400 dark:text-zinc-600 hidden xs:block shrink-0" />
           </button>
           {onLogout && (
-            <button
-              type="button"
-              onClick={onLogout}
-              className="p-2 text-zinc-400 dark:text-zinc-600 hover:text-rose-500 dark:hover:text-rose-400 transition-colors rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800/80"
-              title="Sair"
-            >
-              <LogOut size={16} />
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={onLogout}
+                  className="p-2 text-zinc-400 dark:text-zinc-600 hover:text-rose-500 dark:hover:text-rose-400 transition-colors rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800/80"
+                  aria-label="Encerrar sessão"
+                >
+                  <LogOut size={16} />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Sair da conta</TooltipContent>
+            </Tooltip>
           )}
         </div>
       </div>

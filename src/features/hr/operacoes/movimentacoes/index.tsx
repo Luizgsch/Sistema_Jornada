@@ -1,25 +1,49 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/shared/ui/Button";
 import { delay } from "@/shared/lib/delay";
 import { useToast } from "@/shared/ui/Toast";
 import { Card, CardContent } from "@/shared/ui/Card";
-import { 
-  ArrowRightLeft, 
-  TrendingUp, 
+import {
+  ArrowRightLeft,
+  TrendingUp,
   History,
-  FileText,
   Clock,
-  ArrowUpRight
+  ArrowUpRight,
 } from "lucide-react";
+import type { Movimentacao } from "@/infrastructure/mock/mockOperacoes";
 import { mockMovimentacoes } from "@/infrastructure/mock/mockOperacoes";
 import { PageHeader } from "@/shared/ui/PageHeader";
 import { FiltersBar } from "@/shared/ui/FiltersBar";
 import { Modal } from "@/shared/ui/Modal";
+import { MovementCard } from "./MovementCard";
+
+function monthSectionTitle(isoDate: string) {
+  const d = new Date(`${isoDate}T12:00:00`);
+  const raw = d.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+  return raw.charAt(0).toUpperCase() + raw.slice(1);
+}
+
+function groupMovimentacoesByMonth(movs: Movimentacao[]) {
+  const sorted = [...movs].sort((a, b) => b.data.localeCompare(a.data));
+  const chunks: { key: string; title: string; items: Movimentacao[] }[] = [];
+  for (const m of sorted) {
+    const key = m.data.slice(0, 7);
+    const last = chunks[chunks.length - 1];
+    if (last?.key === key) {
+      last.items.push(m);
+    } else {
+      chunks.push({ key, title: monthSectionTitle(m.data), items: [m] });
+    }
+  }
+  return chunks;
+}
 
 export default function MovimentacoesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const { success, error } = useToast();
+
+  const groupedMovimentacoes = useMemo(() => groupMovimentacoesByMonth(mockMovimentacoes), []);
 
   const stats = {
     total: mockMovimentacoes.length,
@@ -45,65 +69,37 @@ export default function MovimentacoesPage() {
 
       <FiltersBar searchPlaceholder="Buscar no histórico de movimentações..." />
 
-      {/* Vertical Timeline UI */}
-      <div className="bg-[#1e293b] rounded-radius-l border border-[#334155]  p-6 sm:p-10 relative">
-         <div className="absolute left-10 sm:left-14 top-10 bottom-10 w-px bg-zinc-700" />
-         
-         <div className="space-y-12">
-            {mockMovimentacoes.map((mov) => (
-             <div key={mov.id} className="relative flex items-start gap-6 group">
-                <div className="absolute left-2 sm:left-6 w-8 h-8 rounded-full bg-[#1e293b] border border-[#334155]  flex items-center justify-center -translate-x-1/2 mt-1 z-10 group-hover:scale-110 group-hover:border-primary transition-all">
-                   <Clock size={14} className="text-zinc-600 group-hover:text-primary transition-colors" />
-                </div>
-                
-                <div className="ml-10 sm:ml-16 flex-1 bg-[#0f172a] border border-[#334155] rounded-radius-l p-6 transition-all group-hover: group-hover:border-primary/20">
-                   <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                      
-                      <div className="space-y-4 flex-1">
-                         <div className="flex items-center gap-3">
-                           <span className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full tracking-wider ${
-                             mov.tipo === 'Promoção' ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800'
-                           }`}>
-                             {mov.tipo}
-                           </span>
-                           <span className="text-xs font-bold text-zinc-500">{mov.data}</span>
-                         </div>
-                         
-                         <div>
-                           <h3 className="text-lg font-bold text-[#e7e5e4] group-hover:text-primary transition-colors">{mov.nome}</h3>
-                           <p className="text-sm font-mono text-zinc-500 mt-1">{mov.matricula}</p>
-                         </div>
-                         
-                         <div className="flex items-center gap-4 bg-[#1e293b] p-4 rounded-radius-m border border-[#334155] w-fit">
-                            <div>
-                               <p className="text-[10px] uppercase font-bold text-zinc-600 mb-1">Anterior</p>
-                               <span className="text-sm font-medium text-zinc-400 line-through decoration-slate-300">{mov.anterior}</span>
-                            </div>
-                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                               <ArrowUpRight size={16} className="text-primary" />
-                            </div>
-                            <div>
-                               <p className="text-[10px] uppercase font-bold text-zinc-600 mb-1">Novo</p>
-                               <span className="text-sm font-bold text-[#e7e5e4]">{mov.novo}</span>
-                            </div>
-                         </div>
-                      </div>
-                      
-                      <div className="flex flex-col items-start md:items-end gap-3 min-w-[200px]">
-                         <div className="text-left md:text-right">
-                            <p className="text-[10px] uppercase font-bold text-zinc-600">Responsável (RH)</p>
-                            <p className="text-sm font-medium text-zinc-300">{mov.responsavel}</p>
-                         </div>
-                         <button className="px-4 py-2 mt-2 bg-[#1e293b] border border-[#334155] hover:border-zinc-700 hover:bg-[#0f172a] text-zinc-300 rounded-radius-m text-xs font-bold  flex items-center gap-2 transition-all">
-                            <FileText size={14} className="text-primary" />
-                            Acessar Aditivo
-                         </button>
-                      </div>
-                   </div>
-                </div>
-             </div>
-           ))}
-         </div>
+      {/* Vertical Timeline UI — cards com divulgação progressiva */}
+      <div className="relative rounded-radius-l border border-[#334155] bg-[#1e293b] p-8 sm:p-11">
+        <div className="absolute bottom-10 left-10 top-10 w-px bg-zinc-700 sm:left-14" />
+
+        <div className="space-y-14">
+          {groupedMovimentacoes.map((group) => (
+            <section key={group.key} aria-labelledby={`mov-month-${group.key}`}>
+              <h2
+                id={`mov-month-${group.key}`}
+                className="mb-6 ml-10 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 sm:ml-16"
+              >
+                {group.title}
+              </h2>
+              <div className="space-y-8">
+                {group.items.map((mov) => (
+                  <div key={mov.id} className="group/timeline relative flex items-start gap-6">
+                    <div className="absolute left-2 top-5 z-10 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full border border-[#334155] bg-[#1e293b] transition-all group-hover/timeline:scale-110 group-hover/timeline:border-primary sm:left-6">
+                      <Clock
+                        size={14}
+                        className="text-zinc-600 transition-colors group-hover/timeline:text-primary"
+                      />
+                    </div>
+                    <div className="ml-10 min-w-0 flex-1 sm:ml-16">
+                      <MovementCard mov={mov} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
       </div>
 
       <div className="p-8 bg-[#0f172a] rounded-radius-l text-white relative overflow-hidden ">
@@ -130,7 +126,7 @@ export default function MovimentacoesPage() {
         footer={
           <>
             <Button
-              variant="secondary"
+              variant="ghost"
               type="button"
               disabled={confirmLoading}
               onClick={() => setIsModalOpen(false)}

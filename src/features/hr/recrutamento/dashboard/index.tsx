@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/Card";
-import { Briefcase, Users, CheckCircle, Clock, BarChart3, Loader2 } from "lucide-react";
+import { Briefcase, Users, CheckCircle, Clock, BarChart3 } from "lucide-react";
 import {
   mockRecrutamentoMetrics,
   mockRecrutamentoVagas,
@@ -12,9 +12,9 @@ import { StatusBadge } from "@/shared/ui/StatusBadge";
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { UserPlus, Search as SearchIcon, Users as UsersIcon, CheckCircle2 } from "lucide-react";
 import { Button } from "@/shared/ui/Button";
-import { useDelayedPending } from "@/shared/hooks/useDelayedPending";
 import { delay } from "@/shared/lib/delay";
 import { cn } from "@/shared/lib/cn";
+import { RecrutamentoBarChartSkeleton, RecrutamentoDonutChartSkeleton } from "@/shared/components/skeletons/pageSkeletons";
 import { useChartTheme } from "@/shared/components/charts/chartTheme";
 import { DonutPieChart } from "@/shared/components/charts/DonutPieChart";
 
@@ -41,8 +41,6 @@ export default function RecrutamentoDashboard() {
   const [statusDistribData, setStatusDistribData] = useState<StatusDistribRow[]>(() =>
     mockCandidatosPorStatus.map((s) => ({ name: s.name, value: s.value, statusKey: s.statusKey }))
   );
-  const showChartSpinner = useDelayedPending(chartPending, 300);
-
   useEffect(() => {
     let cancelled = false;
     setChartPending(true);
@@ -81,7 +79,7 @@ export default function RecrutamentoDashboard() {
         <p className="text-zinc-500 dark:text-slate-400 mt-2 leading-relaxed text-sm">Visão estratégica do pipeline de seleção e abertura de vagas.</p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
+      <div className="grid gap-4 sm:gap-6 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]">
         <MetricCard title="Vagas Abertas" value={mockRecrutamentoMetrics.vagasAbertas} icon={Briefcase} trend="+2 este mês" />
         <MetricCard title="Em Processo" value={mockRecrutamentoMetrics.vagasEmProcesso} icon={Clock} />
         <MetricCard title="Fechadas (Mês)" value={mockRecrutamentoMetrics.vagasFechadasMes} icon={CheckCircle} accent="emerald" />
@@ -119,17 +117,16 @@ export default function RecrutamentoDashboard() {
           </CardHeader>
           <CardContent>
             <div className="relative h-[260px]">
-              {showChartSpinner && (
+              {chartPending && (
                 <div
-                  className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-radius-m bg-[#0f172a]/85 backdrop-blur-[2px]"
+                  className="absolute inset-0 z-10 rounded-radius-m bg-[#0f172a]/80 backdrop-blur-[1px] px-2"
                   aria-busy
                   aria-label="Carregando gráfico"
                 >
-                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                  <span className="text-xs font-medium text-zinc-500">Carregando dados…</span>
+                  <RecrutamentoBarChartSkeleton />
                 </div>
               )}
-              <div className={cn("h-full", chartPending && showChartSpinner && "opacity-40 pointer-events-none")}>
+              <div className={cn("h-full", chartPending && "opacity-35 pointer-events-none")}>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={funnelData} layout="vertical">
                     <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} horizontal={true} vertical={false} />
@@ -161,17 +158,16 @@ export default function RecrutamentoDashboard() {
           </CardHeader>
           <CardContent>
             <div className="relative h-[260px]">
-              {showChartSpinner && (
+              {chartPending && (
                 <div
-                  className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-radius-m bg-[#0f172a]/85 backdrop-blur-[2px]"
+                  className="absolute inset-0 z-10 rounded-radius-m bg-[#0f172a]/80 backdrop-blur-[1px]"
                   aria-busy
                   aria-label="Carregando gráfico"
                 >
-                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                  <span className="text-xs font-medium text-zinc-500">Carregando dados…</span>
+                  <RecrutamentoDonutChartSkeleton />
                 </div>
               )}
-              <div className={cn("h-full", chartPending && showChartSpinner && "opacity-40 pointer-events-none")}>
+              <div className={cn("h-full", chartPending && "opacity-35 pointer-events-none")}>
                 <DonutPieChart
                   data={statusDistribData.map(({ name, value }) => ({ name, value }))}
                   isDark={isDark}
@@ -195,17 +191,16 @@ export default function RecrutamentoDashboard() {
           </CardHeader>
           <CardContent>
             <div className="relative max-w-lg mx-auto h-[260px]">
-              {showChartSpinner && (
+              {chartPending && (
                 <div
-                  className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-radius-m bg-[#0f172a]/85 backdrop-blur-[2px]"
+                  className="absolute inset-0 z-10 rounded-radius-m bg-[#0f172a]/80 backdrop-blur-[1px]"
                   aria-busy
                   aria-label="Carregando gráfico"
                 >
-                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                  <span className="text-xs font-medium text-zinc-500">Carregando dados…</span>
+                  <RecrutamentoDonutChartSkeleton />
                 </div>
               )}
-              <div className={cn("h-full", chartPending && showChartSpinner && "opacity-40 pointer-events-none")}>
+              <div className={cn("h-full", chartPending && "opacity-35 pointer-events-none")}>
                 <DonutPieChart
                   data={origemData}
                   isDark={isDark}
@@ -290,21 +285,21 @@ function MetricCard({ title, value, icon: Icon, trend, accent }: {
 }) {
   const style = accent ? (accentMap[accent] ?? accentMap.slate) : accentMap.slate;
   return (
-    <div className="bg-[#1e293b] rounded-radius-l border border-[#334155] hover:border-zinc-600 p-8 flex flex-col gap-4 transition-colors">
-      <div className="flex items-center justify-between">
-        <div className={`p-2 rounded-radius-m ${style.bg}`}>
+    <div className="bg-[#1e293b] rounded-radius-l border border-[#334155] hover:border-zinc-600 p-6 sm:p-8 flex flex-col gap-4 transition-colors md:flex-row md:items-center md:justify-between md:gap-6">
+      <div className="flex min-w-0 flex-1 items-start gap-4 md:items-center">
+        <div className={`p-2 rounded-radius-m shrink-0 ${style.bg}`}>
           <Icon className={`w-4 h-4 ${style.icon}`} />
         </div>
-        {trend && (
-          <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-radius-m border border-emerald-500/20">
-            {trend}
-          </span>
-        )}
+        <div className="min-w-0">
+          <p className="text-xs font-medium text-zinc-500 uppercase tracking-widest">{title}</p>
+          <span className="text-3xl font-bold text-[#e7e5e4] leading-none tracking-tighter">{value}</span>
+        </div>
       </div>
-      <div>
-        <p className="text-xs font-medium text-zinc-500 uppercase tracking-widest">{title}</p>
-        <span className="text-3xl font-bold text-[#e7e5e4] leading-none tracking-tighter">{value}</span>
-      </div>
+      {trend && (
+        <span className="inline-flex w-fit shrink-0 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-radius-m border border-emerald-500/20 md:self-center">
+          {trend}
+        </span>
+      )}
     </div>
   );
 }

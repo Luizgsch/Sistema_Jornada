@@ -4,6 +4,7 @@ import { StatusBadge } from "@/shared/ui/StatusBadge";
 import type { CandidateData } from "@/shared/types";
 import { motion } from "framer-motion";
 import { User, MoreHorizontal, Search, FileText } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/Tooltip";
 
 interface CandidateMatchTableProps {
   candidates: CandidateData[];
@@ -21,7 +22,7 @@ export function CandidateMatchTable({ candidates, showExport = false }: Candidat
       <Card className="w-full">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <div className="space-y-1">
-            <CardTitle className="text-xl md:text-2xl">Triagem de Candidatos</CardTitle>
+            <CardTitle className="text-xl md:text-2xl font-semibold">Triagem de Candidatos</CardTitle>
             <p className="text-xs md:text-sm text-zinc-500">Analise os perfis com maior compatibilidade para suas vagas abertas.</p>
           </div>
           <div className="hidden sm:flex items-center space-x-2">
@@ -49,11 +50,11 @@ export function CandidateMatchTable({ candidates, showExport = false }: Candidat
               <table className="w-full min-w-[800px]">
                 <thead className="bg-zinc-50 dark:bg-[#0f172a] border-y border-zinc-200 dark:border-zinc-800">
                   <tr>
-                    <th className="h-10 px-4 text-left align-middle font-bold text-zinc-500 dark:text-zinc-500 text-xs uppercase tracking-wide">Nome</th>
-                    <th className="h-10 px-4 text-left align-middle font-bold text-zinc-500 dark:text-zinc-500 text-xs uppercase tracking-wide">Match Score</th>
-                    <th className="h-10 px-4 text-left align-middle font-bold text-zinc-500 dark:text-zinc-500 text-xs uppercase tracking-wide">Skills Detectadas</th>
-                    <th className="h-10 px-4 text-left align-middle font-bold text-zinc-500 dark:text-zinc-500 text-xs uppercase tracking-wide">Status</th>
-                    <th className="h-10 px-4 align-middle font-bold text-zinc-500 dark:text-zinc-500 text-xs uppercase tracking-wide text-right">Ações</th>
+                    <th className="h-10 px-4 text-left align-middle font-semibold text-zinc-500 dark:text-zinc-500 text-xs uppercase tracking-wide">Nome</th>
+                    <th className="h-10 px-4 text-left align-middle font-semibold text-zinc-500 dark:text-zinc-500 text-xs uppercase tracking-wide">Match Score</th>
+                    <th className="h-10 px-4 text-left align-middle font-semibold text-zinc-500 dark:text-zinc-500 text-xs uppercase tracking-wide">Skills Detectadas</th>
+                    <th className="h-10 px-4 text-left align-middle font-semibold text-zinc-500 dark:text-zinc-500 text-xs uppercase tracking-wide">Status</th>
+                    <th className="h-10 px-4 align-middle font-semibold text-zinc-500 dark:text-zinc-500 text-xs uppercase tracking-wide text-right">Ações</th>
                   </tr>
                 </thead>
                 <tbody className="[&_tr:last-child]:border-0">
@@ -64,7 +65,7 @@ export function CandidateMatchTable({ candidates, showExport = false }: Candidat
                           <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                             <User size={16} />
                           </div>
-                          <span className="font-semibold text-zinc-800 dark:text-zinc-100">{candidate.nome}</span>
+                          <span className="font-semibold text-zinc-800 dark:text-white">{candidate.nome}</span>
                         </div>
                       </td>
                       <td className="p-4 align-middle">
@@ -87,12 +88,30 @@ export function CandidateMatchTable({ candidates, showExport = false }: Candidat
                       </td>
                       <td className="p-4 align-middle text-right">
                         <div className="flex items-center justify-end space-x-2">
-                          <button className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-radius-s transition-colors" title="Ver Currículo">
-                            <FileText size={16} className="text-zinc-400 dark:text-zinc-500" />
-                          </button>
-                          <button className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-radius-s transition-colors">
-                            <MoreHorizontal size={16} className="text-zinc-400 dark:text-zinc-500" />
-                          </button>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <button
+                                type="button"
+                                className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-radius-s transition-colors"
+                                aria-label="Ver currículo"
+                              >
+                                <FileText size={16} className="text-zinc-400 dark:text-zinc-500" />
+                              </button>
+                            </TooltipTrigger>
+                            <TooltipContent>Ver currículo</TooltipContent>
+                          </Tooltip>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <button
+                                type="button"
+                                className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-radius-s transition-colors"
+                                aria-label="Mais ações"
+                              >
+                                <MoreHorizontal size={16} className="text-zinc-400 dark:text-zinc-500" />
+                              </button>
+                            </TooltipTrigger>
+                            <TooltipContent>Mais ações</TooltipContent>
+                          </Tooltip>
                         </div>
                       </td>
                     </tr>

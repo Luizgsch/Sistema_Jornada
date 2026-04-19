@@ -85,7 +85,7 @@ export function DashboardTDView() {
   const pctMeta = Math.min(100, Math.round((mockKpiTD.horaHomemMes / mockKpiTD.horaHomemMeta) * 100));
   return (
     <div className="space-y-8">
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(220px,1fr))]">
         <KpiCard
           label="Hora-homem de treinamento (mês)"
           value={`${mockKpiTD.horaHomemMes.toLocaleString('pt-BR')} h`}
@@ -169,13 +169,10 @@ export function PresencaDigitalView() {
               Substitui listas em papel: QR no local + conferência rápida no tablet.
             </p>
           </div>
-          <button
-            type="button"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-radius-m text-sm font-medium"
-          >
+          <Button type="button" className="inline-flex items-center gap-2 rounded-radius-m px-4 text-sm font-medium">
             <QrCode size={15} />
             Gerar QR do treinamento
-          </button>
+          </Button>
         </div>
       </CardHeader>
       <CardContent className="p-0">
@@ -312,8 +309,8 @@ export function LancamentoLoteView() {
         </div>
         <Button
           type="button"
-          variant="secondary"
-          className="shrink-0 bg-[#334155] hover:bg-zinc-700 border-[#334155]"
+          variant="outline"
+          className="shrink-0"
           isLoading={uploading}
           onClick={() => fileInputRef.current?.click()}
         >
@@ -353,7 +350,7 @@ export function LancamentoLoteView() {
             </table>
           </div>
           <div className="p-4 border-t border-[#334155] flex flex-wrap gap-2 justify-end">
-            <Button type="button" variant="outline" className="border-[#334155]" disabled={confirmLoading}>
+            <Button type="button" variant="ghost" disabled={confirmLoading}>
               Descartar
             </Button>
             <Button type="button" isLoading={confirmLoading} onClick={() => void confirmarLote()}>
@@ -455,9 +452,9 @@ export function PortalGestorView() {
             </h3>
             <p className="text-sm text-zinc-500 mt-1">Protocolo, fila, priorização e histórico.</p>
           </div>
-          <button type="button" className="px-4 py-2 bg-primary text-white rounded-radius-m text-sm font-medium shrink-0 hover:bg-primary/90 transition-colors">
+          <Button type="button" className="shrink-0 rounded-radius-m px-4 text-sm font-medium">
             Nova solicitação
-          </button>
+          </Button>
         </div>
       </CardHeader>
       <CardContent className="p-0">
@@ -514,9 +511,9 @@ export function ComunicadosTDView() {
             </h3>
             <p className="text-sm text-zinc-500 mt-1">Divulgação, confirmação de presença e acompanhamento em um só fluxo.</p>
           </div>
-          <button type="button" className="px-4 py-2 border border-[#334155] rounded-radius-m text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">
+          <Button type="button" variant="outline" className="rounded-radius-m px-4 text-sm font-medium">
             Novo comunicado
-          </button>
+          </Button>
         </div>
       </CardHeader>
       <CardContent className="p-0">
@@ -665,7 +662,7 @@ export function DHOGestorTransversalView() {
           </div>
           <Button
             type="button"
-            className="w-full sm:w-auto rounded-radius-m py-2.5 px-5 bg-teal-600 hover:bg-teal-500"
+            className="w-full sm:w-auto rounded-radius-m py-2.5 px-5"
             isLoading={consultoriaLoading}
             disabled={treinoLoading}
             onClick={() => void abrirConsultoria()}
@@ -703,9 +700,9 @@ export function ConsultoriaInternaView() {
               Registro formal com histórico, responsável e prazo.
             </p>
           </div>
-          <button type="button" className="px-4 py-2 bg-primary text-white rounded-radius-m text-sm font-medium hover:bg-primary/90 transition-colors">
+          <Button type="button" className="rounded-radius-m px-4 text-sm font-medium">
             Abrir solicitação
-          </button>
+          </Button>
         </div>
       </CardHeader>
       <CardContent className="p-0">

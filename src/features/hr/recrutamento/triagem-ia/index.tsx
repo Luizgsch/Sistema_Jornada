@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/shared/ui/Card";
 import { Search, Upload, FileText, CheckCircle, XCircle, Brain, Zap, Eye } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/Tooltip";
 import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/shared/ui/Button";
 
 const mockCurriculos = [
   {
@@ -253,13 +255,19 @@ export default function TriagemIAPage() {
                     </td>
                     <td className="py-4 px-6 text-xs text-muted-foreground">{curriculo.uploadedAt}</td>
                     <td className="py-4 px-6 text-center">
-                      <button 
-                        onClick={() => setSelectedCurriculo(curriculo)}
-                        className="p-2 hover:bg-zinc-800 rounded-radius-m text-zinc-400 transition-colors"
-                        title="Ver Detalhes"
-                      >
-                        <Eye size={16} />
-                      </button>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedCurriculo(curriculo)}
+                            className="p-2 hover:bg-zinc-800 rounded-radius-m text-zinc-400 transition-colors"
+                            aria-label="Visualizar detalhes da triagem"
+                          >
+                            <Eye size={16} />
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent>Visualizar detalhes da triagem</TooltipContent>
+                      </Tooltip>
                     </td>
                   </tr>
                 ))}
@@ -295,9 +303,19 @@ export default function TriagemIAPage() {
                     <p className="text-sm text-muted-foreground">{selectedCurriculo.cargo}</p>
                   </div>
                 </div>
-                <button onClick={() => setSelectedCurriculo(null)} className="p-2 hover:bg-zinc-700 rounded-full transition-colors self-end sm:self-auto">
-                  <Upload className="rotate-45" size={20} />
-                </button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedCurriculo(null)}
+                      className="p-2 hover:bg-zinc-700 rounded-full transition-colors self-end sm:self-auto"
+                      aria-label="Fechar"
+                    >
+                      <Upload className="rotate-45" size={20} />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Fechar</TooltipContent>
+                </Tooltip>
               </div>
               
               <div className="flex-1 overflow-y-auto p-6 space-y-6">
@@ -373,15 +391,12 @@ export default function TriagemIAPage() {
               </div>
 
               <div className="p-6 border-t bg-[#0f172a] flex justify-end gap-3">
-                <button 
-                  onClick={() => setSelectedCurriculo(null)}
-                  className="px-6 py-2 border rounded-radius-m font-bold hover:bg-[#1e293b] transition-colors"
-                >
+                <Button type="button" variant="ghost" onClick={() => setSelectedCurriculo(null)} className="rounded-radius-m px-6 font-bold">
                   Fechar
-                </button>
-                <button className="px-6 py-2 bg-primary text-white rounded-radius-m font-bold hover:bg-primary/90 transition-all  ">
+                </Button>
+                <Button type="button" className="rounded-radius-m px-6 font-bold">
                   Avançar para Entrevista
-                </button>
+                </Button>
               </div>
             </motion.div>
           </div>
@@ -431,21 +446,19 @@ export default function TriagemIAPage() {
               </div>
 
               <div className="p-6 border-t bg-[#0f172a] flex justify-end gap-3">
-                <button 
-                  onClick={() => setShowUpload(false)}
-                  className="px-6 py-2 border rounded-radius-m font-bold hover:bg-[#1e293b] transition-colors"
-                >
+                <Button type="button" variant="ghost" onClick={() => setShowUpload(false)} className="rounded-radius-m px-6 font-bold">
                   Cancelar
-                </button>
-                <button 
+                </Button>
+                <Button
+                  type="button"
                   onClick={() => {
                     alert('Upload simulado! A IA está processando os currículos...');
                     setShowUpload(false);
                   }}
-                  className="px-6 py-2 bg-primary text-white rounded-radius-m font-bold hover:bg-primary/90 transition-all"
+                  className="rounded-radius-m px-6 font-bold"
                 >
                   Processar com IA
-                </button>
+                </Button>
               </div>
             </motion.div>
           </div>

@@ -21,7 +21,7 @@ export const PageHeader: FC<PageHeaderProps> = ({
   return (
     <div className="flex flex-col md:flex-row xl:items-center justify-between gap-4 mb-8">
       <div>
-        <h1 className="text-2xl md:text-3xl font-semibold tracking-tighter text-zinc-800 dark:text-[#e7e5e4]">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
           {title}
         </h1>
         <p className="text-sm text-zinc-500 mt-1 max-w-2xl leading-relaxed text-balance">

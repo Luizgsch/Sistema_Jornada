@@ -26,7 +26,7 @@ export function CommandCenterOpsBento({ onOpenVagas }: CommandCenterOpsBentoProp
   }));
 
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-12 lg:gap-4">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-12 lg:gap-4 lg:items-stretch 2xl:gap-5">
       <div className="sm:col-span-1 lg:col-span-3">
         <StatCard
           label="Headcount ativo"

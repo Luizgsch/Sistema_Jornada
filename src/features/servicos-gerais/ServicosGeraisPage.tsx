@@ -111,10 +111,10 @@ function SGEngajamentoPlaceholderView({
   Icon: LucideIcon;
 }) {
   return (
-    <Card>
+    <Card importance="low">
       <CardHeader className="border-b border-zinc-100 dark:border-zinc-800 pb-4">
-        <CardTitle className="flex items-center gap-2">
-          <Icon className="text-primary shrink-0" size={20} aria-hidden />
+        <CardTitle importance="low" className="flex items-center gap-2">
+          <Icon className="text-zinc-500 dark:text-zinc-500 shrink-0" size={20} strokeWidth={1.5} aria-hidden />
           {title}
         </CardTitle>
         <p className="text-sm text-muted-foreground mt-1">{description}</p>

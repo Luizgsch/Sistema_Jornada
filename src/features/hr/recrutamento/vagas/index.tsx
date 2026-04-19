@@ -1,17 +1,56 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/shared/ui/Card";
-import { Search, Filter, Plus, Edit, Archive, Eye } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { Search, Filter, Plus, Edit, Archive, Eye, ChevronDown, X } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/Tooltip";
 import { StatusBadge } from "@/shared/ui/StatusBadge";
 import { mockRecrutamentoVagas } from "@/infrastructure/mock/mockRecrutamento";
 import { motion, AnimatePresence } from "framer-motion";
 import { AutomationStepper } from "@/shared/components/automation/AutomationStepper";
 import { cn } from "@/shared/lib/cn";
+import { Button } from "@/shared/ui/Button";
+import { SideDrawer } from "@/shared/ui/SideDrawer";
+
+const COMPETENCIAS_SUGESTOES = [
+  "React",
+  "TypeScript",
+  "Node.js",
+  "Product discovery",
+  "Inglês avançado",
+  "SQL",
+  "Liderança",
+  "Scrum",
+];
 
 export default function GestaoVagas() {
   const [showNewVaga, setShowNewVaga] = useState(false);
+  const [novaVagaStep, setNovaVagaStep] = useState<"formulario" | "automacao">("formulario");
+  const [cargoDraft, setCargoDraft] = useState("");
+  const [competenciasSel, setCompetenciasSel] = useState<string[]>([]);
+  const [competenciasExpandido, setCompetenciasExpandido] = useState(true);
+  const [chipRemoveConfirm, setChipRemoveConfirm] = useState<string | null>(null);
+
   const [showStepper, setShowStepper] = useState(false);
   const [stepperVaga, setStepperVaga] = useState("");
   const [abaVagas, setAbaVagas] = useState<"ativas" | "arquivadas">("ativas");
+
+  const closeNovaVagaDrawer = useCallback(() => {
+    setShowNewVaga(false);
+    setNovaVagaStep("formulario");
+    setCargoDraft("");
+    setCompetenciasSel([]);
+    setChipRemoveConfirm(null);
+  }, []);
+
+  const toggleCompetencia = useCallback((c: string) => {
+    setCompetenciasSel((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
+    setChipRemoveConfirm(null);
+  }, []);
+
+  const removeCompetencia = useCallback((c: string) => {
+    setCompetenciasSel((prev) => prev.filter((x) => x !== c));
+    setChipRemoveConfirm(null);
+  }, []);
 
   const vagasVisiveis = useMemo(() => {
     if (abaVagas === "arquivadas") {
@@ -36,7 +75,14 @@ export default function GestaoVagas() {
         </div>
         <div className="flex items-center gap-2">
           <button
-            onClick={() => setShowNewVaga(true)}
+            type="button"
+            onClick={() => {
+              setNovaVagaStep("formulario");
+              setCargoDraft("");
+              setCompetenciasSel([]);
+              setChipRemoveConfirm(null);
+              setShowNewVaga(true);
+            }}
             className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-radius-m font-semibold text-sm hover:bg-primary/90 transition-all"
           >
             <Plus size={16} />
@@ -122,12 +168,12 @@ export default function GestaoVagas() {
                     </td>
                     <td className="py-3.5 px-5">
                       <div className="flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <ActionButton icon={Eye} title="Visualizar Candidatos" />
-                        <ActionButton icon={Edit} title="Editar" />
+                        <ActionButton icon={Eye} label="Visualizar candidatos da vaga" />
+                        <ActionButton icon={Edit} label="Editar vaga" />
                         {vaga.status !== "encerrado" ? (
                           <ActionButton
                             icon={Archive}
-                            title="Encerrar Vaga (dispara automações)"
+                            label="Encerrar vaga e disparar automações"
                             onClick={() => {
                               setStepperVaga(vaga.cargo);
                               setShowStepper(true);
@@ -144,102 +190,236 @@ export default function GestaoVagas() {
         </CardContent>
       </Card>
 
-      {/* Automation Stepper */}
       <AutomationStepper
         isOpen={showStepper}
         onClose={() => setShowStepper(false)}
         vagaNome={stepperVaga}
+        flow="encerramento"
       />
 
-      {/* New Vaga Modal */}
-      <AnimatePresence>
-        {showNewVaga && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <SideDrawer
+        open={showNewVaga}
+        onClose={closeNovaVagaDrawer}
+        title={novaVagaStep === "formulario" ? "Abertura de Nova Vaga" : "Publicação e integrações"}
+        subtitle={
+          novaVagaStep === "formulario"
+            ? "Passo 1 de 2 — dados da vaga (competências no painel expansível abaixo, sem pop-up extra)."
+            : "Passo 2 de 2 — automações no mesmo painel lateral."
+        }
+        zIndex={110}
+        className="md:!max-w-[min(44rem,96vw)] md:!w-[min(44rem,96vw)]"
+        footer={
+          novaVagaStep === "formulario" ? (
+            <div className="flex flex-wrap justify-end gap-2">
+              <Button type="button" variant="ghost" onClick={closeNovaVagaDrawer} className="rounded-radius-m px-5 font-semibold">
+                Cancelar
+              </Button>
+              <Button
+                type="button"
+                onClick={() => {
+                  setStepperVaga(cargoDraft.trim() || "Nova vaga");
+                  setNovaVagaStep("automacao");
+                }}
+                className="rounded-radius-m px-5 font-semibold"
+              >
+                Criar vaga
+              </Button>
+            </div>
+          ) : (
+            <p className="text-xs text-zinc-500 text-center w-full">
+              Ao concluir a automação, este painel fecha e você volta à lista.
+            </p>
+          )
+        }
+      >
+        <AnimatePresence mode="wait">
+          {novaVagaStep === "formulario" ? (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowNewVaga(false)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            />
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-radius-l overflow-hidden flex flex-col max-h-[90vh] shadow-2xl"
+              key="form"
+              initial={{ opacity: 0, x: -12 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -12 }}
+              transition={{ duration: 0.2 }}
+              className="space-y-6"
             >
-              <div className="p-5 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-zinc-900/80">
-                <h2 className="text-lg font-bold text-zinc-800 dark:text-[#e7e5e4]">Abertura de Nova Vaga</h2>
-                <button
-                  onClick={() => setShowNewVaga(false)}
-                  className="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-full transition-colors text-zinc-500 dark:text-zinc-400"
-                >
-                  <Plus className="rotate-45" size={18} />
-                </button>
+              <div className="flex gap-1" aria-hidden>
+                <div className="h-1 flex-1 rounded-full bg-primary" />
+                <div className="h-1 flex-1 rounded-full bg-zinc-600/80" />
               </div>
 
-              <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                <FormSection title="Informações Gerais">
-                  <div className="grid grid-cols-2 gap-4">
-                    <Field label="Cargo" placeholder="Ex: Desenvolvedor React" />
-                    <Field label="Setor" placeholder="Ex: Tecnologia" />
-                    <Field label="Gestor Responsável" placeholder="Ex: João Silva" />
+              <FormSection title="Informações Gerais">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                  <div className="space-y-1.5 md:col-span-2 xl:col-span-1">
+                    <label className="text-[11px] font-bold text-zinc-500 dark:text-slate-400 uppercase tracking-wide">
+                      Cargo
+                    </label>
+                    <input
+                      type="text"
+                      value={cargoDraft}
+                      onChange={(e) => setCargoDraft(e.target.value)}
+                      placeholder="Ex: Desenvolvedor React"
+                      className="w-full h-10 px-3.5 rounded-radius-m border border-zinc-200 dark:border-[#334155] bg-white dark:bg-[#0f172a] text-zinc-800 dark:text-[#f8fafc] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                    />
+                  </div>
+                  <Field label="Setor" placeholder="Ex: Tecnologia" />
+                  <Field label="Gestor Responsável" placeholder="Ex: João Silva" />
+                  <div className="md:col-span-2 xl:col-span-3">
                     <SelectField label="Motivo" options={["Expansão", "Substituição"]} />
                   </div>
-                </FormSection>
+                </div>
+              </FormSection>
 
-                <FormSection title="Configurações">
-                  <div className="grid grid-cols-2 gap-4">
-                    <SelectField label="Tipo de Contrato" options={["CLT", "PJ", "Estágio"]} />
-                    <Field label="Salário" placeholder="R$ 0.000,00" />
-                    <SelectField label="Turno" options={["Integral", "Manhã", "Tarde", "Noite"]} />
+              <FormSection title="Configurações">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                  <SelectField label="Tipo de Contrato" options={["CLT", "PJ", "Estágio"]} />
+                  <Field label="Salário" placeholder="R$ 0.000,00" />
+                  <SelectField label="Turno" options={["Integral", "Manhã", "Tarde", "Noite"]} />
+                  <div className="md:col-span-2 xl:col-span-2">
                     <Field label="Horário" placeholder="09:00 - 18:00" />
                   </div>
-                </FormSection>
+                </div>
+              </FormSection>
 
-                <FormSection title="Requisitos">
-                  <div className="space-y-4">
-                    <Field label="Experiência Mínima" placeholder="Ex: 3 anos" />
-                    <TextAreaField label="Requisitos Técnicos" placeholder="Liste as competências..." />
-                  </div>
-                </FormSection>
+              <FormSection title="Requisitos">
+                <Field label="Experiência Mínima" placeholder="Ex: 3 anos" />
+              </FormSection>
+
+              <div className="rounded-radius-m border border-zinc-200 dark:border-[#334155] bg-zinc-50/80 dark:bg-[#0f172a]/40 overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => setCompetenciasExpandido((v) => !v)}
+                  className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left hover:bg-zinc-100/80 dark:hover:bg-zinc-800/50 transition-colors"
+                >
+                  <span className="text-sm font-bold text-zinc-800 dark:text-[#e7e5e4]">
+                    Competências e requisitos comportamentais
+                  </span>
+                  <ChevronDown
+                    size={18}
+                    className={cn(
+                      "text-zinc-500 transition-transform shrink-0",
+                      competenciasExpandido ? "rotate-180" : ""
+                    )}
+                  />
+                </button>
+                <AnimatePresence initial={false}>
+                  {competenciasExpandido ? (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-4 pb-4 space-y-3 border-t border-zinc-200 dark:border-[#334155] pt-3">
+                        <p className="text-xs text-zinc-500">
+                          Marque itens da biblioteca interna — tudo neste painel, sem segunda janela modal.
+                        </p>
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {COMPETENCIAS_SUGESTOES.map((c) => (
+                            <li key={c}>
+                              <label className="flex items-center gap-2 cursor-pointer text-sm text-zinc-700 dark:text-zinc-300">
+                                <input
+                                  type="checkbox"
+                                  checked={competenciasSel.includes(c)}
+                                  onChange={() => toggleCompetencia(c)}
+                                  className="rounded border-zinc-400 text-primary focus:ring-primary/30"
+                                />
+                                {c}
+                              </label>
+                            </li>
+                          ))}
+                        </ul>
+                        {competenciasSel.length > 0 ? (
+                          <div className="flex flex-wrap gap-2 pt-1">
+                            {competenciasSel.map((c) => (
+                              <span
+                                key={c}
+                                className="inline-flex items-center gap-1 pl-2.5 pr-1 py-1 rounded-md bg-primary/10 border border-primary/25 text-xs font-medium text-primary"
+                              >
+                                {c}
+                                {chipRemoveConfirm === c ? (
+                                  <span className="flex items-center gap-1">
+                                    <button
+                                      type="button"
+                                      onClick={() => removeCompetencia(c)}
+                                      className="text-[10px] font-bold uppercase text-rose-500 px-1 py-0.5 rounded hover:bg-rose-500/10"
+                                    >
+                                      Sim, remover
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => setChipRemoveConfirm(null)}
+                                      className="p-0.5 rounded hover:bg-zinc-700 text-zinc-400"
+                                      aria-label="Cancelar"
+                                    >
+                                      <X size={12} />
+                                    </button>
+                                  </span>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    onClick={() => setChipRemoveConfirm(c)}
+                                    className="p-0.5 rounded hover:bg-primary/20 text-primary/80"
+                                    aria-label={`Remover ${c}`}
+                                  >
+                                    <X size={14} />
+                                  </button>
+                                )}
+                              </span>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+                    </motion.div>
+                  ) : null}
+                </AnimatePresence>
               </div>
 
-              <div className="p-5 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/80 flex justify-end gap-3">
-                <button
-                  onClick={() => setShowNewVaga(false)}
-                  className="px-5 py-2 border border-zinc-200 dark:border-zinc-700 rounded-radius-m font-semibold text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={() => {
-                    setShowNewVaga(false);
-                    setStepperVaga("Nova Vaga");
-                    setShowStepper(true);
-                  }}
-                  className="px-5 py-2 bg-primary text-white rounded-radius-m font-semibold text-sm hover:bg-primary/90 transition-all"
-                >
-                  Criar Vaga
-                </button>
-              </div>
+              <TextAreaField label="Observações adicionais" placeholder="Detalhes que não couberam nas competências marcadas..." />
             </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+          ) : (
+            <motion.div
+              key="auto"
+              initial={{ opacity: 0, x: 16 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 16 }}
+              transition={{ duration: 0.2 }}
+              className="space-y-4"
+            >
+              <div className="flex gap-1" aria-hidden>
+                <div className="h-1 flex-1 rounded-full bg-emerald-600" />
+                <div className="h-1 flex-1 rounded-full bg-primary" />
+              </div>
+              <AutomationStepper
+                variant="embedded"
+                flow="publicacao"
+                isOpen={novaVagaStep === "automacao"}
+                onClose={closeNovaVagaDrawer}
+                vagaNome={stepperVaga}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </SideDrawer>
     </div>
   );
 }
 
-function ActionButton({ icon: Icon, title, onClick }: any) {
+function ActionButton({ icon: Icon, label, onClick }: { icon: LucideIcon; label: string; onClick?: () => void }) {
   return (
-    <button
-      className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-radius-m text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
-      title={title}
-      onClick={onClick}
-    >
-      <Icon size={15} />
-    </button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          type="button"
+          className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-radius-m text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
+          onClick={onClick}
+          aria-label={label}
+        >
+          <Icon size={15} />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent>{label}</TooltipContent>
+    </Tooltip>
   );
 }
 

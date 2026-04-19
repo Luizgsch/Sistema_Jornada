@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/Card';
+import { Button } from '@/shared/ui/Button';
 import { KpiCard } from '@/shared/components/dashboard/KpiCard';
 import { CriticalActionsBar, type CriticalAction } from '@/shared/components/dashboard/CriticalActionsBar';
 import {
@@ -34,7 +35,10 @@ export function SGLogisticaMobileView() {
       icon: UsersRound,
       label: 'Engajamento — Café',
       sublabel: `${cafeFalha} ponto${cafeFalha !== 1 ? 's' : ''} pendente${cafeFalha !== 1 ? 's' : ''}`,
-      color: 'bg-amber-500/10 border-amber-500/20 text-amber-400',
+      color:
+        cafeFalha > 0
+          ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+          : 'bg-zinc-500/5 border-zinc-600/25 text-zinc-400',
       urgent: cafeFalha > 0,
     },
     {
@@ -188,7 +192,7 @@ export function SGDashboardLogisticaView() {
     }] : []),
     ...(cafeFalha > 0 ? [{
       id: 'cafe-pendente',
-      severity: 'warning' as const,
+      severity: 'muted' as const,
       title: 'Pontos de café não abastecidos',
       count: cafeFalha,
       description: 'Locais identificados pelo Forms sem abastecimento confirmado.',
@@ -245,7 +249,7 @@ export function SGDashboardLogisticaView() {
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground">
           <p className="flex items-center gap-2">
-            <UsersRound className="text-primary shrink-0" size={16} aria-hidden />
+            <UsersRound className="text-zinc-500 dark:text-zinc-500 shrink-0" size={16} strokeWidth={1.5} aria-hidden />
             Pontos de café pendentes:{' '}
             <span className="font-bold text-zinc-800 dark:text-zinc-100">{cafeFalha}</span>
             <span className="text-zinc-500">· detalhe em Engajamento</span>
@@ -253,29 +257,32 @@ export function SGDashboardLogisticaView() {
         </CardContent>
       </Card>
 
-      <Card className="border border-zinc-200 dark:border-zinc-800">
-        <CardContent className="pt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <Card importance="low" className="border-zinc-200/90 dark:border-zinc-700/40">
+        <CardContent className="pt-5 pb-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-start gap-3 min-w-0">
-            <div className="p-2 rounded-radius-m bg-primary/10 text-primary shrink-0">
-              <UsersRound size={18} aria-hidden />
+            <div className="p-2 rounded-radius-m bg-zinc-200/70 dark:bg-zinc-800/40 text-zinc-600 dark:text-zinc-400 shrink-0">
+              <UsersRound size={18} strokeWidth={1.5} aria-hidden />
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Engajamento</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-500">Engajamento</p>
               <p className="font-medium text-zinc-800 dark:text-zinc-100 mt-0.5">
-                Próximo café agendado: <span className="text-primary">{mockProximoCafeRoda.quando}</span>
+                Próximo café agendado: <span className="text-zinc-600 dark:text-zinc-400">{mockProximoCafeRoda.quando}</span>
               </p>
               <p className="text-sm text-muted-foreground mt-1">
                 {mockProximoCafeRoda.local} · {mockProximoCafeRoda.tema}
               </p>
             </div>
           </div>
-          <button
+          <Button
             type="button"
+            variant="outline"
+            importance="low"
+            size="sm"
+            className="shrink-0"
             onClick={() => navigateTo('sg-engajamento-cafe')}
-            className="shrink-0 inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-radius-m bg-primary text-white hover:bg-primary/90 transition-colors"
           >
             Abrir painel
-          </button>
+          </Button>
         </CardContent>
       </Card>
       </div>
@@ -467,13 +474,13 @@ export function SGChamadosView() {
 
 export function SGCafeView() {
   return (
-    <Card>
-      <CardHeader className="border-b border-zinc-100 dark:border-zinc-800 pb-4 flex flex-row items-start gap-3">
-        <div className="p-2 rounded-radius-m bg-primary/10 text-primary shrink-0">
-          <UsersRound size={20} aria-hidden />
+    <Card importance="low">
+      <CardHeader className="border-b border-zinc-100 dark:border-zinc-800 pb-4 flex flex-row items-start gap-3 sm:p-5">
+        <div className="p-2 rounded-radius-m bg-zinc-200/80 dark:bg-zinc-800/50 text-zinc-600 dark:text-zinc-400 shrink-0">
+          <UsersRound size={20} strokeWidth={1.5} aria-hidden />
         </div>
         <div className="min-w-0">
-          <CardTitle>Sociedade do Café — abastecimento</CardTitle>
+          <CardTitle importance="low">Sociedade do Café — abastecimento</CardTitle>
           <p className="text-sm text-muted-foreground mt-1">
             Leitura do Forms: locais sem registro de abastecimento aparecem no mesmo dia.
           </p>

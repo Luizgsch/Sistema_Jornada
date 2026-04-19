@@ -1,17 +1,20 @@
 import { Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/features/theme/ThemeContext';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/Tooltip';
 
 export function ThemeToggle() {
   const { toggleTheme, isDark } = useTheme();
 
   return (
-    <button
-      onClick={toggleTheme}
-      className="p-2 rounded-full text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors relative overflow-hidden"
-      title={isDark ? 'Alternar para modo claro' : 'Alternar para modo escuro'}
-      aria-label="Alternar tema claro/escuro"
-    >
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="p-2 rounded-full text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors relative overflow-hidden"
+          aria-label="Alternar tema claro/escuro"
+        >
       <AnimatePresence mode="wait" initial={false}>
         {isDark ? (
           <motion.span
@@ -37,6 +40,9 @@ export function ThemeToggle() {
           </motion.span>
         )}
       </AnimatePresence>
-    </button>
+        </button>
+      </TooltipTrigger>
+      <TooltipContent>{isDark ? 'Modo claro' : 'Modo escuro'}</TooltipContent>
+    </Tooltip>
   );
 }

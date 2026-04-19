@@ -13,6 +13,8 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@radix-ui/react-accordion": "^1.2.12",
+    "@radix-ui/react-tooltip": "^1.2.8",
     "@shadcn/ui": "^0.0.4",
     "clsx": "^2.1.1",
     "framer-motion": "^12.38.0",

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader } from "@/shared/ui/Card";
 import { Search, Send, Paperclip, Calendar, FileText, CheckCircle2, MessageCircle, MessageSquare, Phone, Video, MoreVertical, Settings, Bot, Users, Zap, Save, RefreshCw, Download, Sparkles } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/Tooltip';
 import { mockContatosComunicacao, mockMensagensPorContato } from '@/infrastructure/mock/mockComunicacao';
 import { useToast } from '@/shared/ui/Toast';
 import { cn } from '@/shared/lib/cn';
@@ -253,10 +254,38 @@ export default function WhatsAppBotPage() {
                     </div>
                   </div>
                   <div className="flex gap-1 lg:gap-2 text-zinc-500">
-                    <button className="p-2 hover:bg-zinc-800 rounded-full"><Phone size={18} /></button>
-                    <button className="p-2 hover:bg-zinc-800 rounded-full"><Video size={18} /></button>
-                    <button className="p-2 hover:bg-zinc-800 rounded-full hidden sm:block"><Search size={18} /></button>
-                    <button className="p-2 hover:bg-zinc-800 rounded-full"><MoreVertical size={18} /></button>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button type="button" className="p-2 hover:bg-zinc-800 rounded-full" aria-label="Ligar">
+                          <Phone size={18} />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>Chamada de voz</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button type="button" className="p-2 hover:bg-zinc-800 rounded-full" aria-label="Vídeo">
+                          <Video size={18} />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>Chamada de vídeo</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button type="button" className="p-2 hover:bg-zinc-800 rounded-full hidden sm:block" aria-label="Buscar">
+                          <Search size={18} />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>Buscar na conversa</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button type="button" className="p-2 hover:bg-zinc-800 rounded-full" aria-label="Mais opções">
+                          <MoreVertical size={18} />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>Mais opções</TooltipContent>
+                    </Tooltip>
                   </div>
                 </div>
 

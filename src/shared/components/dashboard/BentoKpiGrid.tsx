@@ -142,11 +142,10 @@ export function BentoKpiGrid() {
         </button>
       </div>
 
-      {/* ── Bento Grid ───────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-
-        {/* ── 1. Taxa de Turnover (col-span-2) ── sparkline indigo */}
-        <BentoCard colSpan="2" delay={0.05}>
+      {/* ── Bento: faixa superior (2 KPIs largos) + faixa inferior (auto-colunas em telas largas) ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* ── 1. Taxa de Turnover ── sparkline indigo */}
+        <BentoCard delay={0.05}>
           <div className="flex items-start justify-between gap-4 mb-4">
             <div className="flex-1 min-w-0">
               <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-500">
@@ -198,8 +197,8 @@ export function BentoKpiGrid() {
           </div>
         </BentoCard>
 
-        {/* ── 2. SLA de Contratação (col-span-2) ── semicircle */}
-        <BentoCard colSpan="2" delay={0.1} alert={slaAlert}>
+        {/* ── 2. SLA de Contratação ── semicircle */}
+        <BentoCard delay={0.1} alert={slaAlert}>
           <div className="flex items-start justify-between gap-4 mb-3">
             <div>
               <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-500">
@@ -223,9 +222,9 @@ export function BentoKpiGrid() {
             </div>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
             {/* Semicircle */}
-            <div className="shrink-0 flex flex-col items-center">
+            <div className="shrink-0 flex flex-col items-center mx-auto sm:mx-0">
               <SemiCircleProgress pct={slaOnTimePct} color="#14b8a6" />
               <p className="text-[10px] text-zinc-400 dark:text-zinc-500 -mt-1">no prazo</p>
             </div>
@@ -251,8 +250,10 @@ export function BentoKpiGrid() {
             </div>
           </div>
         </BentoCard>
+      </div>
 
-        {/* ── 3. Vagas em Aberto (col-span-1) */}
+      <div className="grid gap-4 sm:gap-6 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]">
+        {/* ── 3. Vagas em Aberto */}
         <BentoCard colSpan="1" delay={0.15}>
           <div className="flex items-start justify-between mb-3">
             <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-500 leading-tight">
@@ -343,7 +344,6 @@ export function BentoKpiGrid() {
             Candidatos em processo
           </p>
         </BentoCard>
-
       </div>
     </div>
   );

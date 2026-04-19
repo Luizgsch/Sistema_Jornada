@@ -2,7 +2,7 @@ import { AlertTriangle, AlertCircle, Info, ArrowRight, Bell } from 'lucide-react
 import { motion } from 'framer-motion';
 import { cn } from '@/shared/lib/cn';
 
-export type ActionSeverity = 'critical' | 'warning' | 'info';
+export type ActionSeverity = 'critical' | 'warning' | 'info' | 'muted';
 
 export interface CriticalAction {
   id: string;
@@ -49,6 +49,13 @@ const severityConfig: Record<ActionSeverity, {
     badgeClass: 'bg-blue-500/15 text-blue-700 dark:text-blue-300 border-blue-500/30',
     dotClass: 'bg-blue-500 dark:bg-blue-400',
   },
+  muted: {
+    icon: Info,
+    containerClass: 'border-zinc-300/80 bg-zinc-100/40 dark:border-zinc-700/40 dark:bg-zinc-900/20',
+    iconClass: 'text-zinc-500 dark:text-zinc-500',
+    badgeClass: 'bg-zinc-200/80 text-zinc-700 dark:bg-zinc-800/60 dark:text-zinc-400 border-zinc-300/80 dark:border-zinc-600/50',
+    dotClass: 'bg-zinc-400 dark:bg-zinc-600',
+  },
 };
 
 export function CriticalActionsBar({ actions, className }: CriticalActionsBarProps) {
@@ -92,7 +99,7 @@ export function CriticalActionsBar({ actions, className }: CriticalActionsBarPro
       </div>
 
       {/* Actions Grid */}
-      <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 min-[1920px]:grid-cols-5">
         {actions.map((action, i) => {
           const cfg = severityConfig[action.severity];
           const Icon = cfg.icon;
