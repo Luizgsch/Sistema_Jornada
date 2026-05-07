@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/shared/ui/Card";
 import type { LucideIcon } from "lucide-react";
-import { Search, Filter, Plus, Edit, Archive, Eye, ChevronDown, X } from "lucide-react";
+import { Search, Filter, Plus, Edit, Archive, Eye, ChevronDown, X, FileText, Stamp } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/Tooltip";
 import { StatusBadge } from "@/shared/ui/StatusBadge";
 import { mockRecrutamentoVagas } from "@/infrastructure/mock/mockRecrutamento";
@@ -12,6 +12,9 @@ import { Button } from "@/shared/ui/Button";
 import { SideDrawer } from "@/shared/ui/SideDrawer";
 import { ImportarPlanilhaButton } from "@/shared/ui/ImportarPlanilhaButton";
 import { ExportarPlanilhaButton } from "@/shared/ui/ExportarPlanilhaButton";
+import { InlineActionBar } from "@/shared/ui/InlineActionBar";
+import { useToast } from "@/shared/ui/Toast";
+import { CarimboModal } from "@/shared/ui/CarimboModal";
 
 const COMPETENCIAS_SUGESTOES = [
   "React",
@@ -25,6 +28,7 @@ const COMPETENCIAS_SUGESTOES = [
 ];
 
 export default function GestaoVagas() {
+  const { success } = useToast();
   const [showNewVaga, setShowNewVaga] = useState(false);
   const [novaVagaStep, setNovaVagaStep] = useState<"formulario" | "automacao">("formulario");
   const [cargoDraft, setCargoDraft] = useState("");
@@ -39,6 +43,16 @@ export default function GestaoVagas() {
   const [showStepper, setShowStepper] = useState(false);
   const [stepperVaga, setStepperVaga] = useState("");
   const [abaVagas, setAbaVagas] = useState<"ativas" | "arquivadas">("ativas");
+  const [selectedVagas, setSelectedVagas] = useState<string[]>([]);
+  const [showCarimboModal, setShowCarimboModal] = useState(false);
+
+  const calcularSLAUrgencia = (sla: string) => {
+    const dias = parseInt(sla);
+    if (isNaN(dias)) return 'blue';
+    if (dias < 3) return 'red';
+    if (dias < 7) return 'orange';
+    return 'green';
+  };
 
   const closeNovaVagaDrawer = useCallback(() => {
     setShowNewVaga(false);
@@ -68,6 +82,29 @@ export default function GestaoVagas() {
     }
     return mockRecrutamentoVagas.filter((v) => v.status !== "encerrado");
   }, [abaVagas]);
+
+  const toggleSelectVaga = useCallback((vagaId: string) => {
+    setSelectedVagas((prev) =>
+      prev.includes(vagaId) ? prev.filter((id) => id !== vagaId) : [...prev, vagaId]
+    );
+  }, []);
+
+  const toggleSelectAllVagas = useCallback(() => {
+    if (selectedVagas.length === vagasVisiveis.length) {
+      setSelectedVagas([]);
+    } else {
+      setSelectedVagas(vagasVisiveis.map((v) => v.id));
+    }
+  }, [selectedVagas, vagasVisiveis]);
+
+  const handleGerarPropostas = () => {
+    success(`Gerando ${selectedVagas.length} Cartas Proposta...`);
+    setSelectedVagas([]);
+  };
+
+  const handleCarimbarPDFs = () => {
+    setShowCarimboModal(true);
+  };
 
   return (
     <div className="space-y-6">
@@ -160,6 +197,14 @@ export default function GestaoVagas() {
             <table className="w-full text-left text-sm whitespace-nowrap">
               <thead className="bg-zinc-50 dark:bg-zinc-900/80 border-y border-zinc-100 dark:border-zinc-800">
                 <tr className="text-zinc-500 dark:text-zinc-400 font-semibold text-xs uppercase tracking-wider">
+                  <th className="py-3 px-3 w-10">
+                    <input
+                      type="checkbox"
+                      checked={selectedVagas.length === vagasVisiveis.length && vagasVisiveis.length > 0}
+                      onChange={toggleSelectAllVagas}
+                      className="w-4 h-4 rounded border-zinc-300 cursor-pointer"
+                    />
+                  </th>
                   <th className="py-3 px-5">Código</th>
                   <th className="py-3 px-5">Cargo</th>
                   <th className="py-3 px-5">Setor</th>
@@ -172,44 +217,100 @@ export default function GestaoVagas() {
                 </tr>
               </thead>
               <tbody>
-                {vagasVisiveis.map((vaga) => (
-                  <tr
-                    key={vaga.id}
-                    className="border-b border-zinc-100 dark:border-zinc-800 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/40 group"
-                  >
-                    <td className="py-3.5 px-5 font-mono text-xs font-bold text-primary">{vaga.id}</td>
-                    <td className="py-3.5 px-5 font-semibold text-zinc-800 dark:text-[#e7e5e4]">{vaga.cargo}</td>
-                    <td className="py-3.5 px-5 text-zinc-600 dark:text-zinc-400">{vaga.setor}</td>
-                    <td className="py-3.5 px-5 text-xs font-medium text-zinc-500 dark:text-zinc-500">{vaga.gestor}</td>
-                    <td className="py-3.5 px-5 text-zinc-600 dark:text-zinc-400">{vaga.contrato}</td>
-                    <td className="py-3.5 px-5 text-zinc-500 dark:text-zinc-400 font-medium">{vaga.salario}</td>
-                    <td className="py-3.5 px-5 text-xs font-medium text-zinc-500 dark:text-zinc-500">{vaga.sla}</td>
-                    <td className="py-3.5 px-5">
-                      <StatusBadge status={vaga.status as any} />
-                    </td>
-                    <td className="py-3.5 px-5">
-                      <div className="flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <ActionButton icon={Eye} label="Visualizar candidatos da vaga" />
-                        <ActionButton icon={Edit} label="Editar vaga" />
-                        {vaga.status !== "encerrado" ? (
-                          <ActionButton
-                            icon={Archive}
-                            label="Encerrar vaga e disparar automações"
-                            onClick={() => {
-                              setStepperVaga(vaga.cargo);
-                              setShowStepper(true);
-                            }}
-                          />
-                        ) : null}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {vagasVisiveis.map((vaga) => {
+                  const isSelected = selectedVagas.includes(vaga.id);
+                  const slaUrgencia = calcularSLAUrgencia(vaga.sla);
+                  const slaColorClass = {
+                    red: 'bg-red-100 dark:bg-red-950/30 text-red-700 dark:text-red-300',
+                    orange: 'bg-orange-100 dark:bg-orange-950/30 text-orange-700 dark:text-orange-300',
+                    green: 'bg-green-100 dark:bg-green-950/30 text-green-700 dark:text-green-300',
+                    blue: 'bg-blue-100 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300',
+                  };
+
+                  return (
+                    <tr
+                      key={vaga.id}
+                      className={cn(
+                        "border-b border-zinc-100 dark:border-zinc-800 transition-colors group cursor-pointer",
+                        isSelected
+                          ? 'bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30'
+                          : 'hover:bg-zinc-50 dark:hover:bg-zinc-800/40'
+                      )}
+                    >
+                      <td className="py-3.5 px-3">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleSelectVaga(vaga.id)}
+                          className="w-4 h-4 rounded border-zinc-300 cursor-pointer"
+                        />
+                      </td>
+                      <td className="py-3.5 px-5 font-mono text-xs font-bold text-primary">{vaga.id}</td>
+                      <td className="py-3.5 px-5 font-semibold text-zinc-800 dark:text-[#e7e5e4]">{vaga.cargo}</td>
+                      <td className="py-3.5 px-5 text-zinc-600 dark:text-zinc-400">{vaga.setor}</td>
+                      <td className="py-3.5 px-5 text-xs font-medium text-zinc-500 dark:text-zinc-500">{vaga.gestor}</td>
+                      <td className="py-3.5 px-5 text-zinc-600 dark:text-zinc-400">{vaga.contrato}</td>
+                      <td className="py-3.5 px-5 text-zinc-500 dark:text-zinc-400 font-medium">{vaga.salario}</td>
+                      <td className="py-3.5 px-5">
+                        <span className={cn('text-xs font-bold px-2 py-1 rounded', slaColorClass[slaUrgencia as keyof typeof slaColorClass])}>
+                          {vaga.sla}
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-5">
+                        <StatusBadge status={vaga.status as any} />
+                      </td>
+                      <td className="py-3.5 px-5">
+                        <div className="flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <ActionButton icon={Eye} label="Visualizar candidatos da vaga" />
+                          <ActionButton icon={Edit} label="Editar vaga" />
+                          {vaga.status !== "encerrado" ? (
+                            <ActionButton
+                              icon={Archive}
+                              label="Encerrar vaga e disparar automações"
+                              onClick={() => {
+                                setStepperVaga(vaga.cargo);
+                                setShowStepper(true);
+                              }}
+                            />
+                          ) : null}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
+
+          {selectedVagas.length > 0 && (
+            <InlineActionBar
+              selectedCount={selectedVagas.length}
+              actions={[
+                {
+                  label: "Gerar Propostas",
+                  icon: <FileText size={16} />,
+                  onClick: handleGerarPropostas,
+                  variant: "blue",
+                },
+                {
+                  label: "Carimbar PDFs",
+                  icon: <Stamp size={16} />,
+                  onClick: handleCarimbarPDFs,
+                  variant: "blue",
+                },
+              ]}
+              onClear={() => setSelectedVagas([])}
+            />
+          )}
         </CardContent>
       </Card>
+
+      <CarimboModal
+        isOpen={showCarimboModal}
+        onClose={() => setShowCarimboModal(false)}
+        mode="batch"
+        batchCount={selectedVagas.length}
+      />
 
       <AutomationStepper
         isOpen={showStepper}
