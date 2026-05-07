@@ -21,8 +21,10 @@ import {
   AlertCircle,
   CheckCircle2,
   Loader2,
+  Smartphone,
 } from 'lucide-react';
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
+import QRCode from 'qrcode';
 import { Button } from '@/shared/ui/Button';
 import { Progress } from '@/shared/ui/Common';
 import { useToast } from '@/shared/ui/Toast';
@@ -156,73 +158,167 @@ export function DashboardTDView() {
 }
 
 export function PresencaDigitalView() {
+  const { success } = useToast();
+  const [qrStates, setQrStates] = useState<Record<string, { dataUrl: string; participants: string[] }>>({});
+  const [generating, setGenerating] = useState<string | null>(null);
+
+  const gerarQr = useCallback(async (treinamentoId: string, titulo: string) => {
+    setGenerating(treinamentoId);
+    try {
+      const qrData = `PRESENCE:${treinamentoId}:${new Date().toISOString()}`;
+      const dataUrl = await QRCode.toDataURL(qrData, { width: 200, margin: 1 });
+      setQrStates((prev) => ({
+        ...prev,
+        [treinamentoId]: { dataUrl, participants: [] },
+      }));
+      success(`QR Gerado`, `QR code para "${titulo}" está pronto para scan.`);
+    } catch (err) {
+      console.error('Erro ao gerar QR:', err);
+    } finally {
+      setGenerating(null);
+    }
+  }, [success]);
+
+  const simularScan = useCallback((treinamentoId: string) => {
+    setQrStates((prev) => {
+      const current = prev[treinamentoId];
+      if (!current) return prev;
+      const newParticipants = [...current.participants, `Participante ${current.participants.length + 1}`];
+      return {
+        ...prev,
+        [treinamentoId]: { ...current, participants: newParticipants },
+      };
+    });
+  }, []);
+
   return (
-    <Card>
-      <CardHeader className="border-b border-[#334155]">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4] flex items-center gap-2">
-              <QrCode className="text-blue-400" size={20} />
-              Presença digital & checklist
-            </h3>
-            <p className="text-sm text-zinc-500 mt-1">
-              Substitui listas em papel: QR no local + conferência rápida no tablet.
-            </p>
+    <div className="space-y-6">
+      <Card>
+        <CardHeader className="border-b border-[#334155]">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4] flex items-center gap-2">
+                <QrCode className="text-blue-400" size={20} />
+                Presença digital & checklist
+              </h3>
+              <p className="text-sm text-zinc-500 mt-1">
+                Substitui listas em papel: QR no local + conferência rápida no tablet.
+              </p>
+            </div>
           </div>
-          <Button type="button" className="inline-flex items-center gap-2 rounded-radius-m px-4 text-sm font-medium">
-            <QrCode size={15} />
-            Gerar QR do treinamento
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent className="p-0">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-[#0f172a] text-zinc-500 font-medium text-xs uppercase tracking-widest">
-              <tr>
-                <th className="py-4 px-6 border-b border-[#334155]">Treinamento</th>
-                <th className="py-4 px-6 border-b border-[#334155]">Data / Local</th>
-                <th className="py-4 px-6 border-b border-[#334155] text-center">Previstos</th>
-                <th className="py-4 px-6 border-b border-[#334155] text-center">Via QR</th>
-                <th className="py-4 px-6 border-b border-[#334155] text-center">Checklist</th>
-                <th className="py-4 px-6 border-b border-[#334155]">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {mockTreinamentosPresenca.map((t) => (
-                <tr key={t.id} className="hover:bg-zinc-800/30 transition-colors">
-                  <td className="py-4 px-6 border-b border-[#334155]">
-                    <p className="font-semibold text-[#e7e5e4]">{t.titulo}</p>
-                    <p className="text-xs text-zinc-600 mt-0.5">{t.id}</p>
-                  </td>
-                  <td className="py-4 px-6 border-b border-[#334155] text-zinc-400">
-                    {t.data}
-                    <br />
-                    <span className="text-xs text-zinc-600">{t.local}</span>
-                  </td>
-                  <td className="py-4 px-6 border-b border-[#334155] text-center font-semibold text-[#e7e5e4]">{t.previstos}</td>
-                  <td className="py-4 px-6 border-b border-[#334155] text-center">
-                    <QrBadge ok={t.confirmadosQr >= t.previstos - 5} />
-                  </td>
-                  <td className="py-4 px-6 border-b border-[#334155] text-center">
-                    {t.checklistPendente === 0 ? (
-                      <span className="inline-flex items-center gap-1 text-emerald-400 text-xs font-semibold">
-                        <ListChecks size={13} /> OK
-                      </span>
-                    ) : (
-                      <span className="text-xs font-semibold neon-error-sm">{t.checklistPendente} pend.</span>
-                    )}
-                  </td>
-                  <td className="py-4 px-6 border-b border-[#334155]">
-                    <StatusPill status={t.status} />
-                  </td>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-[#0f172a] text-zinc-500 font-medium text-xs uppercase tracking-widest">
+                <tr>
+                  <th className="py-4 px-6 border-b border-[#334155]">Treinamento</th>
+                  <th className="py-4 px-6 border-b border-[#334155]">Data / Local</th>
+                  <th className="py-4 px-6 border-b border-[#334155] text-center">Previstos</th>
+                  <th className="py-4 px-6 border-b border-[#334155] text-center">Via QR</th>
+                  <th className="py-4 px-6 border-b border-[#334155] text-center">Checklist</th>
+                  <th className="py-4 px-6 border-b border-[#334155]">Status</th>
+                  <th className="py-4 px-6 border-b border-[#334155]">Ações</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </CardContent>
-    </Card>
+              </thead>
+              <tbody>
+                {mockTreinamentosPresenca.map((t) => (
+                  <tr key={t.id} className="hover:bg-zinc-800/30 transition-colors">
+                    <td className="py-4 px-6 border-b border-[#334155]">
+                      <p className="font-semibold text-[#e7e5e4]">{t.titulo}</p>
+                      <p className="text-xs text-zinc-600 mt-0.5">{t.id}</p>
+                    </td>
+                    <td className="py-4 px-6 border-b border-[#334155] text-zinc-400">
+                      {t.data}
+                      <br />
+                      <span className="text-xs text-zinc-600">{t.local}</span>
+                    </td>
+                    <td className="py-4 px-6 border-b border-[#334155] text-center font-semibold text-[#e7e5e4]">{t.previstos}</td>
+                    <td className="py-4 px-6 border-b border-[#334155] text-center">
+                      {qrStates[t.id] ? (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-radius-m text-xs font-semibold bg-green-500/10 text-green-400 border border-green-500/20">
+                          {qrStates[t.id].participants.length}/{t.previstos}
+                        </span>
+                      ) : (
+                        <QrBadge ok={t.confirmadosQr >= t.previstos - 5} />
+                      )}
+                    </td>
+                    <td className="py-4 px-6 border-b border-[#334155] text-center">
+                      {t.checklistPendente === 0 ? (
+                        <span className="inline-flex items-center gap-1 text-emerald-400 text-xs font-semibold">
+                          <ListChecks size={13} /> OK
+                        </span>
+                      ) : (
+                        <span className="text-xs font-semibold neon-error-sm">{t.checklistPendente} pend.</span>
+                      )}
+                    </td>
+                    <td className="py-4 px-6 border-b border-[#334155]">
+                      <StatusPill status={t.status} />
+                    </td>
+                    <td className="py-4 px-6 border-b border-[#334155]">
+                      <div className="flex gap-2">
+                        {!qrStates[t.id] ? (
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="secondary"
+                            isLoading={generating === t.id}
+                            onClick={() => gerarQr(t.id, t.titulo)}
+                            className="text-xs"
+                          >
+                            <QrCode size={13} />
+                            Gerar QR
+                          </Button>
+                        ) : (
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="secondary"
+                            onClick={() => simularScan(t.id)}
+                            className="text-xs"
+                          >
+                            <Smartphone size={13} />
+                            Scan
+                          </Button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {Object.entries(qrStates).map(([id, state]) => (
+        <Card key={id} className="border-blue-500/30 bg-blue-950/20">
+          <CardHeader className="pb-3">
+            <h3 className="text-sm font-semibold text-blue-300">QR Code Ativo</h3>
+          </CardHeader>
+          <CardContent className="p-6 flex flex-col md:flex-row gap-6 items-center">
+            <div className="flex-shrink-0">
+              <img src={state.dataUrl} alt="QR Code" className="w-48 h-48 border-2 border-blue-500 p-2 bg-white" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm text-zinc-400 mb-3">Participantes escaneados:</p>
+              <div className="space-y-1">
+                {state.participants.length === 0 ? (
+                  <p className="text-xs text-zinc-500 italic">Nenhum scan ainda. Clique em "Scan" para simular.</p>
+                ) : (
+                  state.participants.map((p, idx) => (
+                    <div key={idx} className="text-xs text-green-400 flex items-center gap-2">
+                      <CheckCircle2 size={12} />
+                      {p}
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
   );
 }
 
