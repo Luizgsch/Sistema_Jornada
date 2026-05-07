@@ -9,6 +9,7 @@ import {
   mockComunicadosTD,
   mockConsultoriaInterna,
 } from '@/infrastructure/mock/mockDHO';
+import { mockMovimentacoes } from '@/infrastructure/mock/mockOperacoes';
 import {
   QrCode,
   ListChecks,
@@ -23,7 +24,7 @@ import {
   Loader2,
   Smartphone,
 } from 'lucide-react';
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useMemo } from 'react';
 import QRCode from 'qrcode';
 import { Button } from '@/shared/ui/Button';
 import { Progress } from '@/shared/ui/Common';
@@ -462,6 +463,18 @@ export function LancamentoLoteView() {
 export function TrilhasCargoView() {
   const [cargoIdx, setCargoIdx] = useState(0);
   const row = mockTrilhasPorCargo[cargoIdx];
+
+  const recentMovements = useMemo(() => {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    return mockMovimentacoes.filter(
+      (m) =>
+        m.novo === row.cargo &&
+        new Date(m.data) > thirtyDaysAgo
+    );
+  }, [row.cargo]);
+
   return (
     <div className="space-y-6">
       <Card>
@@ -496,11 +509,26 @@ export function TrilhasCargoView() {
 
       <Card>
         <CardHeader className="border-b border-[#334155] pb-4">
-          <h3 className="font-semibold text-[#e7e5e4] tracking-tighter">Cursos obrigatórios — {row.cargo}</h3>
-          <p className="text-sm text-zinc-500 mt-1">
-            Pendentes pós-movimentação interna:{' '}
-            <span className="font-semibold text-amber-400">{row.pendentesPosMovimentacao}</span>
-          </p>
+          <div className="space-y-3">
+            <h3 className="font-semibold text-[#e7e5e4] tracking-tighter">Cursos obrigatórios — {row.cargo}</h3>
+            <p className="text-sm text-zinc-500 mt-1">
+              Pendentes pós-movimentação interna:{' '}
+              <span className="font-semibold text-amber-400">{row.pendentesPosMovimentacao}</span>
+            </p>
+            {recentMovements.length > 0 && (
+              <div className="flex items-start gap-3 p-3 rounded-radius-m bg-orange-500/10 border border-orange-500/30">
+                <AlertCircle size={18} className="text-orange-400 mt-0.5 shrink-0" />
+                <div className="text-sm">
+                  <p className="font-semibold text-orange-400">
+                    ⚠️ {recentMovements.length} colaborador{recentMovements.length > 1 ? "es" : ""} movimentado{recentMovements.length > 1 ? "s" : ""} recentemente
+                  </p>
+                  <p className="text-xs text-orange-300 mt-1">
+                    {recentMovements.map((m) => m.nome).join(", ")} {recentMovements.length === 1 ? "precisará" : "precisarão"} dessa trilha de treinamento.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
         </CardHeader>
         <CardContent className="p-0">
           <table className="w-full text-sm">
