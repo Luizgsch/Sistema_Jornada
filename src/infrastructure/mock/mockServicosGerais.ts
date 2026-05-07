@@ -62,6 +62,79 @@ export const mockChamadosManusis = [
   { id: 'MAN-4403', titulo: 'Ajuste ar-cond. sala reuniões', area: 'Predial', vencimento: '2026-04-12', status: 'ok' as const },
 ];
 
+export type FechamentoAttos = {
+  id: string;
+  periodo: string;
+  totalAcessos: number;
+  totalRefeicoes: number;
+  valorTotal: string;
+  status: 'pendente' | 'conciliado' | 'divergente';
+  responsavel: string;
+};
+
+export const mockFechamentosAttos: FechamentoAttos[] = [
+  { id: 'FECH-001', periodo: 'Abril/2026', totalAcessos: 1247, totalRefeicoes: 3891, valorTotal: 'R$ 87.450,00', status: 'conciliado', responsavel: 'Ana Paula' },
+  { id: 'FECH-002', periodo: 'Março/2026', totalAcessos: 1189, totalRefeicoes: 3721, valorTotal: 'R$ 83.720,00', status: 'conciliado', responsavel: 'Carlos Mendes' },
+  { id: 'FECH-003', periodo: 'Fevereiro/2026', totalAcessos: 1156, totalRefeicoes: 3614, valorTotal: 'R$ 81.315,00', status: 'divergente', responsavel: 'Mariana Costa' },
+  { id: 'FECH-004', periodo: 'Janeiro/2026', totalAcessos: 1312, totalRefeicoes: 4105, valorTotal: 'R$ 92.362,50', status: 'pendente', responsavel: 'Roberto Alves' },
+  { id: 'FECH-005', periodo: 'Dezembro/2025', totalAcessos: 1401, totalRefeicoes: 4380, valorTotal: 'R$ 98.550,00', status: 'conciliado', responsavel: 'Patricia Gomes' },
+];
+
+export type VagaEstacionamento = {
+  id: string;
+  setor: 'A' | 'B';
+  numero: number;
+  status: 'livre' | 'ocupado' | 'reservado';
+  crachaVinculado: string | null;
+  nomeColaborador: string | null;
+  temVT: boolean;
+  horaEntrada: string | null;
+};
+
+export const mockVagasEstacionamento: VagaEstacionamento[] = [
+  // Setor A: 20 vagas
+  { id: 'A01', setor: 'A', numero: 1, status: 'ocupado', crachaVinculado: '1047', nomeColaborador: 'Carlos Motta', temVT: false, horaEntrada: '07:32' },
+  { id: 'A02', setor: 'A', numero: 2, status: 'ocupado', crachaVinculado: '0892', nomeColaborador: 'Fernanda Lima', temVT: true, horaEntrada: '07:45' },
+  { id: 'A03', setor: 'A', numero: 3, status: 'livre', crachaVinculado: null, nomeColaborador: null, temVT: false, horaEntrada: null },
+  { id: 'A04', setor: 'A', numero: 4, status: 'ocupado', crachaVinculado: '2103', nomeColaborador: 'Diego Santos', temVT: false, horaEntrada: '06:15' },
+  { id: 'A05', setor: 'A', numero: 5, status: 'livre', crachaVinculado: null, nomeColaborador: null, temVT: false, horaEntrada: null },
+  { id: 'A06', setor: 'A', numero: 6, status: 'ocupado', crachaVinculado: '1834', nomeColaborador: 'Juliana Rocha', temVT: true, horaEntrada: '07:18' },
+  { id: 'A07', setor: 'A', numero: 7, status: 'livre', crachaVinculado: null, nomeColaborador: null, temVT: false, horaEntrada: null },
+  { id: 'A08', setor: 'A', numero: 8, status: 'ocupado', crachaVinculado: '0445', nomeColaborador: 'Roberto Silva', temVT: false, horaEntrada: '07:22' },
+  { id: 'A09', setor: 'A', numero: 9, status: 'livre', crachaVinculado: null, nomeColaborador: null, temVT: false, horaEntrada: null },
+  { id: 'A10', setor: 'A', numero: 10, status: 'ocupado', crachaVinculado: '1956', nomeColaborador: 'Patricia Gomes', temVT: false, horaEntrada: '07:40' },
+  { id: 'A11', setor: 'A', numero: 11, status: 'livre', crachaVinculado: null, nomeColaborador: null, temVT: false, horaEntrada: null },
+  { id: 'A12', setor: 'A', numero: 12, status: 'ocupado', crachaVinculado: '0721', nomeColaborador: 'Marcos Oliveira', temVT: true, horaEntrada: '07:25' },
+  { id: 'A13', setor: 'A', numero: 13, status: 'livre', crachaVinculado: null, nomeColaborador: null, temVT: false, horaEntrada: null },
+  { id: 'A14', setor: 'A', numero: 14, status: 'livre', crachaVinculado: null, nomeColaborador: null, temVT: false, horaEntrada: null },
+  { id: 'A15', setor: 'A', numero: 15, status: 'ocupado', crachaVinculado: '2481', nomeColaborador: 'Amanda Costa', temVT: false, horaEntrada: '07:35' },
+  { id: 'A16', setor: 'A', numero: 16, status: 'livre', crachaVinculado: null, nomeColaborador: null, temVT: false, horaEntrada: null },
+  { id: 'A17', setor: 'A', numero: 17, status: 'livre', crachaVinculado: null, nomeColaborador: null, temVT: false, horaEntrada: null },
+  { id: 'A18', setor: 'A', numero: 18, status: 'reservado', crachaVinculado: null, nomeColaborador: 'Bruno Mendes (reservado)', temVT: false, horaEntrada: null },
+  { id: 'A19', setor: 'A', numero: 19, status: 'livre', crachaVinculado: null, nomeColaborador: null, temVT: false, horaEntrada: null },
+  { id: 'A20', setor: 'A', numero: 20, status: 'ocupado', crachaVinculado: '1623', nomeColaborador: 'Veronica Alves', temVT: false, horaEntrada: '07:50' },
+  // Setor B: 50 vagas
+  { id: 'B01', setor: 'B', numero: 1, status: 'livre', crachaVinculado: null, nomeColaborador: null, temVT: false, horaEntrada: null },
+  { id: 'B02', setor: 'B', numero: 2, status: 'ocupado', crachaVinculado: '1745', nomeColaborador: 'Gustavo Pires', temVT: false, horaEntrada: '07:10' },
+  { id: 'B03', setor: 'B', numero: 3, status: 'livre', crachaVinculado: null, nomeColaborador: null, temVT: false, horaEntrada: null },
+  { id: 'B04', setor: 'B', numero: 4, status: 'livre', crachaVinculado: null, nomeColaborador: null, temVT: false, horaEntrada: null },
+  { id: 'B05', setor: 'B', numero: 5, status: 'livre', crachaVinculado: null, nomeColaborador: null, temVT: false, horaEntrada: null },
+  { id: 'B06', setor: 'B', numero: 6, status: 'livre', crachaVinculado: null, nomeColaborador: null, temVT: false, horaEntrada: null },
+  { id: 'B07', setor: 'B', numero: 7, status: 'livre', crachaVinculado: null, nomeColaborador: null, temVT: false, horaEntrada: null },
+  { id: 'B08', setor: 'B', numero: 8, status: 'ocupado', crachaVinculado: '2067', nomeColaborador: 'Helena Dias', temVT: true, horaEntrada: '07:55' },
+  // Fill remaining spots with libre
+  ...Array.from({ length: 42 }, (_, i) => ({
+    id: `B${String(i + 9).padStart(2, '0')}`,
+    setor: 'B' as const,
+    numero: i + 9,
+    status: 'livre' as const,
+    crachaVinculado: null,
+    nomeColaborador: null,
+    temVT: false,
+    horaEntrada: null,
+  })),
+];
+
 export const mockCafeAbastecimento = [
   { local: 'Copa Produção – Setor 1', ultimoAbastecimento: '2026-04-02', ok: true },
   { local: 'Copa Administrativo', ultimoAbastecimento: '2026-04-01', ok: true },

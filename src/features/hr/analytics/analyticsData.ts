@@ -10,7 +10,4 @@ export {
   mockContractTypes,
   mockTurnoverReasons,
   mockTurnoverHistory,
-  mockTrainingVolumeHistory,
-  mockTrainingStatusDistribution,
-  mockTrainingModalityMix,
 } from "@/infrastructure/mock/mockAnalytics";

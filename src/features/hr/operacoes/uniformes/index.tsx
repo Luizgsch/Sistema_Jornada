@@ -18,6 +18,8 @@ import { mockOperacoesColaboradores, mockUniformeStats } from "@/infrastructure/
 import { Button } from "@/shared/ui/Button";
 import { useToast } from "@/shared/ui/Toast";
 import { delay } from "@/shared/lib/delay";
+import { ImportarPlanilhaButton } from "@/shared/ui/ImportarPlanilhaButton";
+import { ExportarPlanilhaButton } from "@/shared/ui/ExportarPlanilhaButton";
 
 type ColaboradorRow = (typeof mockOperacoesColaboradores)[number];
 
@@ -125,6 +127,8 @@ export default function UniformesPage() {
               <Filter size={14} />
               Filtrar
             </Button>
+            <ImportarPlanilhaButton label="Importar" modeloNome="modelo_uniformes.xlsx" />
+            <ExportarPlanilhaButton label="Exportar" nomeArquivo="uniformes.xlsx" />
           </div>
         </CardHeader>
         <CardContent className="p-0">

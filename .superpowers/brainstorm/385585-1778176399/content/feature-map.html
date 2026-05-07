@@ -1,0 +1,356 @@
+<h2>Mapa de Funcionalidades — O que o Excel não faz</h2>
+<p class="subtitle">Selecione as features que fazem mais sentido para o projeto SENAI</p>
+
+<style>
+.module-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  margin-top: 24px;
+}
+.module-col {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 18px;
+}
+.module-title {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid;
+}
+.hr-col .module-title { color: #60a5fa; border-color: #60a5fa; }
+.dho-col .module-title { color: #a78bfa; border-color: #a78bfa; }
+.sg-col .module-title { color: #34d399; border-color: #34d399; }
+
+.feature-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+  border: 1px solid transparent;
+  user-select: none;
+}
+.feature-item:hover { background: rgba(255,255,255,0.06); }
+.feature-item.selected { background: rgba(99,102,241,0.15); border-color: rgba(99,102,241,0.5); }
+
+.feature-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.feature-text { flex: 1; }
+.feature-name { font-size: 13px; font-weight: 600; color: #f1f5f9; line-height: 1.3; }
+.feature-desc { font-size: 11px; color: #94a3b8; margin-top: 3px; line-height: 1.4; }
+.feature-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 5px;
+  display: inline-block;
+}
+.tag-wow { background: rgba(239,68,68,0.2); color: #fca5a5; }
+.tag-auto { background: rgba(34,197,94,0.2); color: #86efac; }
+.tag-bulk { background: rgba(251,146,60,0.2); color: #fdba74; }
+.tag-search { background: rgba(99,102,241,0.2); color: #a5b4fc; }
+
+.cross-section {
+  margin-top: 24px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 18px;
+}
+.cross-title {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fbbf24;
+  border-bottom: 2px solid #fbbf24;
+  padding-bottom: 10px;
+  margin-bottom: 16px;
+}
+.cross-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #94a3b8; }
+.legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+</style>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#fca5a5"></div> WOW factor (impressiona SENAI)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#86efac"></div> Automatização (substitui Ctrl+C Ctrl+V)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#fdba74"></div> Lote / em massa</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#a5b4fc"></div> Busca inteligente</div>
+</div>
+
+<div class="module-grid">
+  <!-- RH -->
+  <div class="module-col hr-col">
+    <div class="module-title">🧑‍💼 RH / Recrutamento</div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="hr-1">
+      <div class="feature-icon">📄</div>
+      <div class="feature-text">
+        <div class="feature-name">Geração em lote de documentos</div>
+        <div class="feature-desc">Selecionar N candidatos aprovados → gerar todas as Cartas Proposta de uma vez</div>
+        <span class="feature-tag tag-bulk">LOTE</span>
+        <span class="feature-tag tag-wow">WOW</span>
+      </div>
+    </div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="hr-2">
+      <div class="feature-icon">🔏</div>
+      <div class="feature-text">
+        <div class="feature-name">Carimbo digital em PDFs</div>
+        <div class="feature-desc">Upload de PDF → aplicar carimbo "CONFERIDO + data + usuário" automaticamente</div>
+        <span class="feature-tag tag-wow">WOW</span>
+        <span class="feature-tag tag-bulk">LOTE</span>
+      </div>
+    </div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="hr-3">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-text">
+        <div class="feature-name">Pipeline automático vaga → uniforme → matrícula</div>
+        <div class="feature-desc">Aprovar candidato na vaga popula automaticamente uniformes e matrícula. Zero Ctrl+C Ctrl+V</div>
+        <span class="feature-tag tag-auto">AUTOMAÇÃO</span>
+        <span class="feature-tag tag-wow">WOW</span>
+      </div>
+    </div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="hr-4">
+      <div class="feature-icon">🔴</div>
+      <div class="feature-text">
+        <div class="feature-name">SLA com countdown e alertas visuais</div>
+        <div class="feature-desc">Vagas com SLA vencendo ficam em vermelho pulsante. Não precisa abrir a planilha pra ver</div>
+        <span class="feature-tag tag-auto">AUTOMAÇÃO</span>
+      </div>
+    </div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="hr-5">
+      <div class="feature-icon">🤝</div>
+      <div class="feature-text">
+        <div class="feature-name">Match auxiliares × vaga</div>
+        <div class="feature-desc">Sistema sugere candidatos da planilha de auxiliares com turno compatível com a vaga aberta</div>
+        <span class="feature-tag tag-auto">AUTOMAÇÃO</span>
+      </div>
+    </div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="hr-6">
+      <div class="feature-icon">🔍</div>
+      <div class="feature-text">
+        <div class="feature-name">Histórico unificado por pessoa</div>
+        <div class="feature-desc">Buscar CPF/matrícula e ver tudo: vaga, uniforme, movimentação, treinamento — num lugar só</div>
+        <span class="feature-tag tag-search">BUSCA</span>
+        <span class="feature-tag tag-wow">WOW</span>
+      </div>
+    </div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="hr-7">
+      <div class="feature-icon">⏰</div>
+      <div class="feature-text">
+        <div class="feature-name">Alertas de vencimento de temporários</div>
+        <div class="feature-desc">Contratos temporários com data de vencimento se destacam automaticamente 7 dias antes</div>
+        <span class="feature-tag tag-auto">AUTOMAÇÃO</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DHO -->
+  <div class="module-col dho-col">
+    <div class="module-title">🎓 DHO — T&D</div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="dho-1">
+      <div class="feature-icon">📱</div>
+      <div class="feature-text">
+        <div class="feature-name">QR Code de presença funcional</div>
+        <div class="feature-desc">Gerar QR real → simular scan → lista de presença se atualiza em tempo real na tela</div>
+        <span class="feature-tag tag-wow">WOW</span>
+        <span class="feature-tag tag-auto">AUTOMAÇÃO</span>
+      </div>
+    </div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="dho-2">
+      <div class="feature-icon">🔔</div>
+      <div class="feature-text">
+        <div class="feature-name">Trilha automática por movimentação</div>
+        <div class="feature-desc">Colaborador é promovido no RH → DHO recebe notificação com cursos obrigatórios do novo cargo</div>
+        <span class="feature-tag tag-auto">AUTOMAÇÃO</span>
+        <span class="feature-tag tag-wow">WOW</span>
+      </div>
+    </div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="dho-3">
+      <div class="feature-icon">📊</div>
+      <div class="feature-text">
+        <div class="feature-name">KPIs que atualizam ao confirmar lote</div>
+        <div class="feature-desc">Importar planilha de treinamentos → confirmar lote → hora-homem e participantes atualizam na hora</div>
+        <span class="feature-tag tag-auto">AUTOMAÇÃO</span>
+      </div>
+    </div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="dho-4">
+      <div class="feature-icon">🔎</div>
+      <div class="feature-text">
+        <div class="feature-name">Busca por palavra-chave em conteúdo</div>
+        <div class="feature-desc">Pesquisar "NR-12" e ver todos os comunicados, solicitações e cursos que mencionam esse termo</div>
+        <span class="feature-tag tag-search">BUSCA</span>
+      </div>
+    </div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="dho-5">
+      <div class="feature-icon">🏷️</div>
+      <div class="feature-text">
+        <div class="feature-name">Reciclagem com alertas automáticos</div>
+        <div class="feature-desc">NR-12 de 14 pessoas vence em 30 dias → badge pulsante + lista dos colaboradores afetados</div>
+        <span class="feature-tag tag-auto">AUTOMAÇÃO</span>
+      </div>
+    </div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="dho-6">
+      <div class="feature-icon">✍️</div>
+      <div class="feature-text">
+        <div class="feature-name">Lista de presença gerada automaticamente</div>
+        <div class="feature-desc">Criar treinamento → sistema gera lista de presença printável com nome e assinatura. Sem digitar nada</div>
+        <span class="feature-tag tag-auto">AUTOMAÇÃO</span>
+        <span class="feature-tag tag-bulk">LOTE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SG -->
+  <div class="module-col sg-col">
+    <div class="module-title">🏢 Serviços Gerais</div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="sg-1">
+      <div class="feature-icon">🔄</div>
+      <div class="feature-text">
+        <div class="feature-name">Conciliação VT × Estacionamento automática</div>
+        <div class="feature-desc">Importar base → sistema cruza e destaca duplicatas automaticamente. Exportar lista de divergências</div>
+        <span class="feature-tag tag-auto">AUTOMAÇÃO</span>
+        <span class="feature-tag tag-wow">WOW</span>
+      </div>
+    </div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="sg-2">
+      <div class="feature-icon">🗄️</div>
+      <div class="feature-text">
+        <div class="feature-name">Armários ↔ Desligados (link automático)</div>
+        <div class="feature-desc">Marcar colaborador como desligado → armário vinculado vira "liberado" automaticamente. Zero conferência manual</div>
+        <span class="feature-tag tag-auto">AUTOMAÇÃO</span>
+      </div>
+    </div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="sg-3">
+      <div class="feature-icon">🧾</div>
+      <div class="feature-text">
+        <div class="feature-name">Kanban NF com alertas em cascata</div>
+        <div class="feature-desc">NF entra na coluna "atrasada" → badge pulsante + alerta no dashboard + contador de dias visível</div>
+        <span class="feature-tag tag-auto">AUTOMAÇÃO</span>
+      </div>
+    </div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="sg-4">
+      <div class="feature-icon">📋</div>
+      <div class="feature-text">
+        <div class="feature-name">Relatório de pendências consolidado</div>
+        <div class="feature-desc">Um botão → PDF/CSV com NFs atrasadas + chamados vencidos + armários de desligados + benefícios duplicados</div>
+        <span class="feature-tag tag-bulk">LOTE</span>
+        <span class="feature-tag tag-wow">WOW</span>
+      </div>
+    </div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="sg-5">
+      <div class="feature-icon">🎁</div>
+      <div class="feature-text">
+        <div class="feature-name">Voucher de Natal em lote</div>
+        <div class="feature-desc">Gerar QR codes para todos os colaboradores de uma vez. Exportar PDF com todos os vouchers para impressão</div>
+        <span class="feature-tag tag-bulk">LOTE</span>
+      </div>
+    </div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="sg-6">
+      <div class="feature-icon">🔍</div>
+      <div class="feature-text">
+        <div class="feature-name">Busca por fornecedor / palavra-chave em NFs</div>
+        <div class="feature-desc">Pesquisar "Fornecedor X" e ver todas as NFs, chamados e compras vinculadas a ele</div>
+        <span class="feature-tag tag-search">BUSCA</span>
+      </div>
+    </div>
+
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="sg-7">
+      <div class="feature-icon">⏰</div>
+      <div class="feature-text">
+        <div class="feature-name">Chamados Manusis com escalada visual</div>
+        <div class="feature-desc">Chamados próximos do vencimento sobem no ranking visual. Filtro "só vencidos" com um clique</div>
+        <span class="feature-tag tag-auto">AUTOMAÇÃO</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cross-cutting -->
+<div class="cross-section">
+  <div class="cross-title">⚡ Funcionalidades Cross-módulo (valem para RH + DHO + SG)</div>
+  <div class="cross-grid">
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="cross-1" style="margin-bottom:0">
+      <div class="feature-icon">🔏</div>
+      <div class="feature-text">
+        <div class="feature-name">Carimbo digital universal</div>
+        <div class="feature-desc">Upload de qualquer PDF → carimbo "CONFERIDO + data + nome do usuário". Funciona em qualquer módulo</div>
+        <span class="feature-tag tag-wow">WOW</span>
+        <span class="feature-tag tag-bulk">LOTE</span>
+      </div>
+    </div>
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="cross-2" style="margin-bottom:0">
+      <div class="feature-icon">👤</div>
+      <div class="feature-text">
+        <div class="feature-name">Visão 360° por colaborador</div>
+        <div class="feature-desc">Buscar CPF ou matrícula → ver vaga, uniforme, treinamentos, movimentações, armário e benefícios. Um único lugar</div>
+        <span class="feature-tag tag-search">BUSCA</span>
+        <span class="feature-tag tag-wow">WOW</span>
+      </div>
+    </div>
+    <div class="feature-item" onclick="toggleFeature(this)" data-id="cross-3" style="margin-bottom:0">
+      <div class="feature-icon">📤</div>
+      <div class="feature-text">
+        <div class="feature-name">Exportação real de tabelas</div>
+        <div class="feature-desc">Todos os botões "Exportar" hoje são stub. Fazer exportar de verdade o conteúdo atual filtrado</div>
+        <span class="feature-tag tag-bulk">LOTE</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:20px; padding:14px; background:rgba(251,191,36,0.08); border:1px solid rgba(251,191,36,0.25); border-radius:8px;">
+  <p style="margin:0; font-size:12px; color:#fbbf24;">💡 <strong>Clique nas features</strong> que quer incluir no plano. Pode selecionar múltiplas. Depois me diga no terminal se tem alguma que quer remover ou adicionar algo diferente.</p>
+</div>
+
+<script>
+function toggleFeature(el) {
+  el.classList.toggle('selected');
+  const selected = document.querySelectorAll('.feature-item.selected');
+  const ids = Array.from(selected).map(e => e.dataset.id);
+  // Record to events via the built-in helper
+  if (window.recordChoice) {
+    recordChoice(ids.join(','), `${selected.length} features selecionadas`);
+  }
+}
+</script>

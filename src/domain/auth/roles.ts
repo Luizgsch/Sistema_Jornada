@@ -28,6 +28,7 @@ const SG_FINANCEIRO_PAGES = [
 const SG_LOGISTICA_PAGES = [
   'sg-dashboard',
   'sg-beneficios',
+  'sg-estacionamento-patio',
   'sg-armarios',
   'sg-satisfacao-attos',
   'sg-chamados-manusis',
@@ -41,6 +42,7 @@ const SG_ADMIN_PAGES = [
   'sg-notas-fiscais',
   'sg-conciliacao-acessos',
   'sg-beneficios',
+  'sg-estacionamento-patio',
   'sg-armarios',
   'sg-compras-insumos',
   'sg-faturamento-attos',

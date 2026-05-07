@@ -1,0 +1,390 @@
+<h2>Central de Automações — Wireframe</h2>
+<p class="subtitle">Uma aba nova no sidebar. Cruza dados de todos os módulos. WOW factor principal para o SENAI.</p>
+
+<style>
+.wireframe-wrap {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 0;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 20px 0;
+  min-height: 480px;
+  background: #0f172a;
+}
+.wf-sidebar {
+  background: #080f1a;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  padding: 16px 0;
+}
+.wf-sidebar-section { padding: 0 12px; margin-bottom: 4px; }
+.wf-sidebar-label { font-size: 9px; color: #334155; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 12px 4px; }
+.wf-nav-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  color: #475569;
+  cursor: default;
+}
+.wf-nav-item.active { background: rgba(99,102,241,0.15); color: #a5b4fc; }
+.wf-nav-item .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.5; }
+.wf-badge {
+  margin-left: auto;
+  background: rgba(239,68,68,0.2);
+  color: #f87171;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 8px;
+}
+
+.wf-main { padding: 20px; }
+.wf-page-title { font-size: 16px; font-weight: 700; color: #f1f5f9; margin-bottom: 4px; }
+.wf-page-sub { font-size: 11px; color: #475569; margin-bottom: 20px; }
+
+/* Alert band */
+.alert-band {
+  background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.25);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  font-size: 11px;
+  color: #fca5a5;
+}
+.pulse-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: #ef4444;
+  animation: pulse 1.5s infinite;
+  flex-shrink: 0;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+
+/* Module sections */
+.module-section { margin-bottom: 20px; }
+.module-section-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #475569;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.module-section-title::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+
+.alert-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.alert-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 12px;
+  cursor: default;
+  transition: all 0.15s;
+}
+.alert-card:hover { background: rgba(255,255,255,0.06); }
+.alert-card.red { border-color: rgba(239,68,68,0.25); background: rgba(239,68,68,0.05); }
+.alert-card.amber { border-color: rgba(251,146,60,0.25); background: rgba(251,146,60,0.04); }
+.alert-card.blue { border-color: rgba(96,165,250,0.25); background: rgba(96,165,250,0.04); }
+.alert-card.purple { border-color: rgba(167,139,250,0.25); background: rgba(167,139,250,0.04); }
+.alert-card.green { border-color: rgba(52,211,153,0.25); background: rgba(52,211,153,0.04); }
+
+.ac-icon { font-size: 16px; margin-bottom: 6px; }
+.ac-count { font-size: 22px; font-weight: 700; line-height: 1; margin-bottom: 3px; }
+.ac-label { font-size: 10px; color: #64748b; line-height: 1.3; }
+.ac-module { font-size: 9px; margin-top: 5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.6; }
+.ac-action {
+  margin-top: 8px;
+  font-size: 9px;
+  color: #6366f1;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 6px;
+  cursor: pointer;
+}
+.ac-action:hover { color: #a5b4fc; }
+
+.red .ac-count { color: #f87171; }
+.amber .ac-count { color: #fdba74; }
+.blue .ac-count { color: #60a5fa; }
+.purple .ac-count { color: #c084fc; }
+.green .ac-count { color: #34d399; }
+
+/* Recent activity */
+.activity-list { }
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 11px;
+}
+.activity-icon {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.activity-text { flex: 1; color: #94a3b8; line-height: 1.4; }
+.activity-text strong { color: #cbd5e1; }
+.activity-time { font-size: 10px; color: #334155; flex-shrink: 0; }
+
+/* Bottom: batch actions */
+.batch-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.batch-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid;
+}
+.batch-btn.primary { background: rgba(99,102,241,0.15); border-color: rgba(99,102,241,0.4); color: #a5b4fc; }
+.batch-btn.orange { background: rgba(251,146,60,0.12); border-color: rgba(251,146,60,0.35); color: #fdba74; }
+.batch-btn.green { background: rgba(52,211,153,0.1); border-color: rgba(52,211,153,0.3); color: #34d399; }
+
+/* inline action pattern */
+.pattern-demo { margin-top: 24px; }
+.pattern-title { font-size: 13px; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+.pattern-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  font-size: 11px;
+  color: #94a3b8;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.mock-checkbox { width: 13px; height: 13px; border: 1.5px solid #334155; border-radius: 3px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.mock-checkbox.checked { background: #6366f1; border-color: #6366f1; color: white; font-size: 9px; }
+.selected-row { background: rgba(99,102,241,0.06); }
+.inline-action-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(99,102,241,0.12);
+  border: 1px solid rgba(99,102,241,0.3);
+  border-radius: 6px;
+  margin-top: 6px;
+  font-size: 11px;
+}
+.ia-count { color: #a5b4fc; font-weight: 700; }
+.ia-btn {
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 600;
+  border: 1px solid;
+  cursor: pointer;
+}
+.ia-btn.blue { background: rgba(96,165,250,0.15); border-color: rgba(96,165,250,0.4); color: #93c5fd; }
+.ia-btn.orange { background: rgba(251,146,60,0.15); border-color: rgba(251,146,60,0.35); color: #fdba74; }
+.ia-btn.green { background: rgba(52,211,153,0.12); border-color: rgba(52,211,153,0.3); color: #6ee7b7; }
+
+.annotation {
+  background: rgba(99,102,241,0.08);
+  border-left: 3px solid #6366f1;
+  padding: 8px 12px;
+  border-radius: 0 6px 6px 0;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 10px;
+}
+.annotation strong { color: #a5b4fc; }
+</style>
+
+<!-- Full app wireframe -->
+<div class="wireframe-wrap">
+  <div class="wf-sidebar">
+    <div class="wf-sidebar-label">RH Core</div>
+    <div class="wf-nav-item"><div class="dot"></div> Vagas</div>
+    <div class="wf-nav-item"><div class="dot"></div> Auxiliares</div>
+    <div class="wf-nav-item"><div class="dot"></div> Uniformes</div>
+    <div class="wf-nav-item"><div class="dot"></div> Movimentações</div>
+    <div class="wf-sidebar-label">DHO</div>
+    <div class="wf-nav-item"><div class="dot"></div> Dashboard T&D</div>
+    <div class="wf-nav-item"><div class="dot"></div> Presença Digital</div>
+    <div class="wf-nav-item"><div class="dot"></div> Trilhas por Cargo</div>
+    <div class="wf-sidebar-label">Serviços Gerais</div>
+    <div class="wf-nav-item"><div class="dot"></div> Notas Fiscais</div>
+    <div class="wf-nav-item"><div class="dot"></div> Armários</div>
+    <div class="wf-nav-item"><div class="dot"></div> Benefícios VT</div>
+    <div class="wf-sidebar-label">⚡ Novo</div>
+    <div class="wf-nav-item active">
+      ⚡ Central
+      <div class="wf-badge">5</div>
+    </div>
+    <div class="wf-nav-item"><div class="dot"></div> Busca 360°</div>
+  </div>
+
+  <div class="wf-main">
+    <div class="wf-page-title">⚡ Central de Automações</div>
+    <div class="wf-page-sub">Visão cruzada de todos os módulos — pendências, alertas e ações em lote</div>
+
+    <div class="alert-band">
+      <div class="pulse-dot"></div>
+      <span><strong>5 itens críticos</strong> precisam de atenção hoje — NFs atrasadas, SLA vencendo e contratos próximos do vencimento</span>
+    </div>
+
+    <div class="module-section">
+      <div class="module-section-title">🧑‍💼 RH / Recrutamento</div>
+      <div class="alert-cards">
+        <div class="alert-card red">
+          <div class="ac-icon">⏰</div>
+          <div class="ac-count">2</div>
+          <div class="ac-label">Vagas com SLA vencendo</div>
+          <div class="ac-module">Recrutamento</div>
+          <div class="ac-action">Ver vagas →</div>
+        </div>
+        <div class="alert-card amber">
+          <div class="ac-icon">📄</div>
+          <div class="ac-count">8</div>
+          <div class="ac-label">Cartas Proposta pendentes</div>
+          <div class="ac-module">Recrutamento</div>
+          <div class="ac-action">Gerar em lote →</div>
+        </div>
+        <div class="alert-card amber">
+          <div class="ac-icon">📋</div>
+          <div class="ac-count">3</div>
+          <div class="ac-label">Uniformes sem dados</div>
+          <div class="ac-module">Operações</div>
+          <div class="ac-action">Preencher pipeline →</div>
+        </div>
+        <div class="alert-card blue">
+          <div class="ac-icon">🤝</div>
+          <div class="ac-count">5</div>
+          <div class="ac-label">Matches de auxiliares</div>
+          <div class="ac-module">Recrutamento</div>
+          <div class="ac-action">Ver sugestões →</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-section">
+      <div class="module-section-title">🎓 DHO — T&D</div>
+      <div class="alert-cards">
+        <div class="alert-card red">
+          <div class="ac-icon">🔄</div>
+          <div class="ac-count">14</div>
+          <div class="ac-label">Reciclagens vencendo</div>
+          <div class="ac-module">DHO</div>
+          <div class="ac-action">Ver colaboradores →</div>
+        </div>
+        <div class="alert-card purple">
+          <div class="ac-icon">🔔</div>
+          <div class="ac-count">2</div>
+          <div class="ac-label">Trilhas pós-movimentação</div>
+          <div class="ac-module">DHO</div>
+          <div class="ac-action">Ver pendentes →</div>
+        </div>
+        <div class="alert-card blue">
+          <div class="ac-icon">📱</div>
+          <div class="ac-count">1</div>
+          <div class="ac-label">Treinamento hoje — QR ativo</div>
+          <div class="ac-module">Presença Digital</div>
+          <div class="ac-action">Abrir QR →</div>
+        </div>
+        <div class="alert-card green">
+          <div class="ac-icon">📊</div>
+          <div class="ac-count">94%</div>
+          <div class="ac-label">Meta hora-homem no mês</div>
+          <div class="ac-module">Dashboard T&D</div>
+          <div class="ac-action">Ver detalhes →</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-section">
+      <div class="module-section-title">🏢 Serviços Gerais</div>
+      <div class="alert-cards">
+        <div class="alert-card red">
+          <div class="ac-icon">🧾</div>
+          <div class="ac-count">3</div>
+          <div class="ac-label">Notas Fiscais atrasadas</div>
+          <div class="ac-module">Financeiro</div>
+          <div class="ac-action">Abrir kanban →</div>
+        </div>
+        <div class="alert-card amber">
+          <div class="ac-icon">🗄️</div>
+          <div class="ac-count">4</div>
+          <div class="ac-label">Armários com desligados</div>
+          <div class="ac-module">Logística</div>
+          <div class="ac-action">Liberar todos →</div>
+        </div>
+        <div class="alert-card amber">
+          <div class="ac-icon">🚗</div>
+          <div class="ac-count">7</div>
+          <div class="ac-label">VT + Estac. duplicados</div>
+          <div class="ac-module">Benefícios</div>
+          <div class="ac-action">Ver lista →</div>
+        </div>
+        <div class="alert-card red">
+          <div class="ac-icon">🔧</div>
+          <div class="ac-count">2</div>
+          <div class="ac-label">Chamados vencidos</div>
+          <div class="ac-module">Manusis</div>
+          <div class="ac-action">Cobrar área →</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="batch-row">
+      <div class="batch-btn primary">📋 Relatório de pendências (PDF)</div>
+      <div class="batch-btn orange">🔏 Carimbar documentos em lote</div>
+      <div class="batch-btn green">👤 Busca 360° por colaborador</div>
+    </div>
+  </div>
+</div>
+
+<!-- Inline action pattern -->
+<div style="margin-top:28px">
+  <div class="pattern-title">Padrão inline — como vai funcionar nas páginas existentes</div>
+  <p style="font-size:12px;color:#64748b;margin-bottom:12px">Exemplo na página de Vagas: usuario seleciona linhas → barra de ações aparece embaixo da tabela</p>
+
+  <div style="background:#0f172a;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:14px;">
+    <div class="pattern-row">
+      <div class="mock-checkbox checked">✓</div>
+      <span style="flex:1;color:#cbd5e1">Auxiliar de Produção I — Setor Operações</span>
+      <span style="font-size:10px;background:rgba(239,68,68,0.2);color:#fca5a5;padding:2px 7px;border-radius:4px">SLA: 2d</span>
+    </div>
+    <div class="pattern-row selected-row">
+      <div class="mock-checkbox checked">✓</div>
+      <span style="flex:1;color:#cbd5e1">Operador de Máquinas — Setor Produção</span>
+      <span style="font-size:10px;background:rgba(34,197,94,0.15);color:#86efac;padding:2px 7px;border-radius:4px">Aprovado</span>
+    </div>
+    <div class="pattern-row">
+      <div class="mock-checkbox"></div>
+      <span style="flex:1">Técnico de Manutenção — Setor Técnico</span>
+      <span style="font-size:10px;background:rgba(99,102,241,0.2);color:#a5b4fc;padding:2px 7px;border-radius:4px">Em processo</span>
+    </div>
+
+    <div class="inline-action-bar">
+      <span class="ia-count">2 selecionados</span>
+      <div style="flex:1"></div>
+      <div class="ia-btn blue">📄 Gerar Propostas</div>
+      <div class="ia-btn orange">🔏 Carimbar PDFs</div>
+      <div class="ia-btn green">⚡ Preencher Pipeline</div>
+    </div>
+  </div>
+
+  <div class="annotation">
+    <strong>Zero novas abas.</strong> O padrão de seleção múltipla + barra de ação se repete em Vagas, Uniformes, Auxiliares, Chamados, Armários, NFs — cada um com suas ações específicas.
+  </div>
+</div>

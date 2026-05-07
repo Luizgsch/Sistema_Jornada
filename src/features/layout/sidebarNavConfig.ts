@@ -27,7 +27,8 @@ import {
   ClipboardList,
   Ticket,
   Coffee,
-  ScrollText,
+  Zap,
+  Search,
 } from "lucide-react";
 import { DHO_PAGE_GESTOR } from "@/domain/auth/roles";
 
@@ -75,6 +76,8 @@ export const HR_CORE_NAV: NavCategory[] = [
     iconTint: "text-primary dark:text-teal-400",
     entries: [
       { kind: "leaf", pageId: "command-center", label: "Início", icon: LayoutDashboard, allowedRoles: ALL_HR },
+      { kind: "leaf", pageId: "central-automacoes", label: "⚡ Central de Automações", icon: Zap, allowedRoles: ALL_HR },
+      { kind: "leaf", pageId: "busca-360", label: "👤 Busca 360°", icon: Search, allowedRoles: ALL_HR },
       {
         kind: "group",
         id: "nav-analytics",
@@ -107,6 +110,7 @@ export const HR_CORE_NAV: NavCategory[] = [
           { id: "triagem-ia", label: "Triagem com IA" },
           { id: "whatsapp", label: "WhatsApp Bot" },
           { id: "indicacoes", label: "Indicações" },
+          { id: "auxiliares", label: "Planilha de Auxiliares" },
         ],
       },
     ],
@@ -126,8 +130,6 @@ export const HR_CORE_NAV: NavCategory[] = [
         icon: UserPlus,
         allowedRoles: ALL_HR,
         subItems: [
-          { id: "dashboard-admissoes", label: "Operação hoje" },
-          { id: "onboarding", label: "Onboarding" },
           { id: "matriculas", label: "Matrículas" },
         ],
       },
@@ -144,22 +146,6 @@ export const HR_CORE_NAV: NavCategory[] = [
           { id: "desligamentos", label: "Desligamentos" },
           { id: "descricao-cargos", label: "Descrição de cargos" },
         ],
-      },
-    ],
-  },
-  {
-    id: "cat-desenvolvimento",
-    title: "DHO · desenvolvimento",
-    iconTint: "text-emerald-600 dark:text-emerald-400",
-    entries: [
-      { kind: "leaf", pageId: "trilhas", label: "Trilhas de aprendizado", icon: Route, allowedRoles: ALL_HR },
-      { kind: "leaf", pageId: "cursos", label: "Catálogo de cursos", icon: GraduationCap, allowedRoles: ALL_HR },
-      {
-        kind: "leaf",
-        pageId: "certificados",
-        label: "Avaliações e certificados",
-        icon: ScrollText,
-        allowedRoles: ALL_HR,
       },
     ],
   },
@@ -384,6 +370,7 @@ export const SG_NAV: NavCategory[] = [
     iconTint: "text-emerald-600 dark:text-emerald-400",
     entries: [
       { kind: "leaf", pageId: "sg-beneficios", label: "VT × Estacionamento", icon: Car },
+      { kind: "leaf", pageId: "sg-estacionamento-patio", label: "Pátio — Estacionamento", icon: Car },
       { kind: "leaf", pageId: "sg-armarios", label: "Armários vestiário", icon: Grid3x3 },
       { kind: "leaf", pageId: "sg-satisfacao-attos", label: "Satisfação refeição", icon: Smile },
       { kind: "leaf", pageId: "sg-chamados-manusis", label: "Chamados (Manusis)", icon: ClipboardList },

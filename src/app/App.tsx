@@ -1,9 +1,7 @@
 import { useState, useMemo, Fragment } from 'react'
 import LoginPage from '@/features/login/LoginPage'
 import HRCommandCenter from '@/features/hr/command-center'
-import AdmissoesDashboard from '@/features/hr/admissoes/dashboard'
 import DocumentosAdmissionais from '@/features/hr/admissoes/documentos'
-import OnboardingPage from '@/features/hr/admissoes/onboarding'
 import MatriculasPage from '@/features/hr/admissoes/matriculas'
 import RecrutamentoDashboard from '@/features/hr/recrutamento/dashboard'
 import GestaoVagas from '@/features/hr/recrutamento/vagas'
@@ -12,13 +10,11 @@ import TriagemIAPage from '@/features/hr/recrutamento/triagem-ia'
 import WhatsAppBotPage from '@/features/hr/recrutamento/whatsapp'
 import BancoCandidatos from '@/features/hr/recrutamento/candidatos'
 import IndicacoesPage from '@/features/hr/recrutamento/indicacoes'
+import AuxiliaresPage from '@/features/hr/recrutamento/auxiliares'
 import ColaboradoresPage from '@/features/hr/operacoes/colaboradores'
 import TemporariosPage from '@/features/hr/operacoes/temporarios'
 import UniformesPage from '@/features/hr/operacoes/uniformes'
 import MovimentacoesPage from '@/features/hr/operacoes/movimentacoes'
-import TrilhasPage from '@/features/hr/treinamentos/trilhas'
-import CursosPage from '@/features/hr/treinamentos/cursos'
-import CertificadosPage from '@/features/hr/treinamentos/certificados'
 import IndicadoresPage from '@/features/hr/analytics/indicadores'
 import RelatoriosPage from '@/features/hr/analytics/relatorios'
 import HeadcountPage from '@/features/hr/operacoes/headcount'
@@ -26,6 +22,8 @@ import QuadroEquipesPage from '@/features/hr/operacoes/quadro-equipes'
 import DesligamentosPage from '@/features/hr/operacoes/desligamentos'
 import CargosPage from '@/features/hr/operacoes/cargos'
 import ComunicacaoPage from '@/features/hr/comunicacao'
+import { CentralAutomacoesPage } from '@/features/central-automacoes/CentralAutomacoesPage'
+import { Busca360Page } from '@/features/central-automacoes/Busca360Page'
 import DHOPage from '@/features/dho/DHOPage'
 import ServicosGeraisPage from '@/features/servicos-gerais/ServicosGeraisPage'
 import { AccessDenied } from '@/features/access-denied/AccessDeniedPage'
@@ -77,6 +75,10 @@ function LoggedInApp({
     switch (activePage) {
       case 'command-center':
         return <HRCommandCenter />;
+      case 'central-automacoes':
+        return <CentralAutomacoesPage />;
+      case 'busca-360':
+        return <Busca360Page />;
       case 'recrutamento-dashboard':
         return <RecrutamentoDashboard />;
       case 'vagas':
@@ -91,12 +93,10 @@ function LoggedInApp({
         return <BancoCandidatos />;
       case 'indicacoes':
         return <IndicacoesPage />;
-      case 'dashboard-admissoes':
-        return <AdmissoesDashboard />;
+      case 'auxiliares':
+        return <AuxiliaresPage />;
       case 'documentos':
         return <DocumentosAdmissionais />;
-      case 'onboarding':
-        return <OnboardingPage />;
       case 'matriculas':
         return <MatriculasPage />;
       case 'colaboradores':
@@ -117,12 +117,6 @@ function LoggedInApp({
         return <CargosPage />;
       case 'comunicacao-interna':
         return <ComunicacaoPage />;
-      case 'trilhas':
-        return <TrilhasPage />;
-      case 'cursos':
-        return <CursosPage />;
-      case 'certificados':
-        return <CertificadosPage />;
       case 'indicadores':
         return <IndicadoresPage />;
       case 'relatorios':

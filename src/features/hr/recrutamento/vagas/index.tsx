@@ -10,6 +10,8 @@ import { AutomationStepper } from "@/shared/components/automation/AutomationStep
 import { cn } from "@/shared/lib/cn";
 import { Button } from "@/shared/ui/Button";
 import { SideDrawer } from "@/shared/ui/SideDrawer";
+import { ImportarPlanilhaButton } from "@/shared/ui/ImportarPlanilhaButton";
+import { ExportarPlanilhaButton } from "@/shared/ui/ExportarPlanilhaButton";
 
 const COMPETENCIAS_SUGESTOES = [
   "React",
@@ -29,6 +31,10 @@ export default function GestaoVagas() {
   const [competenciasSel, setCompetenciasSel] = useState<string[]>([]);
   const [competenciasExpandido, setCompetenciasExpandido] = useState(true);
   const [chipRemoveConfirm, setChipRemoveConfirm] = useState<string | null>(null);
+  const [motivoDraft, setMotivoDraft] = useState<"Expansão" | "Substituição">("Expansão");
+  const [slaDraft, setSlaDraft] = useState("");
+  const [escalaDraft, setEscalaDraft] = useState("");
+  const [nomeSubstituidoDraft, setNomeSubstituidoDraft] = useState("");
 
   const [showStepper, setShowStepper] = useState(false);
   const [stepperVaga, setStepperVaga] = useState("");
@@ -40,6 +46,10 @@ export default function GestaoVagas() {
     setCargoDraft("");
     setCompetenciasSel([]);
     setChipRemoveConfirm(null);
+    setMotivoDraft("Expansão");
+    setSlaDraft("");
+    setEscalaDraft("");
+    setNomeSubstituidoDraft("");
   }, []);
 
   const toggleCompetencia = useCallback((c: string) => {
@@ -74,6 +84,11 @@ export default function GestaoVagas() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <ImportarPlanilhaButton
+            label="Importar Planilha de Vagas"
+            modeloNome="modelo_vagas.xlsx"
+          />
+          <ExportarPlanilhaButton label="Exportar Vagas" nomeArquivo="vagas.xlsx" />
           <button
             type="button"
             onClick={() => {
@@ -81,6 +96,10 @@ export default function GestaoVagas() {
               setCargoDraft("");
               setCompetenciasSel([]);
               setChipRemoveConfirm(null);
+              setMotivoDraft("Expansão");
+              setSlaDraft("");
+              setEscalaDraft("");
+              setNomeSubstituidoDraft("");
               setShowNewVaga(true);
             }}
             className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-radius-m font-semibold text-sm hover:bg-primary/90 transition-all"
@@ -147,6 +166,7 @@ export default function GestaoVagas() {
                   <th className="py-3 px-5">Gestor</th>
                   <th className="py-3 px-5">Contrato</th>
                   <th className="py-3 px-5">Salário</th>
+                  <th className="py-3 px-5">SLA</th>
                   <th className="py-3 px-5">Status</th>
                   <th className="py-3 px-5 text-center">Ações</th>
                 </tr>
@@ -163,6 +183,7 @@ export default function GestaoVagas() {
                     <td className="py-3.5 px-5 text-xs font-medium text-zinc-500 dark:text-zinc-500">{vaga.gestor}</td>
                     <td className="py-3.5 px-5 text-zinc-600 dark:text-zinc-400">{vaga.contrato}</td>
                     <td className="py-3.5 px-5 text-zinc-500 dark:text-zinc-400 font-medium">{vaga.salario}</td>
+                    <td className="py-3.5 px-5 text-xs font-medium text-zinc-500 dark:text-zinc-500">{vaga.sla}</td>
                     <td className="py-3.5 px-5">
                       <StatusBadge status={vaga.status as any} />
                     </td>
@@ -264,8 +285,28 @@ export default function GestaoVagas() {
                   <Field label="Setor" placeholder="Ex: Tecnologia" />
                   <Field label="Gestor Responsável" placeholder="Ex: João Silva" />
                   <div className="md:col-span-2 xl:col-span-3">
-                    <SelectField label="Motivo" options={["Expansão", "Substituição"]} />
+                    <label className="text-[11px] font-bold text-zinc-500 dark:text-slate-400 uppercase tracking-wide">Motivo</label>
+                    <select
+                      value={motivoDraft}
+                      onChange={(e) => setMotivoDraft(e.target.value as "Expansão" | "Substituição")}
+                      className="w-full h-10 px-3.5 rounded-radius-m border border-zinc-200 dark:border-[#334155] bg-white dark:bg-[#0f172a] text-zinc-800 dark:text-[#f8fafc] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                    >
+                      <option value="Expansão">Expansão</option>
+                      <option value="Substituição">Substituição</option>
+                    </select>
                   </div>
+                  {motivoDraft === "Substituição" && (
+                    <div className="md:col-span-2 xl:col-span-3">
+                      <label className="text-[11px] font-bold text-zinc-500 dark:text-slate-400 uppercase tracking-wide">Nome da Pessoa Substituída</label>
+                      <input
+                        type="text"
+                        value={nomeSubstituidoDraft}
+                        onChange={(e) => setNomeSubstituidoDraft(e.target.value)}
+                        placeholder="Ex: João Silva"
+                        className="w-full h-10 px-3.5 rounded-radius-m border border-zinc-200 dark:border-[#334155] bg-white dark:bg-[#0f172a] text-zinc-800 dark:text-[#f8fafc] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                      />
+                    </div>
+                  )}
                 </div>
               </FormSection>
 
@@ -274,6 +315,31 @@ export default function GestaoVagas() {
                   <SelectField label="Tipo de Contrato" options={["CLT", "PJ", "Estágio"]} />
                   <Field label="Salário" placeholder="R$ 0.000,00" />
                   <SelectField label="Turno" options={["Integral", "Manhã", "Tarde", "Noite"]} />
+                  <div>
+                    <label className="text-[11px] font-bold text-zinc-500 dark:text-slate-400 uppercase tracking-wide">SLA</label>
+                    <input
+                      type="text"
+                      value={slaDraft}
+                      onChange={(e) => setSlaDraft(e.target.value)}
+                      placeholder="Ex: 15 dias"
+                      className="w-full h-10 px-3.5 rounded-radius-m border border-zinc-200 dark:border-[#334155] bg-white dark:bg-[#0f172a] text-zinc-800 dark:text-[#f8fafc] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[11px] font-bold text-zinc-500 dark:text-slate-400 uppercase tracking-wide">Escala</label>
+                    <select
+                      value={escalaDraft}
+                      onChange={(e) => setEscalaDraft(e.target.value)}
+                      className="w-full h-10 px-3.5 rounded-radius-m border border-zinc-200 dark:border-[#334155] bg-white dark:bg-[#0f172a] text-zinc-800 dark:text-[#f8fafc] text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                    >
+                      <option value="">Selecione...</option>
+                      <option value="5x2">5x2</option>
+                      <option value="6x1">6x1</option>
+                      <option value="12x36">12x36</option>
+                      <option value="5x1">5x1</option>
+                      <option value="Administrativo">Administrativo</option>
+                    </select>
+                  </div>
                   <div className="md:col-span-2 xl:col-span-2">
                     <Field label="Horário" placeholder="09:00 - 18:00" />
                   </div>

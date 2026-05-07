@@ -6,6 +6,7 @@ import {
   mockConciliacaoAcessos,
   mockComprasMensais,
   mockAttosFaturamento,
+  mockFechamentosAttos,
   type KanbanNfColuna,
 } from '@/infrastructure/mock/mockServicosGerais';
 import { GitMerge, ShoppingCart, UtensilsCrossed } from 'lucide-react';
@@ -344,26 +345,54 @@ export function SGFaturamentoAttosView() {
 }
 
 export function SGFechamentoAttosView() {
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'conciliado': return 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20';
+      case 'divergente': return 'bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-500/20';
+      case 'pendente': return 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/20';
+      default: return 'bg-zinc-50 dark:bg-zinc-500/10 text-zinc-700 dark:text-zinc-400 border-zinc-200 dark:border-zinc-500/20';
+    }
+  };
+
   return (
     <Card>
       <CardHeader className="border-b border-[#334155] pb-4">
-        <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4]">Fechamento Attos — fonte única</h3>
+        <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4]">Fechamento Attos — histórico de períodos</h3>
         <p className="text-sm text-zinc-500">
-          Consolidação em um painel para substituir planilhas paralelas e reduzir divergência.
+          Consolidação de fechamentos Attos por período com status de conciliação e responsável.
         </p>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="p-4 rounded-radius-m border border-dashed border-[#334155] bg-[#0f172a]">
-          <p className="text-sm text-zinc-400">
-            <strong className="text-[#e7e5e4]">Competência 2026-03</strong> — fechamento validado. Última sincronização: 02/04/2026 06:00.
-            Todas as linhas originadas do mesmo conjunto de dados (simulação).
-          </p>
+      <CardContent className="p-0">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-zinc-900/80 border-b border-[#334155] text-zinc-400 font-semibold text-xs uppercase tracking-wider">
+              <tr>
+                <th className="py-3 px-5">Período</th>
+                <th className="py-3 px-5">Total Acessos</th>
+                <th className="py-3 px-5">Total Refeições</th>
+                <th className="py-3 px-5">Valor Total</th>
+                <th className="py-3 px-5">Status</th>
+                <th className="py-3 px-5">Responsável</th>
+              </tr>
+            </thead>
+            <tbody>
+              {mockFechamentosAttos.map((fechamento) => (
+                <tr key={fechamento.id} className="border-b border-[#334155] hover:bg-zinc-800/20 transition-colors">
+                  <td className="py-3 px-5 font-medium text-[#e7e5e4]">{fechamento.periodo}</td>
+                  <td className="py-3 px-5 text-zinc-400">{fechamento.totalAcessos.toLocaleString('pt-BR')}</td>
+                  <td className="py-3 px-5 text-zinc-400">{fechamento.totalRefeicoes.toLocaleString('pt-BR')}</td>
+                  <td className="py-3 px-5 font-semibold text-zinc-300">{fechamento.valorTotal}</td>
+                  <td className="py-3 px-5">
+                    <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-semibold border ${getStatusColor(fechamento.status)}`}>
+                      {fechamento.status.charAt(0).toUpperCase() + fechamento.status.slice(1)}
+                    </span>
+                  </td>
+                  <td className="py-3 px-5 text-xs text-zinc-500">{fechamento.responsavel}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <ul className="text-sm text-zinc-500 space-y-2 list-disc list-inside">
-          <li>Reconciliação automática com acessos Elo/Posigraf</li>
-          <li>Trava de edição após aprovação do responsável</li>
-          <li>Exportação única para financeiro</li>
-        </ul>
       </CardContent>
     </Card>
   );

@@ -3,6 +3,8 @@ import { Button } from "@/shared/ui/Button";
 import { delay } from "@/shared/lib/delay";
 import { useToast } from "@/shared/ui/Toast";
 import { Card, CardContent } from "@/shared/ui/Card";
+import { ImportarPlanilhaButton } from "@/shared/ui/ImportarPlanilhaButton";
+import { ExportarPlanilhaButton } from "@/shared/ui/ExportarPlanilhaButton";
 import {
   ArrowRightLeft,
   TrendingUp,
@@ -54,12 +56,17 @@ export default function MovimentacoesPage() {
 
   return (
     <div className="h-full flex flex-col space-y-6">
-      <PageHeader 
-        title="Movimentações Internas" 
+      <PageHeader
+        title="Movimentações Internas"
         description="Histórico cronológico de mudanças de cargo, transferências e promoções estruturais da empresa."
         actionLabel="Registrar Alteração"
         onAction={() => setIsModalOpen(true)}
       />
+
+      <div className="flex items-center gap-2">
+        <ImportarPlanilhaButton label="Importar Movimentações" modeloNome="modelo_movimentacoes.xlsx" />
+        <ExportarPlanilhaButton label="Exportar Histórico" nomeArquivo="movimentacoes.xlsx" />
+      </div>
 
       <div className="grid gap-4 md:grid-cols-3">
         <MovMetricCard title="Total no Mês" value={stats.total} icon={History} color="text-[#e7e5e4]" />

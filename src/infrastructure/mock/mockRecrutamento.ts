@@ -20,12 +20,12 @@ export const mockEntrevistasHoje = [
 ];
 
 export const mockRecrutamentoVagas = [
-  { id: "VAG-001", cargo: "Desenvolvedor Backend Senior", setor: "Tecnologia", gestor: "Ricardo Santos", contrato: "CLT", turno: "Integral", salario: "R$ 15.000", status: "aberta", dataAbertura: "2026-03-10" },
-  { id: "VAG-002", cargo: "Analista de Dados Pleno", setor: "Tecnologia", gestor: "Ana Lima", contrato: "CLT", turno: "Integral", salario: "R$ 8.500", status: "processo", dataAbertura: "2026-03-15" },
-  { id: "VAG-003", cargo: "Gerente de Marketing", setor: "Marketing", gestor: "Carla Souza", contrato: "PJ", turno: "Flexível", salario: "R$ 12.000", status: "aberta", dataAbertura: "2026-03-18" },
-  { id: "VAG-004", cargo: "Analista de RH", setor: "RH", gestor: "Mariana Costa", contrato: "CLT", turno: "Integral", salario: "R$ 6.000", status: "pausada", dataAbertura: "2026-02-28" },
-  { id: "VAG-088", cargo: "Analista Fiscal Pleno", setor: "Financeiro", gestor: "Paula Mendes", contrato: "CLT", turno: "Integral", salario: "R$ 9.200", status: "encerrado", dataAbertura: "2025-08-01" },
-  { id: "VAG-089", cargo: "Assistente de Logística", setor: "Operações", gestor: "Fernando Reis", contrato: "CLT", turno: "Integral", salario: "R$ 3.400", status: "encerrado", dataAbertura: "2025-05-12" },
+  { id: "VAG-001", cargo: "Desenvolvedor Backend Senior", setor: "Tecnologia", gestor: "Ricardo Santos", contrato: "CLT", turno: "Integral", salario: "R$ 15.000", status: "aberta", dataAbertura: "2026-03-10", sla: "15 dias", escala: "5x2", motivo: "Expansão", nomeSubstituido: null, horario: "08:00 - 17:00" },
+  { id: "VAG-002", cargo: "Analista de Dados Pleno", setor: "Tecnologia", gestor: "Ana Lima", contrato: "CLT", turno: "Integral", salario: "R$ 8.500", status: "processo", dataAbertura: "2026-03-15", sla: "10 dias", escala: "5x2", motivo: "Substituição", nomeSubstituido: "Roberto Ferreira", horario: "08:00 - 17:00" },
+  { id: "VAG-003", cargo: "Gerente de Marketing", setor: "Marketing", gestor: "Carla Souza", contrato: "PJ", turno: "Flexível", salario: "R$ 12.000", status: "aberta", dataAbertura: "2026-03-18", sla: "20 dias", escala: "6x1", motivo: "Expansão", nomeSubstituido: null, horario: "09:00 - 18:00" },
+  { id: "VAG-004", cargo: "Analista de RH", setor: "RH", gestor: "Mariana Costa", contrato: "CLT", turno: "Integral", salario: "R$ 6.000", status: "pausada", dataAbertura: "2026-02-28", sla: "12 dias", escala: "5x2", motivo: "Substituição", nomeSubstituido: "Patricia Gomes", horario: "08:00 - 17:00" },
+  { id: "VAG-088", cargo: "Analista Fiscal Pleno", setor: "Financeiro", gestor: "Paula Mendes", contrato: "CLT", turno: "Integral", salario: "R$ 9.200", status: "encerrado", dataAbertura: "2025-08-01", sla: "18 dias", escala: "5x2", motivo: "Expansão", nomeSubstituido: null, horario: "08:00 - 17:00" },
+  { id: "VAG-089", cargo: "Assistente de Logística", setor: "Operações", gestor: "Fernando Reis", contrato: "CLT", turno: "Integral", salario: "R$ 3.400", status: "encerrado", dataAbertura: "2025-05-12", sla: "12 dias", escala: "6x1", motivo: "Expansão", nomeSubstituido: null, horario: "06:00 - 14:00" },
 ];
 
 export const mockPipelineCandidatos = [
@@ -210,3 +210,25 @@ export const mockCandidatosPorStatus = [
   { name: "Reprovado", value: 14, statusKey: "reprovado" },
   { name: "Arquivado", value: 22, statusKey: "arquivado" },
 ] as const;
+
+export type AuxiliarMock = {
+  id: string;
+  nome: string;
+  cpf: string;
+  preferencaTurno: "Manhã" | "Tarde" | "Noite" | "Integral";
+  vagaVinculada: string;
+  status: "disponivel" | "processo" | "contratado";
+};
+
+export const mockAuxiliares: AuxiliarMock[] = [
+  { id: "AUX-001", nome: "Carlos Mendes", cpf: "123.456.789-00", preferencaTurno: "Manhã", vagaVinculada: "Assistente de Logística", status: "disponivel" },
+  { id: "AUX-002", nome: "Juliana Santos", cpf: "234.567.890-11", preferencaTurno: "Tarde", vagaVinculada: "Assistente de Operações", status: "disponivel" },
+  { id: "AUX-003", nome: "Roberto Oliveira", cpf: "345.678.901-22", preferencaTurno: "Noite", vagaVinculada: "Assistente Administrativo", status: "processo" },
+  { id: "AUX-004", nome: "Marcela Costa", cpf: "456.789.012-33", preferencaTurno: "Integral", vagaVinculada: "Assistente de Recepção", status: "disponivel" },
+  { id: "AUX-005", nome: "Fernando Silva", cpf: "567.890.123-44", preferencaTurno: "Manhã", vagaVinculada: "Auxiliar de Limpeza", status: "contratado" },
+  { id: "AUX-006", nome: "Patricia Lima", cpf: "678.901.234-55", preferencaTurno: "Tarde", vagaVinculada: "Assistente de Estoque", status: "disponivel" },
+  { id: "AUX-007", nome: "Diego Rodrigues", cpf: "789.012.345-66", preferencaTurno: "Noite", vagaVinculada: "Auxiliar de Segurança", status: "disponivel" },
+  { id: "AUX-008", nome: "Beatriz Ferreira", cpf: "890.123.456-77", preferencaTurno: "Integral", vagaVinculada: "Assistente Operacional", status: "processo" },
+  { id: "AUX-009", nome: "Lucas Gomes", cpf: "901.234.567-88", preferencaTurno: "Manhã", vagaVinculada: "Assistente de Almoxarifado", status: "disponivel" },
+  { id: "AUX-010", nome: "Fernanda Alves", cpf: "012.345.678-99", preferencaTurno: "Tarde", vagaVinculada: "Assistente de Faturamento", status: "contratado" },
+];

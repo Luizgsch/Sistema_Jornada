@@ -28,9 +28,6 @@ import {
   mockContractTypes,
   mockTurnoverReasons,
   mockTurnoverHistory,
-  mockTrainingVolumeHistory,
-  mockTrainingStatusDistribution,
-  mockTrainingModalityMix,
 } from "../analyticsData";
 import { useTheme } from "@/features/theme/ThemeContext";
 import { motion } from "framer-motion";
@@ -45,12 +42,11 @@ import {
 import { chartColorForFunnelStage } from "@/shared/lib/recrutamentoStatusStyles";
 import { cn } from "@/shared/lib/cn";
 
-type AnalyticsTab = "rh" | "recrutamento" | "treinamentos";
+type AnalyticsTab = "rh" | "recrutamento";
 
 const TABS: { id: AnalyticsTab; label: string }[] = [
   { id: "rh", label: "RH / DHO" },
   { id: "recrutamento", label: "Recrutamento" },
-  { id: "treinamentos", label: "Treinamentos" },
 ];
 
 export default function IndicadoresPage() {
@@ -273,53 +269,6 @@ export default function IndicadoresPage() {
               tooltipStyle={tooltipStyle}
               innerRadius={64}
               outerRadius={104}
-              paddingAngle={2}
-            />
-          </ChartCard>
-        </div>
-      )}
-
-      {tab === "treinamentos" && (
-        <div className="grid gap-6 md:grid-cols-2">
-          <ChartCard title="Treinamentos realizados" subtitle="Volume mensal consolidado" delay={0.1}>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={mockTrainingVolumeHistory} margin={{ top: 5, right: 16, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={gridColor} />
-                <XAxis dataKey="mes" axisLine={false} tickLine={false} tick={{ fill: axisColor, fontSize: 11 }} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: axisColor, fontSize: 11 }} />
-                <Tooltip contentStyle={tooltipStyle} />
-                <Line
-                  type="monotone"
-                  dataKey="realizados"
-                  stroke="#6366f1"
-                  strokeWidth={3}
-                  dot={{ r: 5, fill: "#6366f1", strokeWidth: 2, stroke: isDark ? "#1e293b" : "#fff" }}
-                  activeDot={{ r: 7 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </ChartCard>
-
-          <ChartCard title="Status das matrículas em T&D" subtitle="Distribuição atual (%)" delay={0.15}>
-            <DonutPieChart
-              data={mockTrainingStatusDistribution}
-              isDark={isDark}
-              paletteMode="training-status"
-              tooltipStyle={tooltipStyle}
-              innerRadius={56}
-              outerRadius={96}
-              paddingAngle={2}
-            />
-          </ChartCard>
-
-          <ChartCard title="Modalidade de treinamento" subtitle="Carga horária por formato (%)" delay={0.2}>
-            <DonutPieChart
-              data={mockTrainingModalityMix}
-              isDark={isDark}
-              paletteMode="sequential-by-value"
-              tooltipStyle={tooltipStyle}
-              innerRadius={52}
-              outerRadius={100}
               paddingAngle={2}
             />
           </ChartCard>

@@ -16,6 +16,7 @@ import {
   SGChamadosView,
   SGCafeView,
 } from '@/features/servicos-gerais/logistica/SGLogisticaViews';
+import { SGEstacionamentoView } from '@/features/servicos-gerais/logistica/SGEstacionamentoView';
 import { SGDashboardFullView } from '@/features/servicos-gerais/shared/SGDashboardFull';
 import { SGVoucherView } from '@/features/servicos-gerais/shared/SGVoucherView';
 import { useAuth } from '@/features/auth/AuthContext';
@@ -36,7 +37,8 @@ export type SGPageId =
   | 'sg-engajamento-cafe'
   | 'sg-engajamento-aniversariantes'
   | 'sg-engajamento-mural'
-  | 'sg-voucher-natal';
+  | 'sg-voucher-natal'
+  | 'sg-estacionamento-patio';
 
 const titles: Record<SGPageId, { title: string; subtitle: string }> = {
   'sg-dashboard': {
@@ -94,6 +96,10 @@ const titles: Record<SGPageId, { title: string; subtitle: string }> = {
   'sg-voucher-natal': {
     title: 'Voucher de Natal',
     subtitle: 'Modelo digital com QR Code para validação e distribuição.',
+  },
+  'sg-estacionamento-patio': {
+    title: 'Pátio — Controle de Estacionamento',
+    subtitle: 'Mapa visual de vagas com check-in por crachá e alerta de Vale Transporte.',
   },
 };
 
@@ -184,6 +190,7 @@ export default function ServicosGeraisPage({ activePage }: ServicosGeraisPagePro
         />
       )}
       {page === 'sg-voucher-natal' && <SGVoucherView />}
+      {page === 'sg-estacionamento-patio' && <SGEstacionamentoView />}
     </div>
   );
 }
