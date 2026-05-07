@@ -1,7 +1,8 @@
-import { useId } from "react";
+import { useId, useMemo } from "react";
 import type { Movimentacao } from "@/infrastructure/mock/mockOperacoes";
+import { mockTrilhasPorCargo } from "@/infrastructure/mock/mockDHO";
 import { cn } from "@/shared/lib/cn";
-import { ArrowRight, ChevronDown, FileText } from "lucide-react";
+import { ArrowRight, ChevronDown, FileText, BookOpen } from "lucide-react";
 
 function initialsFromName(nome: string) {
   const parts = nome.split(/\s+/).filter(Boolean);
@@ -22,6 +23,16 @@ type MovementCardProps = {
 export function MovementCard({ mov }: MovementCardProps) {
   const detailsId = useId();
   const isPromocao = mov.tipo === "Promoção";
+
+  const trilhaInfo = useMemo(() => {
+    const trilha = mockTrilhasPorCargo.find((t) => t.cargo === mov.novo);
+    return trilha
+      ? {
+          count: trilha.cursosObrigatorios.length,
+          pending: trilha.pendentesPosMovimentacao,
+        }
+      : null;
+  }, [mov.novo]);
 
   return (
     <div
@@ -70,6 +81,15 @@ export function MovementCard({ mov }: MovementCardProps) {
               </span>
             ) : (
               <span className="text-[10px] font-medium uppercase tracking-wide text-zinc-500">Transferência</span>
+            )}
+            {trilhaInfo && (
+              <span
+                className="inline-flex items-center gap-1.5 rounded-full border border-purple-900/60 bg-purple-950/40 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-purple-400/95"
+                title={`${trilhaInfo.count} curso${trilhaInfo.count > 1 ? "s" : ""} obrigatório${trilhaInfo.count > 1 ? "s" : ""}`}
+              >
+                <BookOpen size={12} aria-hidden />
+                {trilhaInfo.count} curso{trilhaInfo.count > 1 ? "s" : ""}
+              </span>
             )}
           </div>
 

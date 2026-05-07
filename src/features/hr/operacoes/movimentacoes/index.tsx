@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import type { Movimentacao } from "@/infrastructure/mock/mockOperacoes";
 import { mockMovimentacoes } from "@/infrastructure/mock/mockOperacoes";
+import { mockTrilhasPorCargo } from "@/infrastructure/mock/mockDHO";
 import { PageHeader } from "@/shared/ui/PageHeader";
 import { FiltersBar } from "@/shared/ui/FiltersBar";
 import { Modal } from "@/shared/ui/Modal";
@@ -149,7 +150,15 @@ export default function MovimentacoesPage() {
                 setConfirmLoading(true);
                 try {
                   await delay(800);
-                  success("Movimentação Registrada", "O histórico do colaborador foi atualizado e os aditivos contratuais gerados.");
+                  // Simula notificação para DHO sobre trilhas obrigatórias
+                  const cargoSimulado = "Líder de Turno";
+                  const trilha = mockTrilhasPorCargo.find((t) => t.cargo === cargoSimulado);
+                  const cursosCount = trilha?.cursosObrigatorios.length || 0;
+
+                  success(
+                    "Movimentação Registrada",
+                    `O histórico foi atualizado. DHO notificado — ${cursosCount} curso${cursosCount > 1 ? "s" : ""} obrigatório${cursosCount > 1 ? "s" : ""} para ${cargoSimulado}.`
+                  );
                   setIsModalOpen(false);
                 } catch {
                   error("Erro", "Não foi possível registrar a movimentação.");
