@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/Card";
 import {
   Shirt,
@@ -20,6 +20,8 @@ import { useToast } from "@/shared/ui/Toast";
 import { delay } from "@/shared/lib/delay";
 import { ImportarPlanilhaButton } from "@/shared/ui/ImportarPlanilhaButton";
 import { ExportarPlanilhaButton } from "@/shared/ui/ExportarPlanilhaButton";
+import { InlineActionBar } from "@/shared/ui/InlineActionBar";
+import { cn } from "@/shared/lib/cn";
 
 type ColaboradorRow = (typeof mockOperacoesColaboradores)[number];
 
@@ -61,6 +63,7 @@ export default function UniformesPage() {
     }))
   );
   const [submittingMatricula, setSubmittingMatricula] = useState<string | null>(null);
+  const [selectedUniformes, setSelectedUniformes] = useState<string[]>([]);
 
   const stats = {
     entregues: colabList.filter((c) => c.uniforme.status === "entregue").length,
@@ -96,6 +99,49 @@ export default function UniformesPage() {
       setSubmittingMatricula(null);
     }
   };
+
+  const toggleSelectUniforme = useCallback((matricula: string) => {
+    setSelectedUniformes((prev) =>
+      prev.includes(matricula) ? prev.filter((id) => id !== matricula) : [...prev, matricula]
+    );
+  }, []);
+
+  const toggleSelectAllUniformes = useCallback(() => {
+    const pendentesMatriculas = colabList
+      .filter((c) => c.uniforme.status === "pendente")
+      .map((c) => c.matricula);
+
+    if (selectedUniformes.length === pendentesMatriculas.length) {
+      setSelectedUniformes([]);
+    } else {
+      setSelectedUniformes(pendentesMatriculas);
+    }
+  }, [colabList, selectedUniformes]);
+
+  const handleRegistrarEntregaLote = async () => {
+    setSubmittingMatricula("lote");
+    try {
+      await delay(1200);
+      setColabList((prev) =>
+        prev.map((c) =>
+          selectedUniformes.includes(c.matricula)
+            ? { ...c, uniforme: { ...c.uniforme, status: "entregue" as const } }
+            : c
+        )
+      );
+      success(`${selectedUniformes.length} uniforme${selectedUniformes.length > 1 ? "s" : ""} entregue${selectedUniformes.length > 1 ? "s" : ""}!`);
+      setSelectedUniformes([]);
+    } catch {
+      error("Falha ao registrar", "Não foi possível concluir o registro em lote.");
+    } finally {
+      setSubmittingMatricula(null);
+    }
+  };
+
+  const pendentesMatriculas = useMemo(
+    () => colabList.filter((c) => c.uniforme.status === "pendente").map((c) => c.matricula),
+    [colabList]
+  );
 
   return (
     <div className="space-y-6">
@@ -136,6 +182,14 @@ export default function UniformesPage() {
             <table className="w-full text-left text-sm whitespace-nowrap">
               <thead className="bg-[#0f172a] border-b">
                 <tr className="text-muted-foreground font-medium text-[10px] uppercase tracking-wider">
+                  <th className="py-4 px-6 w-10">
+                    <input
+                      type="checkbox"
+                      checked={selectedUniformes.length === pendentesMatriculas.length && pendentesMatriculas.length > 0}
+                      onChange={toggleSelectAllUniformes}
+                      className="w-4 h-4 rounded border-zinc-300 cursor-pointer"
+                    />
+                  </th>
                   <th className="py-4 px-6">Colaborador</th>
                   <th className="py-4 px-6 text-center">Camisa</th>
                   <th className="py-4 px-6 text-center">Calça</th>
@@ -147,8 +201,26 @@ export default function UniformesPage() {
               <tbody>
                 {colabList.map((colab) => {
                   const pendente = colab.uniforme.status === "pendente";
+                  const isSelected = selectedUniformes.includes(colab.matricula);
                   return (
-                    <tr key={colab.matricula} className="border-b hover:bg-zinc-800/20 transition-colors">
+                    <tr
+                      key={colab.matricula}
+                      className={cn(
+                        "border-b transition-colors group cursor-pointer",
+                        isSelected
+                          ? "bg-blue-950/30 hover:bg-blue-950/40"
+                          : "hover:bg-zinc-800/20"
+                      )}
+                    >
+                      <td className="py-4 px-6">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleSelectUniforme(colab.matricula)}
+                          disabled={!pendente}
+                          className="w-4 h-4 rounded border-zinc-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        />
+                      </td>
                       <td className="py-4 px-6">
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 rounded-radius-m bg-zinc-800 flex items-center justify-center text-zinc-600">
@@ -193,6 +265,21 @@ export default function UniformesPage() {
               </tbody>
             </table>
           </div>
+
+          {selectedUniformes.length > 0 && (
+            <InlineActionBar
+              selectedCount={selectedUniformes.length}
+              actions={[
+                {
+                  label: "Registrar Entrega",
+                  icon: <PackageCheck size={16} />,
+                  onClick: handleRegistrarEntregaLote,
+                  variant: "green",
+                },
+              ]}
+              onClear={() => setSelectedUniformes([])}
+            />
+          )}
         </CardContent>
       </Card>
       </div>
