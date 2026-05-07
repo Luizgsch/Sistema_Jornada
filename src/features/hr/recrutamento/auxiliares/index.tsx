@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/shared/ui/Card";
-import { Search } from "lucide-react";
-import { mockAuxiliares } from "@/infrastructure/mock/mockRecrutamento";
+import { Search, CheckCircle } from "lucide-react";
+import { mockAuxiliares, mockRecrutamentoVagas } from "@/infrastructure/mock/mockRecrutamento";
 import { StatusBadge } from "@/shared/ui/StatusBadge";
 import { ImportarPlanilhaButton } from "@/shared/ui/ImportarPlanilhaButton";
 import { ExportarPlanilhaButton } from "@/shared/ui/ExportarPlanilhaButton";
@@ -19,6 +19,23 @@ export default function AuxiliaresPage() {
       return matchNome && matchTurno;
     });
   }, [searchTerm, turnoFiltro]);
+
+  const matchesSugeridos = useMemo(() => {
+    const vagasAbertas = mockRecrutamentoVagas.filter(
+      (v) => v.status === "aberta" || v.status === "processo"
+    );
+    const auxiliaresDisponiveis = mockAuxiliares.filter((a) => a.status === "disponivel");
+
+    return vagasAbertas.map((vaga) => {
+      const matchingAux = auxiliaresDisponiveis.filter(
+        (aux) => aux.preferencaTurno === vaga.turno || vaga.turno === "Flexível"
+      );
+      return {
+        vaga,
+        matches: matchingAux,
+      };
+    }).filter((item) => item.matches.length > 0);
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -42,6 +59,52 @@ export default function AuxiliaresPage() {
           <ExportarPlanilhaButton label="Exportar Auxiliares" nomeArquivo="auxiliares.xlsx" />
         </div>
       </div>
+
+      {matchesSugeridos.length > 0 && (
+        <Card className="border-emerald-200 dark:border-emerald-900/40 bg-emerald-50 dark:bg-emerald-950/20">
+          <CardHeader className="pb-3">
+            <div>
+              <h2 className="text-lg font-bold text-emerald-900 dark:text-emerald-100">
+                🤝 Matches Sugeridos
+              </h2>
+              <p className="text-sm text-emerald-700 dark:text-emerald-300 mt-1">
+                Auxiliares disponíveis com turno compatível para vagas abertas
+              </p>
+            </div>
+          </CardHeader>
+          <CardContent className="p-5 pt-0">
+            <div className="space-y-3">
+              {matchesSugeridos.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="p-4 rounded-lg border border-emerald-200 dark:border-emerald-800/50 bg-white dark:bg-slate-800/50"
+                >
+                  <div className="mb-3">
+                    <h3 className="font-bold text-zinc-900 dark:text-slate-100">
+                      {item.vaga.cargo}
+                    </h3>
+                    <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5">
+                      {item.vaga.setor} • Turno: {item.vaga.turno}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    {item.matches.map((aux) => (
+                      <div
+                        key={aux.id}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs font-medium rounded-lg border border-emerald-200 dark:border-emerald-800"
+                      >
+                        <CheckCircle size={14} />
+                        <span>{aux.nome}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardHeader className="pb-3 space-y-4">
