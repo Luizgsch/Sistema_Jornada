@@ -116,9 +116,9 @@ export default function TriagemIAPage() {
               <div className="p-3 rounded-radius-l bg-[#0f172a] text-primary shrink-0">
                 <FileText size={24} />
               </div>
-              <div className="flex flex-col justify-center">
-                <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider">Total Recebidos</p>
-                <h4 className="text-2xl font-black">{mockCurriculos.length}</h4>
+              <div className="flex flex-col items-start justify-center h-full py-0">
+                <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider leading-none">Total Recebidos</p>
+                <h4 className="text-2xl font-black leading-none mt-1">{mockCurriculos.length}</h4>
               </div>
             </div>
           </CardContent>

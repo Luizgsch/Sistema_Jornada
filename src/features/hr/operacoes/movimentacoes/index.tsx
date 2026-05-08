@@ -221,9 +221,9 @@ function MovMetricCard({ title, value, icon: Icon, color }: any) {
            <div className={`p-3 rounded-radius-l bg-zinc-800 ${color} shrink-0`}>
              <Icon size={24} />
            </div>
-           <div className="flex flex-col justify-center">
-              <p className="text-xs font-bold text-muted-foreground uppercase">{title}</p>
-              <h4 className="text-3xl font-black text-[#e7e5e4]">{value}</h4>
+           <div className="flex flex-col items-start justify-center h-full py-0">
+              <p className="text-xs font-bold text-muted-foreground uppercase leading-none">{title}</p>
+              <h4 className="text-3xl font-black text-[#e7e5e4] mt-1 leading-none">{value}</h4>
            </div>
         </div>
       </CardContent>

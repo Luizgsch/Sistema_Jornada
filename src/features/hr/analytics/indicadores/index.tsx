@@ -302,11 +302,11 @@ function MetricCard({ title, value, icon: Icon, iconClass, iconBg, colSpan = "",
             <div className={`p-3 rounded-radius-l shrink-0 ${iconBg}`}>
               <Icon size={22} className={iconClass} />
             </div>
-            <div className="min-w-0 flex flex-col justify-center">
-              <p className="text-[10px] font-bold text-zinc-500 dark:text-zinc-500 uppercase tracking-wider truncate">
+            <div className="min-w-0 flex flex-col items-start justify-center h-full py-0">
+              <p className="text-[10px] font-bold text-zinc-500 dark:text-zinc-500 uppercase tracking-wider truncate leading-none">
                 {title}
               </p>
-              <h4 className="text-3xl font-black text-zinc-800 dark:text-[#e7e5e4] mt-0.5 tracking-tight leading-none">
+              <h4 className="text-3xl font-black text-zinc-800 dark:text-[#e7e5e4] mt-1 tracking-tight leading-none">
                 {value}
               </h4>
             </div>
