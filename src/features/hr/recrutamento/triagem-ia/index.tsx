@@ -111,9 +111,9 @@ export default function TriagemIAPage() {
 
       <div className="grid gap-4 md:grid-cols-4">
         <Card className="border-none ">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-radius-l bg-[#0f172a] text-primary">
+          <CardContent className="p-6 flex items-center min-h-[88px]">
+            <div className="flex items-center gap-4 w-full">
+              <div className="p-3 rounded-radius-l bg-[#0f172a] text-primary shrink-0">
                 <FileText size={24} />
               </div>
               <div className="flex flex-col justify-center">
@@ -124,9 +124,9 @@ export default function TriagemIAPage() {
           </CardContent>
         </Card>
         <Card className="border-none ">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-radius-l bg-[#0f172a] text-emerald-500">
+          <CardContent className="p-6 flex items-center min-h-[88px]">
+            <div className="flex items-center gap-4 w-full">
+              <div className="p-3 rounded-radius-l bg-[#0f172a] text-emerald-500 shrink-0">
                 <CheckCircle size={24} />
               </div>
               <div className="flex flex-col justify-center">
@@ -137,9 +137,9 @@ export default function TriagemIAPage() {
           </CardContent>
         </Card>
         <Card className="border-none ">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-radius-l bg-[#0f172a] text-amber-500">
+          <CardContent className="p-6 flex items-center min-h-[88px]">
+            <div className="flex items-center gap-4 w-full">
+              <div className="p-3 rounded-radius-l bg-[#0f172a] text-amber-500 shrink-0">
                 <Brain size={24} />
               </div>
               <div className="flex flex-col justify-center">
@@ -150,9 +150,9 @@ export default function TriagemIAPage() {
           </CardContent>
         </Card>
         <Card className="border-none ">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-radius-l bg-[#0f172a] text-rose-500">
+          <CardContent className="p-6 flex items-center min-h-[88px]">
+            <div className="flex items-center gap-4 w-full">
+              <div className="p-3 rounded-radius-l bg-[#0f172a] text-rose-500 shrink-0">
                 <XCircle size={24} />
               </div>
               <div className="flex flex-col justify-center">

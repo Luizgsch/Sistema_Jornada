@@ -297,8 +297,8 @@ function MetricCard({ title, value, icon: Icon, iconClass, iconBg, colSpan = "",
       className={colSpan}
     >
       <Card className="h-full transition-all duration-300 hover:scale-[1.02] hover:shadow-md dark:hover:border-zinc-700 cursor-pointer">
-        <CardContent className="pt-5">
-          <div className="flex items-center gap-4">
+        <CardContent className="p-5 flex items-center min-h-[88px]">
+          <div className="flex items-center gap-4 w-full">
             <div className={`p-3 rounded-radius-l shrink-0 ${iconBg}`}>
               <Icon size={22} className={iconClass} />
             </div>
