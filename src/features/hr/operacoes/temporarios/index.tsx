@@ -143,17 +143,15 @@ export default function TemporariosPage() {
 
 function MetricCard({ title, value, icon: Icon, color }: any) {
   return (
-    <Card className="border-none  overflow-hidden group">
-      <CardContent className="p-6 relative flex items-center min-h-[88px]">
+    <Card className="border-none overflow-hidden group">
+      <CardContent className="p-6 relative h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
         <div className="absolute top-0 right-0 p-8 -mt-4 -mr-4 bg-[#0f172a] rounded-full scale-0 group-hover:scale-100 transition-transform duration-500" />
-        <div className="relative flex items-center gap-4 w-full">
-          <div className={`p-3 rounded-radius-l bg-[#0f172a] ${color} shrink-0`}>
-            <Icon size={24} />
-          </div>
-          <div className="flex flex-col items-start justify-center h-full py-0">
-            <p className="text-xs font-bold text-muted-foreground uppercase leading-none">{title}</p>
-            <p className="text-2xl font-bold mt-1 leading-none">{value}</p>
-          </div>
+        <div className={`p-3 rounded-radius-l bg-[#0f172a] ${color}`}>
+          <Icon size={24} />
+        </div>
+        <div>
+          <p className="text-xs font-bold text-muted-foreground uppercase m-0">{title}</p>
+          <p className="text-2xl font-bold m-0">{value}</p>
         </div>
       </CardContent>
     </Card>

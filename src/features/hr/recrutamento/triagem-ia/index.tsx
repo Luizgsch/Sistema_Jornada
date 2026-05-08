@@ -110,55 +110,47 @@ export default function TriagemIAPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">
-        <Card className="border-none ">
-          <CardContent className="p-6 flex items-center min-h-[88px]">
-            <div className="flex items-center gap-4 w-full">
-              <div className="p-3 rounded-radius-l bg-[#0f172a] text-primary shrink-0">
-                <FileText size={24} />
-              </div>
-              <div className="flex flex-col items-start justify-center h-full py-0">
-                <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider leading-none">Total Recebidos</p>
-                <h4 className="text-2xl font-black leading-none mt-1">{mockCurriculos.length}</h4>
-              </div>
+        <Card className="border-none">
+          <CardContent className="p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+            <div className="p-3 rounded-radius-l bg-[#0f172a] text-primary">
+              <FileText size={24} />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider m-0">Total Recebidos</p>
+              <h4 className="text-2xl font-black m-0">{mockCurriculos.length}</h4>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-none ">
-          <CardContent className="p-6 flex items-center min-h-[88px]">
-            <div className="flex items-center gap-4 w-full">
-              <div className="p-3 rounded-radius-l bg-[#0f172a] text-emerald-500 shrink-0">
-                <CheckCircle size={24} />
-              </div>
-              <div className="flex flex-col justify-center">
-                <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider">Alta Compatibilidade</p>
-                <h4 className="text-2xl font-black">{mockCurriculos.filter(c => c.score >= 80).length}</h4>
-              </div>
+        <Card className="border-none">
+          <CardContent className="p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+            <div className="p-3 rounded-radius-l bg-[#0f172a] text-emerald-500">
+              <CheckCircle size={24} />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider m-0">Alta Compatibilidade</p>
+              <h4 className="text-2xl font-black m-0">{mockCurriculos.filter(c => c.score >= 80).length}</h4>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-none ">
-          <CardContent className="p-6 flex items-center min-h-[88px]">
-            <div className="flex items-center gap-4 w-full">
-              <div className="p-3 rounded-radius-l bg-[#0f172a] text-amber-500 shrink-0">
-                <Brain size={24} />
-              </div>
-              <div className="flex flex-col justify-center">
-                <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider">Parciais</p>
-                <h4 className="text-2xl font-black">{mockCurriculos.filter(c => c.score >= 60 && c.score < 80).length}</h4>
-              </div>
+        <Card className="border-none">
+          <CardContent className="p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+            <div className="p-3 rounded-radius-l bg-[#0f172a] text-amber-500">
+              <Brain size={24} />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider m-0">Parciais</p>
+              <h4 className="text-2xl font-black m-0">{mockCurriculos.filter(c => c.score >= 60 && c.score < 80).length}</h4>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-none ">
-          <CardContent className="p-6 flex items-center min-h-[88px]">
-            <div className="flex items-center gap-4 w-full">
-              <div className="p-3 rounded-radius-l bg-[#0f172a] text-rose-500 shrink-0">
-                <XCircle size={24} />
-              </div>
-              <div className="flex flex-col justify-center">
-                <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider">Baixa Compatibilidade</p>
-                <h4 className="text-2xl font-black">{mockCurriculos.filter(c => c.score < 60).length}</h4>
-              </div>
+        <Card className="border-none">
+          <CardContent className="p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+            <div className="p-3 rounded-radius-l bg-[#0f172a] text-rose-500">
+              <XCircle size={24} />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider m-0">Baixa Compatibilidade</p>
+              <h4 className="text-2xl font-black m-0">{mockCurriculos.filter(c => c.score < 60).length}</h4>
             </div>
           </CardContent>
         </Card>

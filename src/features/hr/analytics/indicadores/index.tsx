@@ -297,19 +297,17 @@ function MetricCard({ title, value, icon: Icon, iconClass, iconBg, colSpan = "",
       className={colSpan}
     >
       <Card className="h-full transition-all duration-300 hover:scale-[1.02] hover:shadow-md dark:hover:border-zinc-700 cursor-pointer">
-        <CardContent className="p-5 flex items-center min-h-[88px]">
-          <div className="flex items-center gap-4 w-full">
-            <div className={`p-3 rounded-radius-l shrink-0 ${iconBg}`}>
-              <Icon size={22} className={iconClass} />
-            </div>
-            <div className="min-w-0 flex flex-col items-start justify-center h-full py-0">
-              <p className="text-[10px] font-bold text-zinc-500 dark:text-zinc-500 uppercase tracking-wider truncate leading-none">
-                {title}
-              </p>
-              <h4 className="text-3xl font-black text-zinc-800 dark:text-[#e7e5e4] mt-1 tracking-tight leading-none">
-                {value}
-              </h4>
-            </div>
+        <CardContent className="p-5 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+          <div className={`p-3 rounded-radius-l ${iconBg}`}>
+            <Icon size={22} className={iconClass} />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[10px] font-bold text-zinc-500 dark:text-zinc-500 uppercase tracking-wider truncate m-0">
+              {title}
+            </p>
+            <h4 className="text-3xl font-black text-zinc-800 dark:text-[#e7e5e4] tracking-tight m-0">
+              {value}
+            </h4>
           </div>
         </CardContent>
       </Card>

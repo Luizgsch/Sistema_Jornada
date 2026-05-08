@@ -215,16 +215,14 @@ export default function MovimentacoesPage() {
 
 function MovMetricCard({ title, value, icon: Icon, color }: any) {
   return (
-    <Card className="border-none  h-full hover: transition-shadow">
-      <CardContent className="p-6 flex items-center min-h-[88px]">
-        <div className="flex items-center gap-4 w-full">
-           <div className={`p-3 rounded-radius-l bg-zinc-800 ${color} shrink-0`}>
-             <Icon size={24} />
-           </div>
-           <div className="flex flex-col items-start justify-center h-full py-0">
-              <p className="text-xs font-bold text-muted-foreground uppercase leading-none">{title}</p>
-              <h4 className="text-3xl font-black text-[#e7e5e4] mt-1 leading-none">{value}</h4>
-           </div>
+    <Card className="border-none h-full hover:transition-shadow">
+      <CardContent className="p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+        <div className={`p-3 rounded-radius-l bg-zinc-800 ${color}`}>
+          <Icon size={24} />
+        </div>
+        <div>
+          <p className="text-xs font-bold text-muted-foreground uppercase m-0">{title}</p>
+          <h4 className="text-3xl font-black text-[#e7e5e4] m-0">{value}</h4>
         </div>
       </CardContent>
     </Card>

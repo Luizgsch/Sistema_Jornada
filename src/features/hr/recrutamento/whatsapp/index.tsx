@@ -82,16 +82,14 @@ export default function WhatsAppBotPage() {
 
       <div className="grid gap-4 md:grid-cols-4">
         {statCards.map((stat, idx) => (
-          <Card key={idx} className="border-none ">
-            <CardContent className="p-6 flex items-center min-h-[88px]">
-              <div className="flex items-center gap-4 w-full">
-                <div className={`p-3 rounded-radius-l bg-[#0f172a] ${stat.color} shrink-0`}>
-                  <stat.icon size={24} />
-                </div>
-                <div className="flex flex-col items-start justify-center h-full py-0">
-                  <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider leading-none">{stat.label}</p>
-                  <h4 className="text-2xl font-black leading-none mt-1">{stat.value}</h4>
-                </div>
+          <Card key={idx} className="border-none">
+            <CardContent className="p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+              <div className={`p-3 rounded-radius-l bg-[#0f172a] ${stat.color}`}>
+                <stat.icon size={24} />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider m-0">{stat.label}</p>
+                <h4 className="text-2xl font-black m-0">{stat.value}</h4>
               </div>
             </CardContent>
           </Card>
