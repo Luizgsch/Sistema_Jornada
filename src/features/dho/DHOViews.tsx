@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { useState, useRef, useCallback, useMemo } from 'react';
 import QRCode from 'qrcode';
+import { useDHOContext } from './DHOContext';
 import { Button } from '@/shared/ui/Button';
 import { Progress } from '@/shared/ui/Common';
 import { useToast } from '@/shared/ui/Toast';
@@ -85,13 +86,17 @@ function StatusPill({ status }: { status: string }) {
 }
 
 export function DashboardTDView() {
-  const pctMeta = Math.min(100, Math.round((mockKpiTD.horaHomemMes / mockKpiTD.horaHomemMeta) * 100));
+  const { kpiUpdates } = useDHOContext();
+  const totalHoras = mockKpiTD.horaHomemMes + kpiUpdates.horaHomemMes;
+  const totalParticipantes = mockKpiTD.participantesMes + kpiUpdates.participantesMes;
+  const pctMeta = Math.min(100, Math.round((totalHoras / mockKpiTD.horaHomemMeta) * 100));
+
   return (
     <div className="space-y-8">
       <div className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(220px,1fr))]">
         <KpiCard
           label="Hora-homem de treinamento (mês)"
-          value={`${mockKpiTD.horaHomemMes.toLocaleString('pt-BR')} h`}
+          value={`${totalHoras.toLocaleString('pt-BR')} h`}
           change={mockKpiTD.variacaoVsMesAnterior}
           trend="up"
         />
@@ -101,7 +106,7 @@ export function DashboardTDView() {
           change={Math.abs(pctMeta - 100)}
           trend={pctMeta >= 90 ? 'up' : 'neutral'}
         />
-        <KpiCard label="Participantes (mês)" value={mockKpiTD.participantesMes} trend="neutral" />
+        <KpiCard label="Participantes (mês)" value={String(totalParticipantes)} trend="neutral" />
         <KpiCard label="Treinamentos realizados" value={mockKpiTD.treinamentosRealizados} trend="neutral" />
       </div>
 
@@ -324,6 +329,7 @@ export function PresencaDigitalView() {
 }
 
 export function LancamentoLoteView() {
+  const { addKpiUpdate } = useDHOContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { success, error } = useToast();
   const [uploading, setUploading] = useState(false);
@@ -355,7 +361,14 @@ export function LancamentoLoteView() {
     setConfirmLoading(true);
     try {
       await delay(900);
-      success('Lote confirmado', 'Registros enviados ao histórico de T&D (demonstração).');
+      // Calculate KPI updates from batch
+      const totalHoras = mockLotePendente.reduce((sum, row) => sum + row.horas, 0);
+      const totalParticipantes = mockLotePendente.length;
+
+      // Update KPI
+      addKpiUpdate(totalHoras, totalParticipantes);
+
+      success('Lote confirmado', `Registros enviados ao histórico de T&D (+${totalHoras}h, +${totalParticipantes} participantes).`);
     } catch {
       error('Erro ao confirmar', 'Não foi possível gravar o lote.');
     } finally {

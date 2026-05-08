@@ -9,6 +9,7 @@ import {
   ConsultoriaInternaView,
   DHOGestorTransversalView,
 } from './DHOViews';
+import { DHOProvider } from './DHOContext';
 import { DHO_PAGE_GESTOR } from '@/domain/auth/roles';
 
 export type DHOPageId =
@@ -69,27 +70,29 @@ export default function DHOPage({ activePage }: DHOPageProps) {
   const header = titles[page];
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-start gap-3">
-          <div className="w-10 h-10 bg-blue-500/20 rounded-radius-m flex items-center justify-center shrink-0">
-            <Building2 className="text-blue-500" size={24} />
-          </div>
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{header.title}</h1>
-            <p className="text-muted-foreground text-sm md:text-base mt-1">{header.subtitle}</p>
+    <DHOProvider>
+      <div className="space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 bg-blue-500/20 rounded-radius-m flex items-center justify-center shrink-0">
+              <Building2 className="text-blue-500" size={24} />
+            </div>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{header.title}</h1>
+              <p className="text-muted-foreground text-sm md:text-base mt-1">{header.subtitle}</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {page === 'dho-dashboard' && <DashboardTDView />}
-      {page === 'dho-presenca' && <PresencaDigitalView />}
-      {page === 'dho-lancamento-lote' && <LancamentoLoteView />}
-      {page === 'dho-trilhas-cargo' && <TrilhasCargoView />}
-      {page === 'dho-portal-gestor' && <PortalGestorView />}
-      {page === 'dho-comunicados' && <ComunicadosTDView />}
-      {page === 'dho-consultoria' && <ConsultoriaInternaView />}
-      {page === DHO_PAGE_GESTOR && <DHOGestorTransversalView />}
-    </div>
+        {page === 'dho-dashboard' && <DashboardTDView />}
+        {page === 'dho-presenca' && <PresencaDigitalView />}
+        {page === 'dho-lancamento-lote' && <LancamentoLoteView />}
+        {page === 'dho-trilhas-cargo' && <TrilhasCargoView />}
+        {page === 'dho-portal-gestor' && <PortalGestorView />}
+        {page === 'dho-comunicados' && <ComunicadosTDView />}
+        {page === 'dho-consultoria' && <ConsultoriaInternaView />}
+        {page === DHO_PAGE_GESTOR && <DHOGestorTransversalView />}
+      </div>
+    </DHOProvider>
   );
 }
