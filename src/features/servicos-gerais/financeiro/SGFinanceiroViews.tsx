@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { Card, CardContent, CardHeader } from '@/shared/ui/Card';
 import { KpiCard } from '@/shared/components/dashboard/KpiCard';
 import { CriticalActionsBar, type CriticalAction } from '@/shared/components/dashboard/CriticalActionsBar';
+import { useToast } from '@/shared/ui/Toast';
 import {
   mockNotasFiscais,
   mockConciliacaoAcessos,
@@ -117,32 +119,77 @@ export function SGDashboardFinanceiroView() {
 }
 
 export function SGNotasFiscaisView() {
+  const { success, warning } = useToast();
+  const [nfEstados, setNfEstados] = useState<Record<string, KanbanNfColuna>>(
+    mockNotasFiscais.reduce((acc, nf) => ({ ...acc, [nf.id]: nf.coluna }), {})
+  );
+  const [draggedNf, setDraggedNf] = useState<string | null>(null);
+
+  const handleDragStart = (e: React.DragEvent, nfId: string) => {
+    setDraggedNf(nfId);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e: React.DragEvent, colId: KanbanNfColuna) => {
+    e.preventDefault();
+    if (!draggedNf) return;
+
+    const nf = mockNotasFiscais.find((n) => n.id === draggedNf);
+    if (!nf) return;
+
+    const novaColuna = colId;
+    setNfEstados((prev) => ({ ...prev, [draggedNf]: novaColuna }));
+
+    if (novaColuna === 'atrasada' && nf.diasAtraso > 0) {
+      warning(`⚠️ ${nf.fornecedor} marcada como atrasada — risco de multa contratual!`);
+    } else if (novaColuna === 'atrasada') {
+      success(`${nf.fornecedor} movida para coluna de atraso.`);
+    } else if (novaColuna === 'recebida') {
+      success(`✓ ${nf.fornecedor} marcada como recebida!`);
+    }
+
+    setDraggedNf(null);
+  };
+
   return (
     <div className="space-y-6">
       <p className="text-sm text-zinc-500 leading-relaxed">
-        Kanban com alertas visuais para esquecimento e atraso — objetivo: nenhuma NF fora do prazo sem sinalização.
+        Arraste cards entre colunas. NFs atrasadas disparam alerta ao atingir coluna "Atrasada".
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
         {colunasNf.map((col) => {
-          const itens = mockNotasFiscais.filter((n) => n.coluna === col.id);
+          const itens = mockNotasFiscais.filter((n) => nfEstados[n.id] === col.id);
           return (
             <div
               key={col.id}
-              className={`bg-[#1e293b] rounded-radius-m min-h-[280px] flex flex-col ${
-                col.alerta
-                  ? 'border border-[#334155] border-l-4 border-l-red-600/70'
-                  : 'border border-[#334155]'
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, col.id)}
+              className={`bg-[#1e293b] rounded-radius-m min-h-[280px] flex flex-col transition-colors ${
+                col.alerta && itens.some((n) => n.diasAtraso > 0)
+                  ? 'border border-red-500/40 border-l-4 border-l-red-600 shadow-lg shadow-red-500/10'
+                  : col.alerta
+                    ? 'border border-[#334155] border-l-4 border-l-red-600/70'
+                    : 'border border-[#334155]'
               }`}
             >
               <div
                 className={`px-4 py-3 border-b border-[#334155] font-semibold text-sm flex items-center justify-between ${
-                  col.alerta ? 'text-red-400' : 'text-[#e7e5e4]'
+                  col.alerta && itens.some((n) => n.diasAtraso > 0) ? 'text-red-300' : col.alerta ? 'text-red-400' : 'text-[#e7e5e4]'
                 }`}
               >
                 {col.label}
                 <span
                   className={`text-xs font-mono px-2 py-0.5 rounded-full ${
-                    col.alerta ? 'bg-red-500/10 text-red-400' : 'bg-zinc-800 text-zinc-500'
+                    col.alerta && itens.some((n) => n.diasAtraso > 0)
+                      ? 'bg-red-500/20 text-red-300 animate-pulse'
+                      : col.alerta
+                        ? 'bg-red-500/10 text-red-400'
+                        : 'bg-zinc-800 text-zinc-500'
                   }`}
                 >
                   {itens.length}
@@ -152,10 +199,14 @@ export function SGNotasFiscaisView() {
                 {itens.map((n) => (
                   <div
                     key={n.id}
-                    className={`p-3 rounded-radius-m text-sm ${
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, n.id)}
+                    className={`p-3 rounded-radius-m text-sm cursor-move transition-all ${
+                      draggedNf === n.id ? 'opacity-50 scale-95' : ''
+                    } ${
                       n.diasAtraso > 0
-                        ? 'bg-red-500/5 border border-red-500/15'
-                        : 'bg-[#0f172a] border border-[#334155]'
+                        ? 'bg-red-500/10 border border-red-500/30 shadow-md shadow-red-500/20'
+                        : 'bg-[#0f172a] border border-[#334155] hover:border-[#475569]'
                     }`}
                   >
                     <p className="font-semibold text-[#e7e5e4] leading-tight">{n.fornecedor}</p>
@@ -166,7 +217,9 @@ export function SGNotasFiscaisView() {
                       R$ {n.valorRef.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                     </p>
                     {n.diasAtraso > 0 && (
-                      <p className="text-xs font-bold mt-2 neon-error-sm">+{n.diasAtraso} dia(s) em atraso</p>
+                      <p className="text-xs font-bold mt-2 neon-error-sm animate-pulse">
+                        +{n.diasAtraso} dia(s) em atraso
+                      </p>
                     )}
                   </div>
                 ))}

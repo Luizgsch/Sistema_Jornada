@@ -1,11 +1,53 @@
 import { Card, CardContent, CardHeader } from '@/shared/ui/Card';
+import { Button } from '@/shared/ui/Button';
 import { mockVouchersNatal } from '@/infrastructure/mock/mockServicosGerais';
-import { Ticket, QrCode } from 'lucide-react';
-import { useState } from 'react';
+import { Ticket, QrCode, Loader } from 'lucide-react';
+import { useState, useCallback } from 'react';
+import { useToast } from '@/shared/ui/Toast';
 
 export function SGVoucherView() {
+  const { success } = useToast();
   const [sel, setSel] = useState(0);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [geradosCount, setGeradosCount] = useState(0);
+  const [showBatchResult, setShowBatchResult] = useState(false);
+
   const v = mockVouchersNatal[sel];
+  const totalVouchers = mockVouchersNatal.length;
+  const progress = Math.round((geradosCount / totalVouchers) * 100);
+
+  const handleGerarTodos = useCallback(async () => {
+    setIsGenerating(true);
+    setGeradosCount(0);
+    setShowBatchResult(false);
+
+    for (let i = 0; i < totalVouchers; i++) {
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      setGeradosCount(i + 1);
+    }
+
+    setIsGenerating(false);
+    setShowBatchResult(true);
+    success(`✓ ${totalVouchers} vouchers gerados com sucesso!`);
+  }, [totalVouchers, success]);
+
+  const handleBaixarPdf = () => {
+    const csv = [
+      ['Colaborador', 'Valor', 'ID'].join(','),
+      ...mockVouchersNatal.map((v) => [v.colaborador, v.valor, v.id].join(',')),
+    ].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'vouchers-natal-2026.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    success(`📥 Vouchers baixados!`);
+  };
+
   return (
     <div className="space-y-6">
       <Card className="border-none ">
@@ -25,6 +67,7 @@ export function SGVoucherView() {
               className="w-full h-10 rounded-radius-s border border-input bg-background px-3 text-sm"
               value={sel}
               onChange={(e) => setSel(Number(e.target.value))}
+              disabled={isGenerating}
             >
               {mockVouchersNatal.map((x, i) => (
                 <option key={x.id} value={i}>
@@ -37,13 +80,51 @@ export function SGVoucherView() {
               <p className="font-mono text-xs break-all mt-2 text-slate-200">{v.qrPayload}</p>
               <p className="text-xs mt-4 text-slate-500 dark:text-slate-400">Status: {v.emitido ? 'Emitido' : 'Pré-visualização'}</p>
             </div>
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-radius-m text-sm font-medium"
-            >
-              <QrCode size={18} />
-              Gerar / baixar QR (demo)
-            </button>
+            <div className="space-y-2">
+              <Button className="w-full" disabled={isGenerating}>
+                <QrCode size={18} />
+                Gerar / baixar QR (demo)
+              </Button>
+              <Button
+                variant="secondary"
+                className="w-full"
+                onClick={handleGerarTodos}
+                disabled={isGenerating}
+              >
+                {isGenerating ? (
+                  <>
+                    <Loader size={16} className="animate-spin" />
+                    Gerando... {geradosCount}/{totalVouchers}
+                  </>
+                ) : (
+                  <>📦 Gerar todos em lote</>
+                )}
+              </Button>
+            </div>
+
+            {isGenerating && (
+              <div className="space-y-2">
+                <div className="h-2 bg-zinc-700 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-emerald-500 transition-all"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+                <p className="text-xs text-zinc-400 text-center">
+                  {geradosCount}/{totalVouchers} vouchers processados ({progress}%)
+                </p>
+              </div>
+            )}
+
+            {showBatchResult && (
+              <Button
+                variant="primary"
+                className="w-full animate-pulse"
+                onClick={handleBaixarPdf}
+              >
+                📥 Baixar PDF com todos os vouchers
+              </Button>
+            )}
           </div>
           <div className="w-full max-w-xs mx-auto lg:mx-0 p-8 rounded-radius-l border-4 border-dashed border-red-200 dark:border-red-900/55 bg-gradient-to-b from-red-50 to-white dark:from-[#1e293b] dark:to-[#0f172a] flex flex-col items-center text-center">
             <p className="text-xs font-bold text-red-800 dark:text-red-300 uppercase tracking-widest">Posigraf</p>

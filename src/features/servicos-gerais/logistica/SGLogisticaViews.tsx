@@ -541,27 +541,83 @@ export function SGSatisfacaoView() {
 }
 
 export function SGChamadosView() {
+  const { success } = useToast();
+  const [soVencidos, setSoVencidos] = useState(false);
+  const [selectedChamados, setSelectedChamados] = useState<string[]>([]);
+
+  const filtrados = useMemo(() => {
+    const base = soVencidos ? mockChamadosManusis.filter((c) => c.status === 'vencido') : mockChamadosManusis;
+    return base.sort((a, b) => {
+      if (a.status === 'vencido' && b.status !== 'vencido') return -1;
+      if (a.status !== 'vencido' && b.status === 'vencido') return 1;
+      return 0;
+    });
+  }, [soVencidos]);
+
+  const toggleSelect = (id: string) => {
+    setSelectedChamados((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
+
+  const handleExportVencidos = () => {
+    const toExport = filtrados.filter((c) => selectedChamados.includes(c.id));
+    const csv = [
+      ['Chamado', 'Título', 'Área', 'Vencimento', 'Status'].join(','),
+      ...toExport.map((c) => [c.id, c.titulo, c.area, c.vencimento, c.status].join(',')),
+    ].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'chamados-vencidos.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    success(`✓ ${toExport.length} chamado(s) exportado(s)`);
+  };
+
   return (
     <Card>
-      <CardHeader className="border-b border-[#334155] pb-4 flex flex-row items-center gap-2">
-        <ClipboardList className="text-rose-400" size={20} />
-        <div>
-          <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4]">Chamados (Manusis) — prazos</h3>
-          <p className="text-sm text-zinc-500">Alerta automático de vencido ou próximo do vencimento.</p>
+      <CardHeader className="border-b border-[#334155] pb-4 flex flex-row items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <ClipboardList className="text-rose-400" size={20} />
+          <div>
+            <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4]">Chamados (Manusis) — prazos</h3>
+            <p className="text-sm text-zinc-500">Alerta automático de vencido ou próximo do vencimento.</p>
+          </div>
         </div>
+        <Button
+          onClick={() => setSoVencidos(!soVencidos)}
+          variant={soVencidos ? 'primary' : 'outline'}
+          className="whitespace-nowrap text-xs"
+        >
+          {soVencidos ? '✓ Só vencidos' : 'Só vencidos'}
+        </Button>
       </CardHeader>
       <CardContent className="p-0">
         <table className="w-full text-sm">
           <thead className="bg-[#0f172a] text-slate-500 dark:text-slate-300 text-xs font-semibold uppercase tracking-widest">
             <tr>
-              <th className="py-4 px-6 border-b border-[#334155]">Chamado</th>
-              <th className="py-4 px-6 border-b border-[#334155]">Área</th>
-              <th className="py-4 px-6 border-b border-[#334155]">Vencimento</th>
-              <th className="py-4 px-6 border-b border-[#334155]">Status</th>
+              <th className="py-4 px-3 border-b border-[#334155] w-8">
+                <input
+                  type="checkbox"
+                  checked={selectedChamados.length === filtrados.length && filtrados.length > 0}
+                  onChange={(e) =>
+                    setSelectedChamados(e.target.checked ? filtrados.map((c) => c.id) : [])
+                  }
+                  className="rounded"
+                />
+              </th>
+              <th className="py-4 px-6 border-b border-[#334155] text-left">Chamado</th>
+              <th className="py-4 px-6 border-b border-[#334155] text-left">Área</th>
+              <th className="py-4 px-6 border-b border-[#334155] text-left">Vencimento</th>
+              <th className="py-4 px-6 border-b border-[#334155] text-left">Status</th>
             </tr>
           </thead>
           <tbody>
-            {mockChamadosManusis.map((c) => (
+            {filtrados.map((c) => (
               <tr
                 key={c.id}
                 className={`hover:bg-zinc-800/30 transition-colors ${
@@ -572,6 +628,14 @@ export function SGChamadosView() {
                       : ''
                 }`}
               >
+                <td className="py-4 px-3 border-b border-[#334155]">
+                  <input
+                    type="checkbox"
+                    checked={selectedChamados.includes(c.id)}
+                    onChange={() => toggleSelect(c.id)}
+                    className="rounded cursor-pointer"
+                  />
+                </td>
                 <td className="py-4 px-6 border-b border-[#334155]">
                   <span className="font-mono text-xs text-zinc-600">{c.id}</span>
                   <p className={`font-semibold mt-0.5 ${c.status === 'vencido' ? 'neon-error-sm' : 'text-[#e7e5e4]'}`}>
@@ -588,6 +652,19 @@ export function SGChamadosView() {
           </tbody>
         </table>
       </CardContent>
+      {selectedChamados.length > 0 && (
+        <InlineActionBar
+          selectedCount={selectedChamados.length}
+          actions={[
+            {
+              label: `📋 Exportar (${selectedChamados.length})`,
+              icon: 'download',
+              onClick: handleExportVencidos,
+              variant: 'blue',
+            },
+          ]}
+        />
+      )}
     </Card>
   );
 }

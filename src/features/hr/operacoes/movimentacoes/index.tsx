@@ -44,9 +44,22 @@ function groupMovimentacoesByMonth(movs: Movimentacao[]) {
 export default function MovimentacoesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const { success, error } = useToast();
 
-  const groupedMovimentacoes = useMemo(() => groupMovimentacoesByMonth(mockMovimentacoes), []);
+  const filteredMovimentacoes = useMemo(() => {
+    if (!searchTerm.trim()) return mockMovimentacoes;
+    const lower = searchTerm.toLowerCase();
+    return mockMovimentacoes.filter((m) =>
+      m.nome.toLowerCase().includes(lower) ||
+      m.matricula.toLowerCase().includes(lower) ||
+      m.anterior.toLowerCase().includes(lower) ||
+      m.novo.toLowerCase().includes(lower) ||
+      m.tipo.toLowerCase().includes(lower)
+    );
+  }, [searchTerm]);
+
+  const groupedMovimentacoes = useMemo(() => groupMovimentacoesByMonth(filteredMovimentacoes), [filteredMovimentacoes]);
 
   const stats = {
     total: mockMovimentacoes.length,
@@ -75,7 +88,10 @@ export default function MovimentacoesPage() {
         <MovMetricCard title="Transferências" value={stats.transferencias} icon={ArrowRightLeft} color="text-blue-500" />
       </div>
 
-      <FiltersBar searchPlaceholder="Buscar no histórico de movimentações..." />
+      <FiltersBar
+        searchPlaceholder="Buscar no histórico de movimentações..."
+        onSearch={setSearchTerm}
+      />
 
       {/* Vertical Timeline UI — cards com divulgação progressiva */}
       <div className="relative rounded-radius-l border border-[#334155] bg-[#1e293b] p-8 sm:p-11">
