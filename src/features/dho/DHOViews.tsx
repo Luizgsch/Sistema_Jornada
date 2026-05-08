@@ -23,9 +23,11 @@ import {
   CheckCircle2,
   Loader2,
   Smartphone,
+  Download,
 } from 'lucide-react';
 import { useState, useRef, useCallback, useMemo } from 'react';
 import QRCode from 'qrcode';
+import jsPDF from 'jspdf';
 import { useDHOContext } from './DHOContext';
 import { Button } from '@/shared/ui/Button';
 import { Progress } from '@/shared/ui/Common';
@@ -197,6 +199,59 @@ export function PresencaDigitalView() {
     });
   }, []);
 
+  const downloadQrPdf = useCallback((treinamentoId: string) => {
+    try {
+      const training = mockTreinamentosPresenca.find((t) => t.id === treinamentoId);
+      if (!training || !qrStates[treinamentoId]) return;
+
+      const qrDataUrl = qrStates[treinamentoId].dataUrl;
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      });
+
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const margin = 20;
+      const contentWidth = pageWidth - margin * 2;
+
+      let yPosition = margin;
+
+      // Add title
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      const titleLines = doc.splitTextToSize(training.titulo, contentWidth) as string[];
+      doc.text(titleLines, margin, yPosition);
+      yPosition += titleLines.length * 8 + 5;
+
+      // Add date and location
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(100);
+      const dataStr: string = String((training as any).data ?? '—');
+      const localStr: string = String((training as any).local ?? '—');
+      doc.text(dataStr, margin, yPosition, { maxWidth: contentWidth });
+      yPosition += 7;
+      doc.text(localStr, margin, yPosition, { maxWidth: contentWidth });
+      yPosition += 15;
+
+      // Reset text color for QR
+      doc.setTextColor(0);
+
+      // Add QR code centered
+      const qrSize = 120;
+      const qrX = (pageWidth - qrSize) / 2;
+      doc.addImage(qrDataUrl, 'PNG', qrX, yPosition, qrSize, qrSize);
+
+      // Download
+      doc.save(`treinamento-${treinamentoId}-qr.pdf`);
+      success('PDF baixado', `QR code de "${training.titulo}" salvo com sucesso.`);
+    } catch (err) {
+      console.error('Erro ao gerar PDF:', err);
+      success('Erro ao gerar PDF', 'Tente novamente.');
+    }
+  }, [qrStates, success]);
+
   return (
     <div className="space-y-6">
       <Card>
@@ -303,8 +358,18 @@ export function PresencaDigitalView() {
             <h3 className="text-sm font-semibold text-blue-300">QR Code Ativo</h3>
           </CardHeader>
           <CardContent className="p-6 flex flex-col md:flex-row gap-6 items-center">
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 flex flex-col items-center gap-3">
               <img src={state.dataUrl} alt="QR Code" className="w-48 h-48 border-2 border-blue-500 p-2 bg-white" />
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={() => downloadQrPdf(id)}
+                className="text-xs"
+              >
+                <Download size={13} />
+                Baixar PDF
+              </Button>
             </div>
             <div className="flex-1">
               <p className="text-sm text-zinc-400 mb-3">Participantes escaneados:</p>
