@@ -10,10 +10,11 @@ import {
   mockCafeAbastecimento,
   mockProximoCafeRoda,
 } from '@/infrastructure/mock/mockServicosGerais';
-import { Car, Grid3x3, Smile, ClipboardList, UsersRound, CheckCircle2, AlertTriangle, Droplets, DoorOpen, Wrench, ChevronRight } from 'lucide-react';
+import { Car, Grid3x3, Smile, ClipboardList, UsersRound, CheckCircle2, AlertTriangle, Droplets, DoorOpen, Wrench, ChevronRight, Download } from 'lucide-react';
 import { motion, type Variants, AnimatePresence } from 'framer-motion';
 import { PulseBadge } from '@/shared/ui/PulseBadge';
 import { InlineActionBar } from '@/shared/ui/InlineActionBar';
+import { ImportarPlanilhaButton } from '@/shared/ui/ImportarPlanilhaButton';
 import { useToast } from '@/shared/ui/Toast';
 import { usePageNav } from '@/features/navigation/PageNavContext';
 import { useState, useCallback, useMemo } from 'react';
@@ -294,61 +295,113 @@ export function SGDashboardLogisticaView() {
 }
 
 export function SGBeneficiosView() {
+  const { success } = useToast();
+  const [newImports, setNewImports] = useState<string[]>([]);
+
+  const divergences = useMemo(() => mockCruzamentoBeneficios.filter((b) => b.redundancia), []);
+  const newDivergences = useMemo(() => divergences.filter((d) => newImports.includes(d.matricula)), [divergences, newImports]);
+
+  const handleImportarPlanilha = useCallback(() => {
+    // Simula import: marca todas as divergências como "new"
+    setNewImports(divergences.map((d) => d.matricula));
+    success('Planilha importada', `${divergences.length} divergência${divergences.length > 1 ? "s" : ""} detectada${divergences.length > 1 ? "s" : ""}`);
+  }, [divergences, success]);
+
+  const handleExportarDivergencias = useCallback(() => {
+    success(`${newDivergences.length} divergência${newDivergences.length > 1 ? "s" : ""} exportada${newDivergences.length > 1 ? "s" : ""}`);
+    setNewImports([]);
+  }, [newDivergences.length, success]);
+
   return (
-    <Card>
-      <CardHeader className="border-b border-[#334155] pb-4">
-        <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4] flex items-center gap-2">
-          <Car className="text-zinc-400" size={20} />
-          Estacionamento × VT
-        </h3>
-        <p className="text-sm text-zinc-500 dark:text-slate-400 mt-1">
-          Cruzamento das bases para identificar automaticamente quem utiliza os dois benefícios.
-        </p>
-      </CardHeader>
-      <CardContent className="p-0">
-        <table className="w-full text-sm">
-          <thead className="bg-[#0f172a] text-slate-500 dark:text-slate-300 text-xs font-semibold uppercase tracking-widest">
-            <tr>
-              <th className="py-4 px-6 border-b border-[#334155]">Matrícula</th>
-              <th className="py-4 px-6 border-b border-[#334155]">Nome</th>
-              <th className="py-4 px-6 border-b border-[#334155] text-center">VT</th>
-              <th className="py-4 px-6 border-b border-[#334155] text-center">Estacionamento</th>
-              <th className="py-4 px-6 border-b border-[#334155] text-center">Ambos</th>
-              <th className="py-4 px-6 border-b border-[#334155]">Observação</th>
-            </tr>
-          </thead>
-          <tbody>
-            {mockCruzamentoBeneficios.map((b) => (
-              <tr
-                key={b.matricula}
-                className={`hover:bg-zinc-800/30 transition-colors ${
-                  b.redundancia ? 'border-l-4 border-l-amber-500/60 border-[#334155]' : ''
-                }`}
-              >
-                <td className="py-4 px-6 border-b border-[#334155] font-mono text-xs text-zinc-600">{b.matricula}</td>
-                <td className="py-4 px-6 border-b border-[#334155] font-semibold text-[#e7e5e4]">{b.nome}</td>
-                <td className="py-4 px-6 border-b border-[#334155] text-center">
-                  {b.vt
-                    ? <CheckCircle2 className="inline text-emerald-400" size={15} />
-                    : <span className="text-zinc-700">—</span>}
-                </td>
-                <td className="py-4 px-6 border-b border-[#334155] text-center">
-                  {b.estacionamento
-                    ? <CheckCircle2 className="inline text-emerald-400" size={15} />
-                    : <span className="text-zinc-700">—</span>}
-                </td>
-                <td className="py-4 px-6 border-b border-[#334155] text-center">
-                  {b.redundancia
-                    ? <LogBadge label="Sim" color="bg-amber-500/10 text-amber-400 border-amber-500/20" />
-                    : <span className="text-zinc-600 text-xs">Não</span>}
-                </td>
-                <td className="py-4 px-6 border-b border-[#334155] text-xs text-zinc-600">{b.observacao}</td>
+    <div className="space-y-6">
+      <Card>
+        <CardHeader className="border-b border-[#334155] pb-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <Car className="text-zinc-400" size={20} />
+            <div>
+              <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4]">Estacionamento × VT</h3>
+              <p className="text-sm text-zinc-500 dark:text-slate-400 mt-1">
+                Cruzamento automático identifica quem utiliza ambos os benefícios.
+              </p>
+            </div>
+          </div>
+          <ImportarPlanilhaButton
+            label="Importar"
+            modeloNome="modelo_beneficios.xlsx"
+            onSuccess={handleImportarPlanilha}
+          />
+        </CardHeader>
+        <CardContent className="p-0">
+          <table className="w-full text-sm">
+            <thead className="bg-[#0f172a] text-slate-500 dark:text-slate-300 text-xs font-semibold uppercase tracking-widest">
+              <tr>
+                <th className="py-4 px-6 border-b border-[#334155]">Matrícula</th>
+                <th className="py-4 px-6 border-b border-[#334155]">Nome</th>
+                <th className="py-4 px-6 border-b border-[#334155] text-center">VT</th>
+                <th className="py-4 px-6 border-b border-[#334155] text-center">Estacionamento</th>
+                <th className="py-4 px-6 border-b border-[#334155] text-center">Ambos</th>
+                <th className="py-4 px-6 border-b border-[#334155]">Observação</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </CardContent>
-    </Card>
+            </thead>
+            <tbody>
+              {mockCruzamentoBeneficios.map((b) => {
+                const isNewDivergence = newImports.includes(b.matricula) && b.redundancia;
+                return (
+                  <tr
+                    key={b.matricula}
+                    className={`hover:bg-zinc-800/30 transition-colors ${
+                      isNewDivergence
+                        ? 'bg-amber-500/10 border-l-4 border-l-amber-400'
+                        : b.redundancia
+                          ? 'border-l-4 border-l-amber-500/60 border-[#334155]'
+                          : ''
+                    }`}
+                  >
+                    <td className="py-4 px-6 border-b border-[#334155] font-mono text-xs text-zinc-600">{b.matricula}</td>
+                    <td className="py-4 px-6 border-b border-[#334155] font-semibold text-[#e7e5e4]">{b.nome}</td>
+                    <td className="py-4 px-6 border-b border-[#334155] text-center">
+                      {b.vt
+                        ? <CheckCircle2 className="inline text-emerald-400" size={15} />
+                        : <span className="text-zinc-700">—</span>}
+                    </td>
+                    <td className="py-4 px-6 border-b border-[#334155] text-center">
+                      {b.estacionamento
+                        ? <CheckCircle2 className="inline text-emerald-400" size={15} />
+                        : <span className="text-zinc-700">—</span>}
+                    </td>
+                    <td className="py-4 px-6 border-b border-[#334155] text-center">
+                      {b.redundancia
+                        ? <LogBadge label={isNewDivergence ? "🆕 Sim" : "Sim"} color={isNewDivergence ? "bg-amber-400/20 text-amber-300 border-amber-400/40" : "bg-amber-500/10 text-amber-400 border-amber-500/20"} />
+                        : <span className="text-zinc-600 text-xs">Não</span>}
+                    </td>
+                    <td className="py-4 px-6 border-b border-[#334155] text-xs text-zinc-600">{b.observacao}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+
+          <AnimatePresence>
+            {newDivergences.length > 0 && (
+              <div className="border-t border-[#334155] p-4">
+                <InlineActionBar
+                  selectedCount={newDivergences.length}
+                  actions={[
+                    {
+                      label: "Exportar Divergências",
+                      icon: <Download size={16} />,
+                      onClick: handleExportarDivergencias,
+                      variant: "blue",
+                    },
+                  ]}
+                  onClear={() => setNewImports([])}
+                />
+              </div>
+            )}
+          </AnimatePresence>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 
