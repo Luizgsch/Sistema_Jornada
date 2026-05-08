@@ -88,7 +88,7 @@ export default function WhatsAppBotPage() {
                 <div className={`p-3 rounded-radius-l bg-[#0f172a] ${stat.color}`}>
                   <stat.icon size={24} />
                 </div>
-                <div>
+                <div className="flex flex-col justify-center">
                   <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider">{stat.label}</p>
                   <h4 className="text-2xl font-black">{stat.value}</h4>
                 </div>

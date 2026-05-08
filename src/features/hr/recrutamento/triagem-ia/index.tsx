@@ -116,7 +116,7 @@ export default function TriagemIAPage() {
               <div className="p-3 rounded-radius-l bg-[#0f172a] text-primary">
                 <FileText size={24} />
               </div>
-              <div>
+              <div className="flex flex-col justify-center">
                 <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider">Total Recebidos</p>
                 <h4 className="text-2xl font-black">{mockCurriculos.length}</h4>
               </div>
@@ -129,7 +129,7 @@ export default function TriagemIAPage() {
               <div className="p-3 rounded-radius-l bg-[#0f172a] text-emerald-500">
                 <CheckCircle size={24} />
               </div>
-              <div>
+              <div className="flex flex-col justify-center">
                 <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider">Alta Compatibilidade</p>
                 <h4 className="text-2xl font-black">{mockCurriculos.filter(c => c.score >= 80).length}</h4>
               </div>
@@ -142,7 +142,7 @@ export default function TriagemIAPage() {
               <div className="p-3 rounded-radius-l bg-[#0f172a] text-amber-500">
                 <Brain size={24} />
               </div>
-              <div>
+              <div className="flex flex-col justify-center">
                 <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider">Parciais</p>
                 <h4 className="text-2xl font-black">{mockCurriculos.filter(c => c.score >= 60 && c.score < 80).length}</h4>
               </div>
@@ -155,7 +155,7 @@ export default function TriagemIAPage() {
               <div className="p-3 rounded-radius-l bg-[#0f172a] text-rose-500">
                 <XCircle size={24} />
               </div>
-              <div>
+              <div className="flex flex-col justify-center">
                 <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider">Baixa Compatibilidade</p>
                 <h4 className="text-2xl font-black">{mockCurriculos.filter(c => c.score < 60).length}</h4>
               </div>

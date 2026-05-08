@@ -150,7 +150,7 @@ function MetricCard({ title, value, icon: Icon, color }: any) {
           <div className={`p-3 rounded-radius-l bg-[#0f172a] ${color}`}>
             <Icon size={24} />
           </div>
-          <div>
+          <div className="flex flex-col justify-center">
             <p className="text-xs font-bold text-muted-foreground uppercase">{title}</p>
             <p className="text-2xl font-bold">{value}</p>
           </div>

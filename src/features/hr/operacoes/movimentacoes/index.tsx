@@ -221,7 +221,7 @@ function MovMetricCard({ title, value, icon: Icon, color }: any) {
            <div className={`p-3 rounded-radius-l bg-zinc-800 ${color} `}>
              <Icon size={24} />
            </div>
-           <div>
+           <div className="flex flex-col justify-center">
               <p className="text-xs font-bold text-muted-foreground uppercase">{title}</p>
               <h4 className="text-3xl font-black text-[#e7e5e4]">{value}</h4>
            </div>

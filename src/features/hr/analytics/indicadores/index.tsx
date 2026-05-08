@@ -302,7 +302,7 @@ function MetricCard({ title, value, icon: Icon, iconClass, iconBg, colSpan = "",
             <div className={`p-3 rounded-radius-l shrink-0 ${iconBg}`}>
               <Icon size={22} className={iconClass} />
             </div>
-            <div className="min-w-0">
+            <div className="min-w-0 flex flex-col justify-center">
               <p className="text-[10px] font-bold text-zinc-500 dark:text-zinc-500 uppercase tracking-wider truncate">
                 {title}
               </p>
