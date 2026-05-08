@@ -76,18 +76,16 @@ function MetricCard({ title, value, icon: Icon, trend, accent }: {
 }) {
   const style = accent ? (accentMap[accent] ?? accentMap.slate) : accentMap.slate;
   return (
-    <div className="bg-[#1e293b] rounded-radius-l border border-[#334155] hover:border-zinc-600 p-6 sm:p-8 flex flex-col gap-4 transition-colors md:flex-row md:items-center md:justify-between md:gap-6">
-      <div className="flex min-w-0 flex-1 items-start gap-4 md:items-center">
-        <div className={`p-2 rounded-radius-m shrink-0 ${style.bg}`}>
-          <Icon className={`w-4 h-4 ${style.icon}`} />
-        </div>
-        <div className="min-w-0">
-          <p className="text-xs font-medium text-zinc-500 uppercase tracking-widest">{title}</p>
-          <span className="text-3xl font-bold text-[#e7e5e4] leading-none tracking-tighter">{value}</span>
-        </div>
+    <div className="bg-[#1e293b] rounded-radius-l border border-[#334155] hover:border-zinc-600 p-6 sm:p-8 grid grid-cols-[auto_1fr_auto] items-center gap-4 sm:gap-6 transition-colors min-h-[80px]">
+      <div className={`p-2 rounded-radius-m shrink-0 ${style.bg}`}>
+        <Icon className={`w-4 h-4 ${style.icon}`} />
+      </div>
+      <div className="min-w-0">
+        <p className="text-xs font-medium text-zinc-500 uppercase tracking-widest m-0">{title}</p>
+        <span className="text-3xl font-bold text-[#e7e5e4] leading-none tracking-tighter m-0">{value}</span>
       </div>
       {trend && (
-        <span className="inline-flex w-fit shrink-0 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-radius-m border border-emerald-500/20 md:self-center">
+        <span className="inline-flex w-fit shrink-0 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-radius-m border border-emerald-500/20">
           {trend}
         </span>
       )}

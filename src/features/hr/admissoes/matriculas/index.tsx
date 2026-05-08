@@ -236,17 +236,15 @@ export default function MatriculasPage() {
 function StatCard({ title, value, icon: Icon }: any) {
   return (
     <Card>
-      <CardContent className="pt-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{title}</p>
-            <h4 className="text-2xl font-bold mt-1">{value}</h4>
-          </div>
-          <div className="p-3 bg-primary/10 rounded-radius-m text-primary">
-            <Icon size={20} />
-          </div>
+      <div className="!p-6 grid grid-cols-[1fr_auto] items-center gap-4 min-h-[88px]">
+        <div>
+          <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider m-0">{title}</p>
+          <h4 className="text-2xl font-bold m-0">{value}</h4>
         </div>
-      </CardContent>
+        <div className="p-3 bg-primary/10 rounded-radius-m text-primary shrink-0">
+          <Icon size={20} />
+        </div>
+      </div>
     </Card>
   );
 }

@@ -380,18 +380,16 @@ export default function UniformesPage() {
 function UniformStatCard({ title, value, icon: Icon, color }: { title: string; value: number; icon: typeof Package; color: string }) {
   return (
     <Card className="border-none h-full">
-      <CardContent className="pt-6">
-        <div className="flex items-center justify-between">
-          <div className={`p-2 rounded-radius-m bg-[#0f172a] ${color}`}>
-            <Icon size={20} />
-          </div>
-          <span className="text-xs font-bold text-zinc-600">Total</span>
+      <div className="!p-6 grid grid-cols-[auto_1fr] items-start gap-4 min-h-[100px]">
+        <div className={`p-2 rounded-radius-m bg-[#0f172a] ${color}`}>
+          <Icon size={20} />
         </div>
-        <div className="mt-4">
-          <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{title}</p>
-          <span className="text-2xl font-bold text-[#e7e5e4]">{value} unidades</span>
+        <div>
+          <span className="text-xs font-bold text-zinc-600 m-0 block">Total</span>
+          <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider m-0 mt-2">{title}</p>
+          <span className="text-2xl font-bold text-[#e7e5e4] m-0">{value} unidades</span>
         </div>
-      </CardContent>
+      </div>
     </Card>
   );
 }
