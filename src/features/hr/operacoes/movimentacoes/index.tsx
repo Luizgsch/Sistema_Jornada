@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Button } from "@/shared/ui/Button";
 import { delay } from "@/shared/lib/delay";
 import { useToast } from "@/shared/ui/Toast";
-import { Card, CardContent } from "@/shared/ui/Card";
+import { Card } from "@/shared/ui/Card";
 import { ImportarPlanilhaButton } from "@/shared/ui/ImportarPlanilhaButton";
 import { ExportarPlanilhaButton } from "@/shared/ui/ExportarPlanilhaButton";
 import {
@@ -216,7 +216,7 @@ export default function MovimentacoesPage() {
 function MovMetricCard({ title, value, icon: Icon, color }: any) {
   return (
     <Card className="border-none h-full hover:transition-shadow">
-      <div className="!p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+      <div className="!p-6 grid grid-cols-[auto_1fr] items-center gap-4 min-h-[88px]">
         <div className={`p-3 rounded-radius-l bg-zinc-800 ${color}`}>
           <Icon size={24} />
         </div>

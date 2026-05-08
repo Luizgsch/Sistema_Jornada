@@ -111,7 +111,7 @@ export default function TriagemIAPage() {
 
       <div className="grid gap-4 md:grid-cols-4">
         <Card className="border-none">
-          <div className="!p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+          <div className="!p-6 grid grid-cols-[auto_1fr] items-center gap-4 min-h-[88px]">
             <div className="p-3 rounded-radius-l bg-[#0f172a] text-primary">
               <FileText size={24} />
             </div>
@@ -122,7 +122,7 @@ export default function TriagemIAPage() {
           </div>
         </Card>
         <Card className="border-none">
-          <div className="!p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+          <div className="!p-6 grid grid-cols-[auto_1fr] items-center gap-4 min-h-[88px]">
             <div className="p-3 rounded-radius-l bg-[#0f172a] text-emerald-500">
               <CheckCircle size={24} />
             </div>
@@ -133,7 +133,7 @@ export default function TriagemIAPage() {
           </div>
         </Card>
         <Card className="border-none">
-          <div className="!p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+          <div className="!p-6 grid grid-cols-[auto_1fr] items-center gap-4 min-h-[88px]">
             <div className="p-3 rounded-radius-l bg-[#0f172a] text-amber-500">
               <Brain size={24} />
             </div>
@@ -144,7 +144,7 @@ export default function TriagemIAPage() {
           </div>
         </Card>
         <Card className="border-none">
-          <div className="!p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+          <div className="!p-6 grid grid-cols-[auto_1fr] items-center gap-4 min-h-[88px]">
             <div className="p-3 rounded-radius-l bg-[#0f172a] text-rose-500">
               <XCircle size={24} />
             </div>

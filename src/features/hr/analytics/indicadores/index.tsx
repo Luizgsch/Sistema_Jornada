@@ -297,7 +297,7 @@ function MetricCard({ title, value, icon: Icon, iconClass, iconBg, colSpan = "",
       className={colSpan}
     >
       <Card className="h-full transition-all duration-300 hover:scale-[1.02] hover:shadow-md dark:hover:border-zinc-700 cursor-pointer">
-        <div className="!p-5 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+        <div className="!p-5 grid grid-cols-[auto_1fr] items-center gap-4 min-h-[88px]">
           <div className={`p-3 rounded-radius-l ${iconBg}`}>
             <Icon size={22} className={iconClass} />
           </div>

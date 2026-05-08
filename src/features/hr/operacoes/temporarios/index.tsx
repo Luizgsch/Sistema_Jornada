@@ -144,7 +144,7 @@ export default function TemporariosPage() {
 function MetricCard({ title, value, icon: Icon, color }: any) {
   return (
     <Card className="border-none overflow-hidden group">
-      <div className="!p-6 relative h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+      <div className="!p-6 relative grid grid-cols-[auto_1fr] items-center gap-4 min-h-[88px]">
         <div className="absolute top-0 right-0 p-8 -mt-4 -mr-4 bg-[#0f172a] rounded-full scale-0 group-hover:scale-100 transition-transform duration-500" />
         <div className={`p-3 rounded-radius-l bg-[#0f172a] ${color}`}>
           <Icon size={24} />
