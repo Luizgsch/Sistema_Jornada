@@ -149,7 +149,31 @@ export const mockProximoCafeRoda = {
   tema: 'Boas-vindas aos novos estagiários',
 } as const;
 
-export const mockVouchersNatal = [
-  { id: 'VCH-2026-001', colaborador: 'Ana Souza', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-001', emitido: false },
-  { id: 'VCH-2026-002', colaborador: 'Bruno Rezende', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-002', emitido: true },
+export type VoucherNatal = {
+  id: string;
+  colaborador: string;
+  matricula: string;
+  setor: 'Logística' | 'Produção' | 'TI' | 'RH' | 'Administrativo' | 'Serviços Gerais';
+  telefone: string;
+  valor: number;
+  qrPayload: string;
+  emitido: boolean;
+};
+
+export const mockVouchersNatal: VoucherNatal[] = [
+  { id: 'VCH-2026-001', colaborador: 'Ana Souza', matricula: 'MAT-001', setor: 'Logística', telefone: '(11) 98765-4321', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-001', emitido: false },
+  { id: 'VCH-2026-002', colaborador: 'Bruno Rezende', matricula: 'MAT-002', setor: 'Produção', telefone: '(11) 97654-3210', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-002', emitido: true },
+  { id: 'VCH-2026-003', colaborador: 'Carla Mendes', matricula: 'MAT-003', setor: 'TI', telefone: '(11) 96543-2109', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-003', emitido: false },
+  { id: 'VCH-2026-004', colaborador: 'Daniel Costa', matricula: 'MAT-004', setor: 'RH', telefone: '(11) 95432-1098', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-004', emitido: false },
+  { id: 'VCH-2026-005', colaborador: 'Ernesto Silva', matricula: 'MAT-005', setor: 'Administrativo', telefone: '(11) 94321-0987', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-005', emitido: false },
+  { id: 'VCH-2026-006', colaborador: 'Fernanda Oliveira', matricula: 'MAT-006', setor: 'Serviços Gerais', telefone: '(11) 93210-9876', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-006', emitido: false },
+  { id: 'VCH-2026-007', colaborador: 'Gustavo Pereira', matricula: 'MAT-007', setor: 'Logística', telefone: '(11) 92109-8765', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-007', emitido: false },
+  { id: 'VCH-2026-008', colaborador: 'Helena Rocha', matricula: 'MAT-008', setor: 'Produção', telefone: '(11) 91098-7654', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-008', emitido: false },
+  { id: 'VCH-2026-009', colaborador: 'Igor Martins', matricula: 'MAT-009', setor: 'TI', telefone: '(11) 90987-6543', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-009', emitido: false },
+  { id: 'VCH-2026-010', colaborador: 'Janaína Lima', matricula: 'MAT-010', setor: 'RH', telefone: '(11) 89876-5432', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-010', emitido: false },
+  { id: 'VCH-2026-011', colaborador: 'Kevin Alves', matricula: 'MAT-011', setor: 'Administrativo', telefone: '(11) 88765-4321', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-011', emitido: false },
+  { id: 'VCH-2026-012', colaborador: 'Larissa Santos', matricula: 'MAT-012', setor: 'Serviços Gerais', telefone: '(11) 87654-3210', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-012', emitido: false },
+  { id: 'VCH-2026-013', colaborador: 'Marcelo Gomes', matricula: 'MAT-013', setor: 'Logística', telefone: '(11) 86543-2109', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-013', emitido: false },
+  { id: 'VCH-2026-014', colaborador: 'Natália Ferreira', matricula: 'MAT-014', setor: 'Produção', telefone: '(11) 85432-1098', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-014', emitido: false },
+  { id: 'VCH-2026-015', colaborador: 'Otávio Barbosa', matricula: 'MAT-015', setor: 'TI', telefone: '(11) 84321-0987', valor: 300, qrPayload: 'POSIGRAF-NATAL-2026-VCH-015', emitido: false },
 ];

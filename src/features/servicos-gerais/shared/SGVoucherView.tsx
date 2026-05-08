@@ -1,9 +1,204 @@
 import { Card, CardContent, CardHeader } from '@/shared/ui/Card';
 import { Button } from '@/shared/ui/Button';
+import { Modal } from '@/shared/ui/Modal';
 import { mockVouchersNatal } from '@/infrastructure/mock/mockServicosGerais';
-import { Ticket, QrCode, Loader } from 'lucide-react';
-import { useState, useCallback } from 'react';
+import { Ticket, QrCode, Loader, MessageCircle, CheckSquare2, Square } from 'lucide-react';
+import { useState, useCallback, useMemo } from 'react';
 import { useToast } from '@/shared/ui/Toast';
+import { cn } from '@/shared/lib/cn';
+
+function EnviarVoucherModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const { success } = useToast();
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [filtroArea, setFiltroArea] = useState<string>('todas');
+  const [enviando, setEnviando] = useState(false);
+
+  const areas = useMemo(
+    () => ['todas', ...Array.from(new Set(mockVouchersNatal.map((v) => v.setor)))],
+    []
+  );
+
+  const colaboradoresFiltrados = useMemo(
+    () =>
+      filtroArea === 'todas'
+        ? mockVouchersNatal
+        : mockVouchersNatal.filter((v) => v.setor === filtroArea),
+    [filtroArea]
+  );
+
+  const todosSelecAarea = useMemo(
+    () =>
+      selectedIds.length === colaboradoresFiltrados.length &&
+      colaboradoresFiltrados.length > 0,
+    [selectedIds, colaboradoresFiltrados]
+  );
+
+  const toggleSelect = useCallback((id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  }, []);
+
+  const toggleSelectAll = useCallback(() => {
+    if (todosSelecAarea) {
+      setSelectedIds((prev) =>
+        prev.filter(
+          (id) =>
+            !colaboradoresFiltrados.map((c) => c.id).includes(id)
+        )
+      );
+    } else {
+      setSelectedIds((prev) => [
+        ...new Set([
+          ...prev,
+          ...colaboradoresFiltrados.map((c) => c.id),
+        ]),
+      ]);
+    }
+  }, [todosSelecAarea, colaboradoresFiltrados]);
+
+  const handleEnviar = useCallback(async () => {
+    if (selectedIds.length === 0) return;
+    setEnviando(true);
+    await new Promise((r) => setTimeout(r, 1500));
+    setEnviando(false);
+    success(
+      'Vouchers enviados!',
+      `${selectedIds.length} vouchers enviados por WhatsApp.`
+    );
+    setSelectedIds([]);
+    setFiltroArea('todas');
+    onClose();
+  }, [selectedIds.length, success, onClose]);
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Enviar Vouchers de Natal por WhatsApp"
+      description="Selecione os colaboradores para receber o voucher digital por WhatsApp"
+      maxWidth="lg"
+      footer={
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            {selectedIds.length} colaborador(es) selecionado(s)
+          </p>
+          <Button
+            onClick={handleEnviar}
+            disabled={selectedIds.length === 0 || enviando}
+            variant="primary"
+          >
+            {enviando ? (
+              <>
+                <Loader size={16} className="animate-spin" />
+                Enviando...
+              </>
+            ) : (
+              <>
+                <MessageCircle size={16} />
+                Enviar por WhatsApp
+              </>
+            )}
+          </Button>
+        </div>
+      }
+    >
+      <div className="space-y-4">
+        {/* Filtro por Área */}
+        <div className="space-y-2">
+          <label className="text-xs font-bold text-zinc-500 uppercase">
+            Filtrar por Área
+          </label>
+          <div className="flex flex-wrap gap-2">
+            {areas.map((area) => (
+              <button
+                key={area}
+                onClick={() => setFiltroArea(area)}
+                className={cn(
+                  'px-3 py-1 rounded-full text-sm font-medium transition-colors',
+                  filtroArea === area
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-zinc-200 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-600'
+                )}
+              >
+                {area === 'todas' ? 'Todas' : area}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Select All Header */}
+        <div className="flex items-center gap-3 p-3 rounded-lg bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700">
+          <button
+            onClick={toggleSelectAll}
+            className="transition-colors hover:opacity-75"
+          >
+            {todosSelecAarea ? (
+              <CheckSquare2 size={20} className="text-blue-600" />
+            ) : (
+              <Square size={20} className="text-zinc-400" />
+            )}
+          </button>
+          <label className="flex-1 cursor-pointer select-none">
+            <p className="font-medium text-sm">
+              Selecionar todos{' '}
+              {filtroArea === 'todas'
+                ? `(${colaboradoresFiltrados.length})`
+                : `da área (${colaboradoresFiltrados.length})`}
+            </p>
+          </label>
+        </div>
+
+        {/* Lista de Colaboradores */}
+        <div className="max-h-80 overflow-y-auto space-y-1 border border-zinc-200 dark:border-zinc-700 rounded-lg p-2">
+          {colaboradoresFiltrados.map((v) => {
+            const isSelected = selectedIds.includes(v.id);
+            const initials = v.colaborador
+              .split(' ')
+              .map((n) => n[0])
+              .join('')
+              .toUpperCase()
+              .slice(0, 2);
+
+            return (
+              <button
+                key={v.id}
+                onClick={() => toggleSelect(v.id)}
+                className={cn(
+                  'w-full flex items-center gap-3 p-3 rounded-lg transition-colors cursor-pointer',
+                  isSelected
+                    ? 'bg-blue-50 dark:bg-blue-950/30'
+                    : 'hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
+                )}
+              >
+                {isSelected ? (
+                  <CheckSquare2 size={18} className="text-blue-600 flex-shrink-0" />
+                ) : (
+                  <Square size={18} className="text-zinc-300 dark:text-zinc-600 flex-shrink-0" />
+                )}
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
+                  {initials}
+                </div>
+                <div className="flex-1 text-left">
+                  <p className="text-sm font-medium">{v.colaborador}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {v.setor} • {v.telefone}
+                  </p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {colaboradoresFiltrados.length === 0 && (
+          <p className="text-center text-sm text-muted-foreground py-8">
+            Nenhum colaborador nesta área
+          </p>
+        )}
+      </div>
+    </Modal>
+  );
+}
 
 export function SGVoucherView() {
   const { success } = useToast();
@@ -11,6 +206,7 @@ export function SGVoucherView() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [geradosCount, setGeradosCount] = useState(0);
   const [showBatchResult, setShowBatchResult] = useState(false);
+  const [showEnviarModal, setShowEnviarModal] = useState(false);
 
   const v = mockVouchersNatal[sel];
   const totalVouchers = mockVouchersNatal.length;
@@ -49,7 +245,12 @@ export function SGVoucherView() {
   };
 
   return (
-    <div className="space-y-6">
+    <>
+      <EnviarVoucherModal
+        isOpen={showEnviarModal}
+        onClose={() => setShowEnviarModal(false)}
+      />
+      <div className="space-y-6">
       <Card className="border-none ">
         <CardHeader className="border-b">
           <h3 className="font-bold text-lg flex items-center gap-2">
@@ -100,6 +301,13 @@ export function SGVoucherView() {
                   <>📦 Gerar todos em lote</>
                 )}
               </Button>
+              <Button
+                className="w-full bg-green-600 hover:bg-green-700"
+                onClick={() => setShowEnviarModal(true)}
+              >
+                <MessageCircle size={18} />
+                Enviar por WhatsApp
+              </Button>
             </div>
 
             {isGenerating && (
@@ -138,5 +346,6 @@ export function SGVoucherView() {
         </CardContent>
       </Card>
     </div>
+      </>
   );
 }
