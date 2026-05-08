@@ -11,9 +11,12 @@ import {
   mockProximoCafeRoda,
 } from '@/infrastructure/mock/mockServicosGerais';
 import { Car, Grid3x3, Smile, ClipboardList, UsersRound, CheckCircle2, AlertTriangle, Droplets, DoorOpen, Wrench, ChevronRight } from 'lucide-react';
-import { motion, type Variants } from 'framer-motion';
+import { motion, type Variants, AnimatePresence } from 'framer-motion';
 import { PulseBadge } from '@/shared/ui/PulseBadge';
+import { InlineActionBar } from '@/shared/ui/InlineActionBar';
+import { useToast } from '@/shared/ui/Toast';
 import { usePageNav } from '@/features/navigation/PageNavContext';
+import { useState, useCallback, useMemo } from 'react';
 function LogBadge({ label, color }: { label: string; color: string }) {
   return (
     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${color}`}>
@@ -350,11 +353,45 @@ export function SGBeneficiosView() {
 }
 
 export function SGArmariosView() {
+  const { success } = useToast();
+  const [selectedArmarios, setSelectedArmarios] = useState<number[]>([]);
+
+  const liberadosDesligados = useMemo(() => mockArmariosMapa.filter((s) => s.status === 'liberado-desligado'), []);
+
+  const toggleSelectArmario = useCallback((id: number) => {
+    setSelectedArmarios((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  }, []);
+
+  const handleLiberarTodos = useCallback(() => {
+    setSelectedArmarios(liberadosDesligados.map((s) => s.id));
+    success(`${liberadosDesligados.length} armário${liberadosDesligados.length > 1 ? "s" : ""} selecionado${liberadosDesligados.length > 1 ? "s" : ""}`);
+  }, [liberadosDesligados, success]);
+
+  const handleLiberar = useCallback(() => {
+    success(`${selectedArmarios.length} armário${selectedArmarios.length > 1 ? "s" : ""} liberado${selectedArmarios.length > 1 ? "s" : ""}`);
+    setSelectedArmarios([]);
+  }, [selectedArmarios.length, success]);
+
   return (
     <div className="space-y-6">
-      <p className="text-sm text-zinc-500 leading-relaxed">
-        Mapa do vestiário vinculado à base de desligados: armários de ex-colaboradores aparecem como liberados automaticamente.
-      </p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <p className="text-sm text-zinc-500 leading-relaxed">
+            Mapa do vestiário vinculado à base de desligados: armários de ex-colaboradores aparecem como liberados automaticamente.
+          </p>
+        </div>
+        {liberadosDesligados.length > 0 && (
+          <Button
+            type="button"
+            size="sm"
+            onClick={handleLiberarTodos}
+            className="shrink-0"
+          >
+            Liberar todos ({liberadosDesligados.length})
+          </Button>
+        )}
+      </div>
+
       <div className="flex flex-wrap gap-4 text-xs font-medium text-zinc-400">
         <span className="flex items-center gap-2">
           <span className="w-4 h-4 rounded-radius-s bg-zinc-800 border border-zinc-700" /> Livre
@@ -366,23 +403,53 @@ export function SGArmariosView() {
           <span className="w-4 h-4 rounded-radius-s bg-emerald-500/20 border border-emerald-500/30" /> Liberado (desligado)
         </span>
       </div>
-      <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-12 gap-2">
-        {mockArmariosMapa.map((slot) => (
-          <div
-            key={slot.id}
-            title={slot.colaborador || (slot.status === 'livre' ? 'Livre' : 'Liberado')}
-            className={`aspect-square rounded-radius-m flex flex-col items-center justify-center text-xs font-bold border transition-all hover:scale-105 ${
-              slot.status === 'livre'
-                ? 'bg-zinc-800 border-zinc-700 text-zinc-500'
-                : slot.status === 'liberado-desligado'
-                  ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400'
-                  : 'bg-primary/20 border-primary/40 text-primary'
-            }`}
-          >
-            <Grid3x3 size={12} className="opacity-50 mb-0.5" />
-            {slot.id}
-          </div>
-        ))}
+
+      <div className="space-y-4">
+        <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-12 gap-2">
+          {mockArmariosMapa.map((slot) => {
+            const isSelected = selectedArmarios.includes(slot.id);
+            const canSelect = slot.status === 'liberado-desligado';
+
+            return (
+              <button
+                key={slot.id}
+                type="button"
+                onClick={() => canSelect && toggleSelectArmario(slot.id)}
+                disabled={!canSelect}
+                title={slot.colaborador || (slot.status === 'livre' ? 'Livre' : 'Liberado')}
+                className={`aspect-square rounded-radius-m flex flex-col items-center justify-center text-xs font-bold border transition-all ${
+                  isSelected ? 'ring-2 ring-offset-2 ring-emerald-500 scale-105' : 'hover:scale-105'
+                } disabled:cursor-not-allowed ${
+                  slot.status === 'livre'
+                    ? 'bg-zinc-800 border-zinc-700 text-zinc-500 disabled:opacity-50'
+                    : slot.status === 'liberado-desligado'
+                      ? `bg-emerald-500/15 border-emerald-500/30 text-emerald-400 ${isSelected ? 'bg-emerald-500/40' : ''}`
+                      : 'bg-primary/20 border-primary/40 text-primary disabled:opacity-50'
+                }`}
+              >
+                <Grid3x3 size={12} className="opacity-50 mb-0.5" />
+                {slot.id}
+              </button>
+            );
+          })}
+        </div>
+
+        <AnimatePresence>
+          {selectedArmarios.length > 0 && (
+            <InlineActionBar
+              selectedCount={selectedArmarios.length}
+              actions={[
+                {
+                  label: 'Liberar Armários',
+                  icon: <DoorOpen size={16} />,
+                  onClick: handleLiberar,
+                  variant: 'green',
+                },
+              ]}
+              onClear={() => setSelectedArmarios([])}
+            />
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
