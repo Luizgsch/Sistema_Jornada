@@ -253,13 +253,13 @@ export default function RecruitmentPipeline() {
 
 function ContactCard({ icon: Icon, label, value }: any) {
   return (
-    <div className="p-3 border rounded-radius-m flex items-center gap-3">
+    <div className="!p-3 border rounded-radius-m grid grid-cols-[auto_1fr] items-center gap-3 min-h-[60px]">
       <div className="p-2 bg-zinc-800 rounded-radius-m text-zinc-400">
         <Icon size={16} />
       </div>
       <div>
-        <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-tighter">{label}</p>
-        <p className="text-xs font-bold text-zinc-300">{value}</p>
+        <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-tighter m-0">{label}</p>
+        <p className="text-xs font-bold text-zinc-300 m-0">{value}</p>
       </div>
     </div>
   );

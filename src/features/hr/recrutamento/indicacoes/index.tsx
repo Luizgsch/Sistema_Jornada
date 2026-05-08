@@ -134,17 +134,15 @@ export default function IndicacoesPage() {
 function StatCard({ title, value, icon: Icon, color }: any) {
   return (
     <Card>
-      <CardContent className="pt-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{title}</p>
-            <h4 className="text-2xl font-bold mt-1">{value}</h4>
-          </div>
-          <div className={`p-3 bg-zinc-800 rounded-radius-m ${color || "text-zinc-400"}`}>
-            <Icon size={20} />
-          </div>
+      <div className="!p-6 grid grid-cols-[1fr_auto] items-center gap-4 min-h-[88px]">
+        <div>
+          <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider m-0">{title}</p>
+          <h4 className="text-2xl font-bold m-0">{value}</h4>
         </div>
-      </CardContent>
+        <div className={`p-3 bg-zinc-800 rounded-radius-m shrink-0 ${color || "text-zinc-400"}`}>
+          <Icon size={20} />
+        </div>
+      </div>
     </Card>
   );
 }

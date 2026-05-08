@@ -817,13 +817,13 @@ export default function ColaboradoresPage() {
 
 function StatCard({ title, value, icon: Icon, color }: any) {
   return (
-    <div className="flex flex-col gap-3 rounded-radius-l border border-[#334155] bg-[#1e293b] p-5 transition-colors hover:border-zinc-600 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+    <div className="grid grid-cols-[auto_1fr] items-center gap-4 rounded-radius-l border border-[#334155] bg-[#1e293b] p-5 transition-colors hover:border-zinc-600 min-h-[80px]">
       <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-radius-m bg-zinc-800 ${color}`}>
         <Icon size={16} />
       </div>
-      <div className="min-w-0 text-left sm:text-right">
-        <p className="text-xs font-medium uppercase tracking-widest text-zinc-500">{title}</p>
-        <span className="text-2xl font-bold leading-none tracking-tighter text-[#e7e5e4] sm:text-3xl">{value}</span>
+      <div className="min-w-0">
+        <p className="text-xs font-medium uppercase tracking-widest text-zinc-500 m-0">{title}</p>
+        <span className="text-2xl font-bold leading-none tracking-tighter text-[#e7e5e4] m-0">{value}</span>
       </div>
     </div>
   );
