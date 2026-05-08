@@ -111,7 +111,7 @@ export default function TriagemIAPage() {
 
       <div className="grid gap-4 md:grid-cols-4">
         <Card className="border-none">
-          <CardContent className="p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+          <div className="!p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
             <div className="p-3 rounded-radius-l bg-[#0f172a] text-primary">
               <FileText size={24} />
             </div>
@@ -119,10 +119,10 @@ export default function TriagemIAPage() {
               <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider m-0">Total Recebidos</p>
               <h4 className="text-2xl font-black m-0">{mockCurriculos.length}</h4>
             </div>
-          </CardContent>
+          </div>
         </Card>
         <Card className="border-none">
-          <CardContent className="p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+          <div className="!p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
             <div className="p-3 rounded-radius-l bg-[#0f172a] text-emerald-500">
               <CheckCircle size={24} />
             </div>
@@ -130,10 +130,10 @@ export default function TriagemIAPage() {
               <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider m-0">Alta Compatibilidade</p>
               <h4 className="text-2xl font-black m-0">{mockCurriculos.filter(c => c.score >= 80).length}</h4>
             </div>
-          </CardContent>
+          </div>
         </Card>
         <Card className="border-none">
-          <CardContent className="p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+          <div className="!p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
             <div className="p-3 rounded-radius-l bg-[#0f172a] text-amber-500">
               <Brain size={24} />
             </div>
@@ -141,10 +141,10 @@ export default function TriagemIAPage() {
               <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider m-0">Parciais</p>
               <h4 className="text-2xl font-black m-0">{mockCurriculos.filter(c => c.score >= 60 && c.score < 80).length}</h4>
             </div>
-          </CardContent>
+          </div>
         </Card>
         <Card className="border-none">
-          <CardContent className="p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+          <div className="!p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
             <div className="p-3 rounded-radius-l bg-[#0f172a] text-rose-500">
               <XCircle size={24} />
             </div>
@@ -152,7 +152,7 @@ export default function TriagemIAPage() {
               <p className="text-xs font-bold text-zinc-600 uppercase tracking-wider m-0">Baixa Compatibilidade</p>
               <h4 className="text-2xl font-black m-0">{mockCurriculos.filter(c => c.score < 60).length}</h4>
             </div>
-          </CardContent>
+          </div>
         </Card>
       </div>
 

@@ -216,7 +216,7 @@ export default function MovimentacoesPage() {
 function MovMetricCard({ title, value, icon: Icon, color }: any) {
   return (
     <Card className="border-none h-full hover:transition-shadow">
-      <CardContent className="p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
+      <div className="!p-6 h-[88px] grid grid-cols-[auto_1fr] items-center gap-4">
         <div className={`p-3 rounded-radius-l bg-zinc-800 ${color}`}>
           <Icon size={24} />
         </div>
@@ -224,7 +224,7 @@ function MovMetricCard({ title, value, icon: Icon, color }: any) {
           <p className="text-xs font-bold text-muted-foreground uppercase m-0">{title}</p>
           <h4 className="text-3xl font-black text-[#e7e5e4] m-0">{value}</h4>
         </div>
-      </CardContent>
+      </div>
     </Card>
   );
 }
