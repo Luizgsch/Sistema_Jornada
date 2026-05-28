@@ -1,8 +1,6 @@
 import { Search, Bell, User, ChevronDown, HelpCircle, Menu, LogOut } from "lucide-react";
 import { motion } from "framer-motion";
 import type { Usuario } from "@/infrastructure/mock/mockLogin";
-import type { SistemaAtual } from "@/domain/auth/roles";
-import { getAmbienteBadge } from "@/domain/auth/roles";
 import { PosigrafLogo } from "@/shared/components/brand/PosigrafLogo";
 import { ThemeToggle } from "@/shared/ui/ThemeToggle";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/Tooltip";
@@ -12,7 +10,6 @@ interface TopbarProps {
   onMenuClick: () => void;
   usuario?: Usuario | null;
   onLogout?: () => void;
-  sistemaAtual?: SistemaAtual;
   onSearchOpen?: () => void;
   onNotificationsOpen?: () => void;
   /** Abre edição rápida de perfil (painel lateral), ex.: ao clicar no avatar. */
@@ -71,15 +68,12 @@ const pageIdToProblemId: Record<string, string> = {
   'sg-engajamento-mural': 'sg-1',
 };
 
-export function Topbar({ onMenuClick, usuario, onLogout, sistemaAtual = 'hr-core', onSearchOpen, onNotificationsOpen, onProfileClick, alertCount = 0, activePage }: TopbarProps) {
+export function Topbar({ onMenuClick, usuario, onLogout, onSearchOpen, onNotificationsOpen, onProfileClick, alertCount = 0, activePage }: TopbarProps) {
   const currentDate = new Intl.DateTimeFormat('pt-BR', {
     weekday: 'long',
     day: 'numeric',
     month: 'long'
   }).format(new Date());
-
-  const ambiente =
-    usuario && sistemaAtual ? getAmbienteBadge(sistemaAtual, usuario.tipo) : null;
 
   const problemId = activePage ? pageIdToProblemId[activePage] : null;
 

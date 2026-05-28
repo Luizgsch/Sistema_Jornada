@@ -64,15 +64,6 @@ export function SGEstacionamentoView() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-zinc-800 dark:text-[#e7e5e4]">
-          Pátio — Controle de Estacionamento
-        </h1>
-        <p className="text-zinc-500 dark:text-zinc-400 mt-1 text-sm">
-          Mapa visual de vagas com check-in por crachá e alerta de VT.
-        </p>
-      </div>
-
       {percentualLivreA < 20 && (
         <div className="flex gap-3 p-4 rounded-radius-m bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20">
           <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />

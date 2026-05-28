@@ -171,7 +171,6 @@ export function DashboardLayout({
           onMenuClick={() => setIsMobileMenuOpen(true)}
           usuario={usuario}
           onLogout={onLogout}
-          sistemaAtual={sistemaAtual}
           onSearchOpen={openCommand}
           onNotificationsOpen={() => setIsNotificationsOpen(true)}
           onProfileClick={() => setIsProfileDrawerOpen(true)}
