@@ -69,6 +69,7 @@ const pageIdToProblemId: Record<string, string> = {
   'sg-voucher-natal': 'sg-13',
   'sg-engajamento-aniversariantes': 'sg-1',
   'sg-engajamento-mural': 'sg-1',
+  // Note: sg-4 (Acessos Duplicados) maps to sg-conciliacao-acessos (sg-2)
 };
 
 export function Topbar({ onMenuClick, usuario, onLogout, sistemaAtual = 'hr-core', onSearchOpen, onNotificationsOpen, onProfileClick, alertCount = 0, activePage }: TopbarProps) {
