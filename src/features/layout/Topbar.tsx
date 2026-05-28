@@ -6,6 +6,7 @@ import { getAmbienteBadge } from "@/domain/auth/roles";
 import { PosigrafLogo } from "@/shared/components/brand/PosigrafLogo";
 import { ThemeToggle } from "@/shared/ui/ThemeToggle";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/Tooltip";
+import { SENAIProblemBadge } from "@/shared/components/SENAIProblemBadge";
 
 interface TopbarProps {
   onMenuClick: () => void;
@@ -17,9 +18,60 @@ interface TopbarProps {
   /** Abre edição rápida de perfil (painel lateral), ex.: ao clicar no avatar. */
   onProfileClick?: () => void;
   alertCount?: number;
+  activePage?: string;
 }
 
-export function Topbar({ onMenuClick, usuario, onLogout, sistemaAtual = 'hr-core', onSearchOpen, onNotificationsOpen, onProfileClick, alertCount = 0 }: TopbarProps) {
+const pageIdToProblemId: Record<string, string> = {
+  // Recrutamento
+  'vagas': '1.1',
+  'candidatos': '1.1',
+  'pipeline': '1.1',
+  'auxiliares': '1.2',
+  'uniformes': '1.3',
+  'matriculas': '1.4',
+  'movimentacoes': '1.5',
+  'desligamentos': '1.6',
+  'quadro-equipes': '2',
+  'temporarios': '3',
+  'indicadores': '4',
+  'documentos': '5',
+  'indicacoes': '6',
+  'descricao-cargos': '7',
+  'triagem-ia': '8',
+  'whatsapp': '9',
+  'recrutamento-dashboard': '1.1',
+  'headcount': '4',
+  'colaboradores': '1.1',
+  'comunicacao-interna': '1.1',
+  'relatorios': '4',
+  // DHO
+  'dho-dashboard': 'dho-1',
+  'dho-presenca': 'dho-2',
+  'dho-lancamento-lote': 'dho-3',
+  'dho-trilhas-cargo': 'dho-5',
+  'dho-portal-gestor': 'dho-7',
+  'dho-comunicados': 'dho-6',
+  'dho-consultoria': 'dho-8',
+  'dho-gestor-transversal': 'dho-4',
+  // SG
+  'sg-dashboard': 'sg-1',
+  'sg-notas-fiscais': 'sg-1',
+  'sg-conciliacao-acessos': 'sg-2',
+  'sg-compras-insumos': 'sg-5',
+  'sg-faturamento-attos': 'sg-3',
+  'sg-fechamento-attos': 'sg-6',
+  'sg-beneficios': 'sg-7',
+  'sg-estacionamento-patio': 'sg-7b',
+  'sg-armarios': 'sg-8',
+  'sg-satisfacao-attos': 'sg-9',
+  'sg-engajamento-cafe': 'sg-10',
+  'sg-chamados-manusis': 'sg-11',
+  'sg-voucher-natal': 'sg-13',
+  'sg-engajamento-aniversariantes': 'sg-1',
+  'sg-engajamento-mural': 'sg-1',
+};
+
+export function Topbar({ onMenuClick, usuario, onLogout, sistemaAtual = 'hr-core', onSearchOpen, onNotificationsOpen, onProfileClick, alertCount = 0, activePage }: TopbarProps) {
   const currentDate = new Intl.DateTimeFormat('pt-BR', {
     weekday: 'long',
     day: 'numeric',
@@ -28,6 +80,8 @@ export function Topbar({ onMenuClick, usuario, onLogout, sistemaAtual = 'hr-core
 
   const ambiente =
     usuario && sistemaAtual ? getAmbienteBadge(sistemaAtual, usuario.tipo) : null;
+
+  const problemId = activePage ? pageIdToProblemId[activePage] : null;
 
   return (
     <motion.header
@@ -81,7 +135,12 @@ export function Topbar({ onMenuClick, usuario, onLogout, sistemaAtual = 'hr-core
         </Tooltip>
       </div>
 
-      <div className="flex items-center space-x-2 md:space-x-3">
+      <div className="flex items-center space-x-3">
+        {/* SENAI Problem Badge — entre search e help, bem visível */}
+        {problemId && (
+          <SENAIProblemBadge problemId={problemId} variant="medium" />
+        )}
+
         {ambiente && (
           <span
             className={`hidden md:inline-flex items-center rounded-radius-m border px-3 py-1 text-[11px] font-bold uppercase tracking-wide ${ambiente.className}`}
@@ -102,7 +161,7 @@ export function Topbar({ onMenuClick, usuario, onLogout, sistemaAtual = 'hr-core
           <TooltipContent>Ajuda e atalhos</TooltipContent>
         </Tooltip>
 
-        {/* Theme Toggle — ao lado do sino */}
+        {/* Theme Toggle */}
         <ThemeToggle />
 
         <Tooltip>

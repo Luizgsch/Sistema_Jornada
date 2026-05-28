@@ -167,8 +167,8 @@ export function DashboardLayout({
 
       {/* Main Content Area — única coluna com scroll vertical (desktop); fundo não rola */}
       <div className="flex-1 flex flex-col min-h-0 lg:ml-72 w-full transition-[margin] duration-300 min-w-0">
-        <Topbar 
-          onMenuClick={() => setIsMobileMenuOpen(true)} 
+        <Topbar
+          onMenuClick={() => setIsMobileMenuOpen(true)}
           usuario={usuario}
           onLogout={onLogout}
           sistemaAtual={sistemaAtual}
@@ -176,6 +176,7 @@ export function DashboardLayout({
           onNotificationsOpen={() => setIsNotificationsOpen(true)}
           onProfileClick={() => setIsProfileDrawerOpen(true)}
           alertCount={alertCount}
+          activePage={activePage}
         />
         <main
           className={cn(
