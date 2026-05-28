@@ -141,13 +141,6 @@ export function Topbar({ onMenuClick, usuario, onLogout, sistemaAtual = 'hr-core
           <SENAIProblemBadge problemId={problemId} variant="medium" />
         )}
 
-        {ambiente && (
-          <span
-            className={`hidden md:inline-flex items-center rounded-radius-m border px-3 py-1 text-[11px] font-bold uppercase tracking-wide ${ambiente.className}`}
-          >
-            {ambiente.label}
-          </span>
-        )}
         <Tooltip>
           <TooltipTrigger asChild>
             <button
