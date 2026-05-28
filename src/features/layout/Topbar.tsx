@@ -52,7 +52,7 @@ const pageIdToProblemId: Record<string, string> = {
   'dho-portal-gestor': 'dho-7',
   'dho-comunicados': 'dho-6',
   'dho-consultoria': 'dho-8',
-  'dho-gestor-transversal': 'dho-4',
+  'dho-gestor': 'dho-4',
   // SG
   'sg-dashboard': 'sg-1',
   'sg-notas-fiscais': 'sg-1',
