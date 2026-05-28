@@ -56,7 +56,7 @@ const pageIdToProblemId: Record<string, string> = {
   // SG
   'sg-dashboard': 'sg-1',
   'sg-notas-fiscais': 'sg-1',
-  'sg-conciliacao-acessos': 'sg-2',
+  'sg-conciliacao-acessos': 'sg-2/sg-4',
   'sg-compras-insumos': 'sg-5',
   'sg-faturamento-attos': 'sg-3',
   'sg-fechamento-attos': 'sg-6',
@@ -69,7 +69,6 @@ const pageIdToProblemId: Record<string, string> = {
   'sg-voucher-natal': 'sg-13',
   'sg-engajamento-aniversariantes': 'sg-1',
   'sg-engajamento-mural': 'sg-1',
-  // Note: sg-4 (Acessos Duplicados) maps to sg-conciliacao-acessos (sg-2)
 };
 
 export function Topbar({ onMenuClick, usuario, onLogout, sistemaAtual = 'hr-core', onSearchOpen, onNotificationsOpen, onProfileClick, alertCount = 0, activePage }: TopbarProps) {
