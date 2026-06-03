@@ -1,14 +1,14 @@
 export type CadastroColaboradorStatus = "completo" | "incompleto";
 
 export const mockOperacoesColaboradores = [
-  { 
-    matricula: "MAT-101", 
-    nome: "Alice Ferreira", 
-    cargo: "Designer UI/UX", 
-    setor: "Tecnologia", 
-    gestor: "Ricardo Santos", 
-    contrato: "CLT", 
-    admissao: "2024-05-12", 
+  {
+    matricula: "MAT-101",
+    nome: "Alice Ferreira",
+    cargo: "Designer UI/UX Pleno",
+    setor: "Tecnologia",
+    gestor: "Ricardo Santos",
+    contrato: "CLT",
+    admissao: "2024-05-12",
     status: "ativo",
     cadastroStatus: "completo" as CadastroColaboradorStatus,
     cpf: "123.456.789-00",
@@ -22,14 +22,14 @@ export const mockOperacoesColaboradores = [
       { data: "2025-01-10", tipo: "Promoção", desc: "Promovida para Designer Pleno" }
     ]
   },
-  { 
-    matricula: "MAT-102", 
-    nome: "Bruno Souza", 
-    cargo: "Desenvolvedor Backend", 
-    setor: "Tecnologia", 
-    gestor: "Ricardo Santos", 
-    contrato: "Temporário", 
-    admissao: "2025-11-20", 
+  {
+    matricula: "MAT-102",
+    nome: "Bruno Souza",
+    cargo: "Auxiliar de Produção I",
+    setor: "Produção",
+    gestor: "Ricardo Santos",
+    contrato: "Temporário",
+    admissao: "2025-11-20",
     vencimento: "2026-05-20",
     status: "ativo",
     cadastroStatus: "incompleto" as CadastroColaboradorStatus,
@@ -43,14 +43,14 @@ export const mockOperacoesColaboradores = [
       { data: "2025-11-20", tipo: "Admissão", desc: "Contrato temporário (Pico Safra)" }
     ]
   },
-  { 
-    matricula: "MAT-103", 
-    nome: "Carla Duarte", 
-    cargo: "Analista de RH", 
-    setor: "RH", 
-    gestor: "Mariana Costa", 
-    contrato: "CLT", 
-    admissao: "2023-08-15", 
+  {
+    matricula: "MAT-103",
+    nome: "Carla Duarte",
+    cargo: "Coordenadora de RH",
+    setor: "RH",
+    gestor: "Mariana Costa",
+    contrato: "CLT",
+    admissao: "2023-08-15",
     status: "ativo",
     cadastroStatus: "completo" as CadastroColaboradorStatus,
     cpf: "345.678.901-22",
@@ -63,14 +63,14 @@ export const mockOperacoesColaboradores = [
       { data: "2023-08-15", tipo: "Admissão", desc: "Contratação CLT" }
     ]
   },
-  { 
-    matricula: "MAT-104", 
-    nome: "Daniel Lima", 
-    cargo: "Assistente Administrativo", 
-    setor: "Administrativo", 
-    gestor: "João Silva", 
-    contrato: "Temporário", 
-    admissao: "2026-01-05", 
+  {
+    matricula: "MAT-104",
+    nome: "Daniel Lima",
+    cargo: "Auxiliar de Produção I",
+    setor: "Produção",
+    gestor: "João Silva",
+    contrato: "Temporário",
+    admissao: "2026-01-05",
     vencimento: "2026-04-05",
     status: "vencendo",
     cadastroStatus: "completo" as CadastroColaboradorStatus,
