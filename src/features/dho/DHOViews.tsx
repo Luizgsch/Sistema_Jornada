@@ -824,12 +824,19 @@ export function TrilhasMovimentacoesView() {
       {/* Movimentações pendentes */}
       <Card>
         <CardHeader className="border-b border-[#334155] pb-4">
-          <h3 className="font-semibold text-[#e7e5e4] tracking-tighter">
-            Movimentações pendentes de trilha ({movimentacoesPendentes.length})
-          </h3>
-          <p className="text-sm text-zinc-500 mt-1">
-            Colaboradores que mudaram de cargo e precisam ter trilha automática aplicada.
-          </p>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h3 className="font-semibold text-[#e7e5e4] tracking-tighter">
+                Trilhas para Movimentações — Auto-Aplicação ({movimentacoesPendentes.length})
+              </h3>
+              <p className="text-sm text-zinc-500 mt-1">
+                Quando colaborador é movimentado (HR-1.5), sistema dispara automaticamente trilha de treinamento obrigatória para novo cargo.
+              </p>
+            </div>
+            <div className="shrink-0 px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-radius-m">
+              <p className="text-xs font-semibold text-emerald-400">✓ Integração ativa</p>
+            </div>
+          </div>
         </CardHeader>
         <CardContent className="p-0">
           {movimentacoesPendentes.length > 0 ? (
