@@ -16,6 +16,7 @@ import {
   Upload,
   FileSpreadsheet,
   Route,
+  GitBranch,
   Inbox,
   Megaphone,
   Headphones,
@@ -636,6 +637,110 @@ export function TrilhasCargoView() {
               ))}
             </tbody>
           </table>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+export function TrilhasMovimentacoesView() {
+  const [movimentacaoIdx, setMovimentacaoIdx] = useState(0);
+  const movimentacao = mockMovimentacoes[movimentacaoIdx];
+
+  const trilhasObrigatorias = useMemo(() => {
+    return mockTrilhasPorCargo.find((t) => t.cargo === movimentacao.novo);
+  }, [movimentacao.novo]);
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardContent className="p-6 flex flex-col md:flex-row md:items-center gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-radius-m bg-purple-500/10 flex items-center justify-center">
+              <GitBranch className="text-purple-400" size={22} />
+            </div>
+            <div>
+              <h3 className="font-semibold text-[#e7e5e4] tracking-tighter">Trilhas automáticas para movimentações</h3>
+              <p className="text-sm text-zinc-500">
+                Sistema de trilhas disparadas automaticamente ao efetuar movimentação interna.
+              </p>
+            </div>
+          </div>
+          <div className="md:ml-auto w-full md:w-96">
+            <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Movimentação</label>
+            <select
+              className="mt-1 w-full h-10 rounded-radius-m border border-[#334155] bg-[#0f172a] px-3 text-sm text-[#e7e5e4] focus:outline-none focus:border-zinc-600"
+              value={movimentacaoIdx}
+              onChange={(e) => setMovimentacaoIdx(Number(e.target.value))}
+            >
+              {mockMovimentacoes.map((m, i) => (
+                <option key={`${m.nome}-${m.novo}`} value={i}>
+                  {m.nome} → {m.novo}
+                </option>
+              ))}
+            </select>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="border-b border-[#334155] pb-4">
+          <div className="space-y-3">
+            <h3 className="font-semibold text-[#e7e5e4] tracking-tighter">
+              Trilha para {movimentacao.novo}
+            </h3>
+            <p className="text-sm text-zinc-500 mt-1">
+              Colaborador: <span className="font-semibold text-purple-400">{movimentacao.nome}</span>
+            </p>
+            {trilhasObrigatorias && (
+              <div className="flex items-start gap-3 p-3 rounded-radius-m bg-purple-500/10 border border-purple-500/30">
+                <AlertCircle size={18} className="text-purple-400 mt-0.5 shrink-0" />
+                <div className="text-sm">
+                  <p className="font-semibold text-purple-400">
+                    {trilhasObrigatorias.pendentesPosMovimentacao} trilha(s) obrigatória(s)
+                  </p>
+                  <p className="text-xs text-purple-300 mt-1">
+                    Cursos necessários foram automaticamente adicionados à fila de aprendizado.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </CardHeader>
+        <CardContent className="p-0">
+          {trilhasObrigatorias ? (
+            <table className="w-full text-sm">
+              <thead className="bg-[#0f172a] text-zinc-500 text-xs uppercase tracking-widest">
+                <tr>
+                  <th className="py-4 px-6 border-b border-[#334155]">Código</th>
+                  <th className="py-4 px-6 border-b border-[#334155]">Curso</th>
+                  <th className="py-4 px-6 border-b border-[#334155] text-center">CH</th>
+                  <th className="py-4 px-6 border-b border-[#334155] text-center">Reciclagem</th>
+                  <th className="py-4 px-6 border-b border-[#334155]">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {trilhasObrigatorias.cursosObrigatorios.map((c) => (
+                  <tr
+                    key={c.codigo}
+                    className="hover:bg-zinc-800/30 transition-colors"
+                  >
+                    <td className="py-3 px-6 border-b border-[#334155] font-mono text-xs text-zinc-600">{c.codigo}</td>
+                    <td className="py-3 px-6 border-b border-[#334155] font-semibold text-[#e7e5e4]">{c.nome}</td>
+                    <td className="py-3 px-6 border-b border-[#334155] text-center text-zinc-400">{c.cargaHoraria}h</td>
+                    <td className="py-3 px-6 border-b border-[#334155] text-center text-zinc-600 text-xs">{c.reciclagemMeses} meses</td>
+                    <td className="py-3 px-6 border-b border-[#334155]">
+                      <StatusPill status="novo" />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="p-6 text-center text-zinc-500">
+              Nenhuma trilha obrigatória encontrada para esse cargo.
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

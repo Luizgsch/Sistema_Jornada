@@ -312,6 +312,7 @@ export const DHO_NAV_FULL: NavCategory[] = [
         ],
       },
       { kind: "leaf", pageId: "dho-trilhas-cargo", label: "Trilhas por cargo", icon: Route },
+      { kind: "leaf", pageId: "dho-trilhas-movimentacoes", label: "Trilhas para movimentações", icon: GitBranch },
       { kind: "leaf", pageId: "dho-portal-gestor", label: "Portal do gestor", icon: Inbox },
     ],
   },

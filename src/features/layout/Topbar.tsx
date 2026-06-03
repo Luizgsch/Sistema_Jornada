@@ -46,10 +46,11 @@ const pageIdToProblemId: Record<string, string> = {
   'dho-presenca': 'dho-2',
   'dho-lancamento-lote': 'dho-3',
   'dho-trilhas-cargo': 'dho-5',
+  'dho-trilhas-movimentacoes': 'dho-4',
   'dho-portal-gestor': 'dho-7',
   'dho-comunicados': 'dho-6',
   'dho-consultoria': 'dho-8',
-  'dho-gestor': 'dho-4',
+  'dho-gestor': 'dho-6',
   // SG
   'sg-dashboard': 'sg-1',
   'sg-notas-fiscais': 'sg-1',

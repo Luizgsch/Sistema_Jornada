@@ -4,6 +4,7 @@ import {
   PresencaDigitalView,
   LancamentoLoteView,
   TrilhasCargoView,
+  TrilhasMovimentacoesView,
   PortalGestorView,
   ComunicadosTDView,
   ConsultoriaInternaView,
@@ -17,6 +18,7 @@ export type DHOPageId =
   | 'dho-presenca'
   | 'dho-lancamento-lote'
   | 'dho-trilhas-cargo'
+  | 'dho-trilhas-movimentacoes'
   | 'dho-portal-gestor'
   | 'dho-comunicados'
   | 'dho-consultoria'
@@ -36,8 +38,12 @@ const titles: Record<DHOPageId, { title: string; subtitle: string }> = {
     subtitle: 'Importação validada reduz duplicidade e atraso no fechamento mensal.',
   },
   'dho-trilhas-cargo': {
-    title: 'Trilhas por cargo / movimentação',
-    subtitle: 'Ao mudar de função, o sistema exige cursos obrigatórios e reciclagens.',
+    title: 'Trilhas por cargo',
+    subtitle: 'Cursos obrigatórios e reciclagens por cargo.',
+  },
+  'dho-trilhas-movimentacoes': {
+    title: 'Trilhas para movimentações',
+    subtitle: 'Automaticamente dispara trilhas quando colaborador é movimentado ou promovido.',
   },
   'dho-portal-gestor': {
     title: 'Portal do gestor — treinamentos',
@@ -88,6 +94,7 @@ export default function DHOPage({ activePage }: DHOPageProps) {
         {page === 'dho-presenca' && <PresencaDigitalView />}
         {page === 'dho-lancamento-lote' && <LancamentoLoteView />}
         {page === 'dho-trilhas-cargo' && <TrilhasCargoView />}
+        {page === 'dho-trilhas-movimentacoes' && <TrilhasMovimentacoesView />}
         {page === 'dho-portal-gestor' && <PortalGestorView />}
         {page === 'dho-comunicados' && <ComunicadosTDView />}
         {page === 'dho-consultoria' && <ConsultoriaInternaView />}
