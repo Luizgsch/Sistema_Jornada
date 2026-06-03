@@ -11,6 +11,7 @@ const DHO_FULL_PAGES = [
   'dho-presenca',
   'dho-lancamento-lote',
   'dho-trilhas-cargo',
+  'dho-trilhas-movimentacoes',
   'dho-portal-gestor',
   'dho-comunicados',
   'dho-consultoria',
