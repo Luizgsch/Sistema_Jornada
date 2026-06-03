@@ -184,3 +184,37 @@ export const mockConsultoriaInterna = [
     prioridade: 'media' as const,
   },
 ];
+
+export const mockHistoricoTreinamentos = [
+  {
+    matricula: 'MAT-101',
+    nome: 'Alice Ferreira',
+    cursos: [
+      { codigo: 'DES-ADV', nome: 'Design Avançado - Responsive', dataConclusao: '2025-11-15', cargaHoraria: 20, reciclagemMeses: 24 },
+      { codigo: 'FIG-PRO', nome: 'Figma Profissional', dataConclusao: '2025-12-20', cargaHoraria: 12, reciclagemMeses: 12 },
+    ],
+  },
+  {
+    matricula: 'MAT-102',
+    nome: 'Bruno Souza',
+    cursos: [
+      { codigo: 'INT-OP-01', nome: 'Integração Operacional', dataConclusao: '2025-12-10', cargaHoraria: 8, reciclagemMeses: 24 },
+    ],
+  },
+  {
+    matricula: 'MAT-103',
+    nome: 'Carla Duarte',
+    cursos: [
+      { codigo: 'COORD-RH', nome: 'Coordenação de RH - Gestão Estratégica', dataConclusao: '2025-10-05', cargaHoraria: 24, reciclagemMeses: 36 },
+      { codigo: 'CLT-ADV', nome: 'CLT Avançada - Rotinas Jurídicas', dataConclusao: '2025-11-30', cargaHoraria: 16, reciclagemMeses: 24 },
+    ],
+  },
+  {
+    matricula: 'MAT-104',
+    nome: 'Daniel Lima',
+    cursos: [
+      { codigo: 'INT-OP-01', nome: 'Integração Operacional', dataConclusao: '2026-02-20', cargaHoraria: 8, reciclagemMeses: 24 },
+      { codigo: 'NR12-BASE', nome: 'NR-12 Básico', dataConclusao: '2025-03-15', cargaHoraria: 4, reciclagemMeses: 12 },
+    ],
+  },
+];

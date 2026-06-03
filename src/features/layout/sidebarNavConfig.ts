@@ -311,7 +311,7 @@ export const DHO_NAV_FULL: NavCategory[] = [
           { id: "dho-lancamento-lote", label: "Lançamento em lote" },
         ],
       },
-      { kind: "leaf", pageId: "dho-trilhas-cargo", label: "Trilhas por cargo", icon: Route },
+      { kind: "leaf", pageId: "dho-trilhas-cargo", label: "Trilhas e desenvolvimento", icon: Route },
       { kind: "leaf", pageId: "dho-trilhas-movimentacoes", label: "Trilhas para movimentações", icon: GitBranch },
       { kind: "leaf", pageId: "dho-portal-gestor", label: "Portal do gestor", icon: Inbox },
     ],
