@@ -192,6 +192,7 @@ export const mockHistoricoTreinamentos = [
     cursos: [
       { codigo: 'DES-ADV', nome: 'Design Avançado - Responsive', dataConclusao: '2025-11-15', cargaHoraria: 20, reciclagemMeses: 24 },
       { codigo: 'FIG-PRO', nome: 'Figma Profissional', dataConclusao: '2025-12-20', cargaHoraria: 12, reciclagemMeses: 12 },
+      { codigo: 'ACC-WEB', nome: 'Acessibilidade Web (WCAG)', dataConclusao: '2026-02-10', cargaHoraria: 8, reciclagemMeses: 36 },
     ],
   },
   {
@@ -199,6 +200,7 @@ export const mockHistoricoTreinamentos = [
     nome: 'Bruno Souza',
     cursos: [
       { codigo: 'INT-OP-01', nome: 'Integração Operacional', dataConclusao: '2025-12-10', cargaHoraria: 8, reciclagemMeses: 24 },
+      { codigo: 'NR12-BASE', nome: 'NR-12 Básico', dataConclusao: '2024-06-15', cargaHoraria: 4, reciclagemMeses: 12 },
     ],
   },
   {
@@ -207,6 +209,7 @@ export const mockHistoricoTreinamentos = [
     cursos: [
       { codigo: 'COORD-RH', nome: 'Coordenação de RH - Gestão Estratégica', dataConclusao: '2025-10-05', cargaHoraria: 24, reciclagemMeses: 36 },
       { codigo: 'CLT-ADV', nome: 'CLT Avançada - Rotinas Jurídicas', dataConclusao: '2025-11-30', cargaHoraria: 16, reciclagemMeses: 24 },
+      { codigo: 'COM-EXEC', nome: 'Comunicação Executiva', dataConclusao: '2026-01-15', cargaHoraria: 12, reciclagemMeses: 24 },
     ],
   },
   {
@@ -215,6 +218,41 @@ export const mockHistoricoTreinamentos = [
     cursos: [
       { codigo: 'INT-OP-01', nome: 'Integração Operacional', dataConclusao: '2026-02-20', cargaHoraria: 8, reciclagemMeses: 24 },
       { codigo: 'NR12-BASE', nome: 'NR-12 Básico', dataConclusao: '2025-03-15', cargaHoraria: 4, reciclagemMeses: 12 },
+    ],
+  },
+  {
+    matricula: 'MAT-105',
+    nome: 'Eduardo Costa',
+    cursos: [
+      { codigo: 'GROW-01', nome: 'Growth Marketing Fundamentos', dataConclusao: '2025-09-20', cargaHoraria: 16, reciclagemMeses: 12 },
+      { codigo: 'AB-TEST', nome: 'A/B Testing e Métricas', dataConclusao: '2025-10-10', cargaHoraria: 12, reciclagemMeses: 6 },
+      { codigo: 'ANA-DATA', nome: 'Analytics Avançada', dataConclusao: '2026-03-05', cargaHoraria: 16, reciclagemMeses: 12 },
+    ],
+  },
+  {
+    matricula: 'MAT-106',
+    nome: 'Fernanda Rocha',
+    cursos: [
+      { codigo: 'LID-01', nome: 'Liderança Situacional', dataConclusao: '2025-08-15', cargaHoraria: 16, reciclagemMeses: 36 },
+      { codigo: 'NR12-ADV', nome: 'NR-12 Avançado', dataConclusao: '2024-11-20', cargaHoraria: 8, reciclagemMeses: 12 },
+      { codigo: '5S-GEST', nome: '5S na Gestão de Equipes', dataConclusao: '2025-12-05', cargaHoraria: 4, reciclagemMeses: 24 },
+    ],
+  },
+  {
+    matricula: 'MAT-107',
+    nome: 'Gabriel Santos',
+    cursos: [
+      { codigo: 'OP-MAT', nome: 'Operações na Matriz', dataConclusao: '2025-07-10', cargaHoraria: 12, reciclagemMeses: 24 },
+      { codigo: 'SGSO', nome: 'Segurança e Saúde Ocupacional', dataConclusao: '2024-05-20', cargaHoraria: 8, reciclagemMeses: 12 },
+      { codigo: 'PROC-OPS', nome: 'Processos Operacionais', dataConclusao: '2025-09-12', cargaHoraria: 16, reciclagemMeses: 12 },
+    ],
+  },
+  {
+    matricula: 'MAT-108',
+    nome: 'Helena Oliveira',
+    cursos: [
+      { codigo: 'DES-ADV', nome: 'Design Avançado - Responsive', dataConclusao: '2024-03-15', cargaHoraria: 20, reciclagemMeses: 24 },
+      { codigo: 'FIG-PRO', nome: 'Figma Profissional', dataConclusao: '2024-05-20', cargaHoraria: 12, reciclagemMeses: 12 },
     ],
   },
 ];
