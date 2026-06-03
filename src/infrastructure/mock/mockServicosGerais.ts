@@ -2,19 +2,50 @@
 
 export type KanbanNfColuna = 'solicitar' | 'aguardando' | 'recebida' | 'atrasada';
 
-export const mockNotasFiscais = [
-  { id: 'NF-001', fornecedor: 'Fornecedor Alfa Ltda', valorRef: 12890.0, coluna: 'atrasada' as KanbanNfColuna, diasAtraso: 5, competencia: '2026-03' },
-  { id: 'NF-002', fornecedor: 'Serviços Beta ME', valorRef: 3420.5, coluna: 'aguardando' as KanbanNfColuna, diasAtraso: 0, competencia: '2026-03' },
-  { id: 'NF-003', fornecedor: 'Insumos Gama', valorRef: 890.2, coluna: 'solicitar' as KanbanNfColuna, diasAtraso: 0, competencia: '2026-04' },
-  { id: 'NF-004', fornecedor: 'Limpeza Delta', valorRef: 5600.0, coluna: 'recebida' as KanbanNfColuna, diasAtraso: 0, competencia: '2026-03' },
-  { id: 'NF-005', fornecedor: 'Manutenção Epsilon', valorRef: 2100.0, coluna: 'atrasada' as KanbanNfColuna, diasAtraso: 2, competencia: '2026-03' },
+export type NotaFiscal = {
+  id: string;
+  fornecedor: string;
+  valorRef: number;
+  coluna: KanbanNfColuna;
+  diasAtraso: number;
+  competencia: string;
+  dataEmissao?: string | null;
+  dataSolicitacao?: string | null;
+  condicaoPagamento?: string;
+};
+
+export const mockNotasFiscais: NotaFiscal[] = [
+  { id: 'NF-001', fornecedor: 'Fornecedor Alfa Ltda', valorRef: 12890.0, coluna: 'atrasada', diasAtraso: 5, competencia: '2026-03', dataEmissao: '2026-02-28', dataSolicitacao: '2026-03-01', condicaoPagamento: '30 dias' },
+  { id: 'NF-002', fornecedor: 'Serviços Beta ME', valorRef: 3420.5, coluna: 'aguardando', diasAtraso: 0, competencia: '2026-03', dataEmissao: '2026-03-15', dataSolicitacao: '2026-03-20', condicaoPagamento: '15 dias' },
+  { id: 'NF-003', fornecedor: 'Insumos Gama', valorRef: 890.2, coluna: 'solicitar', diasAtraso: 0, competencia: '2026-04', dataEmissao: '2026-04-01', dataSolicitacao: null, condicaoPagamento: '30 dias' },
+  { id: 'NF-004', fornecedor: 'Limpeza Delta', valorRef: 5600.0, coluna: 'recebida', diasAtraso: 0, competencia: '2026-03', dataEmissao: '2026-03-05', dataSolicitacao: '2026-03-10', condicaoPagamento: '7 dias' },
+  { id: 'NF-005', fornecedor: 'Manutenção Epsilon', valorRef: 2100.0, coluna: 'atrasada', diasAtraso: 2, competencia: '2026-03', dataEmissao: '2026-03-10', dataSolicitacao: '2026-03-15', condicaoPagamento: '30 dias' },
+  { id: 'NF-006', fornecedor: 'Suprimentos Zeta', valorRef: 1450.8, coluna: 'recebida', diasAtraso: 0, competencia: '2026-03', dataEmissao: '2026-03-22', dataSolicitacao: '2026-03-25', condicaoPagamento: '15 dias' },
+  { id: 'NF-007', fornecedor: 'Transportes Eta', valorRef: 8900.0, coluna: 'aguardando', diasAtraso: 0, competencia: '2026-04', dataEmissao: '2026-04-02', dataSolicitacao: '2026-04-03', condicaoPagamento: '30 dias' },
+  { id: 'NF-008', fornecedor: 'Fornecedor Theta', valorRef: 4200.0, coluna: 'solicitar', diasAtraso: 0, competencia: '2026-04', dataEmissao: null, dataSolicitacao: null, condicaoPagamento: 'A confirmar' },
+  { id: 'NF-009', fornecedor: 'Facilities Iota', valorRef: 6700.5, coluna: 'atrasada', diasAtraso: 8, competencia: '2026-02', dataEmissao: '2026-02-15', dataSolicitacao: '2026-02-20', condicaoPagamento: '30 dias' },
+  { id: 'NF-010', fornecedor: 'Alimentos Kappa', valorRef: 11200.0, coluna: 'recebida', diasAtraso: 0, competencia: '2026-03', dataEmissao: '2026-03-18', dataSolicitacao: '2026-03-20', condicaoPagamento: '20 dias' },
 ];
 
-export const mockConciliacaoAcessos = [
-  { id: 'ACC-1001', colaborador: 'Marcos Vieira', origem: 'Elo', tipoFaturamento: 'Elo' as const, duplicado: false, refeitorioDuplicado: false },
-  { id: 'ACC-1002', colaborador: 'Juliana Prado', origem: 'Attos', tipoFaturamento: 'Posigraf' as const, duplicado: true, refeitorioDuplicado: false },
-  { id: 'ACC-1003', colaborador: 'Eduardo Lima', origem: 'Elo', tipoFaturamento: 'Elo' as const, duplicado: false, refeitorioDuplicado: true },
-  { id: 'ACC-1004', colaborador: 'Patrícia Souza', origem: 'Attos', tipoFaturamento: 'Posigraf' as const, duplicado: false, refeitorioDuplicado: false },
+export type ConciliacaoAcesso = {
+  id: string;
+  colaborador: string;
+  origem: string;
+  tipoFaturamento: 'Elo' | 'Posigraf';
+  duplicado: boolean;
+  refeitorioDuplicado: boolean;
+  resolvido?: boolean;
+  dataResolucao?: string;
+};
+
+export const mockConciliacaoAcessos: ConciliacaoAcesso[] = [
+  { id: 'ACC-1001', colaborador: 'Marcos Vieira', origem: 'Elo', tipoFaturamento: 'Elo', duplicado: false, refeitorioDuplicado: false, resolvido: false },
+  { id: 'ACC-1002', colaborador: 'Juliana Prado', origem: 'Attos', tipoFaturamento: 'Posigraf', duplicado: true, refeitorioDuplicado: false, resolvido: false },
+  { id: 'ACC-1003', colaborador: 'Eduardo Lima', origem: 'Elo', tipoFaturamento: 'Elo', duplicado: false, refeitorioDuplicado: true, resolvido: false },
+  { id: 'ACC-1004', colaborador: 'Patrícia Souza', origem: 'Attos', tipoFaturamento: 'Posigraf', duplicado: false, refeitorioDuplicado: false, resolvido: false },
+  { id: 'ACC-1005', colaborador: 'Roberto Silva', origem: 'Elo', tipoFaturamento: 'Elo', duplicado: true, refeitorioDuplicado: true, resolvido: false },
+  { id: 'ACC-1006', colaborador: 'Fernanda Costa', origem: 'Attos', tipoFaturamento: 'Posigraf', duplicado: false, refeitorioDuplicado: false, resolvido: false },
+  { id: 'ACC-1007', colaborador: 'Carlos Mendes', origem: 'Elo', tipoFaturamento: 'Elo', duplicado: true, refeitorioDuplicado: false, resolvido: false },
 ];
 
 export const mockCruzamentoBeneficios = [
@@ -34,19 +65,60 @@ export const mockArmariosMapa = Array.from({ length: 24 }, (_, i) => {
   return { id: n, status, colaborador: status === 'ocupado' ? `Colab. ${n}` : null };
 });
 
-export const mockComprasMensais = [
-  { mes: '2026-01', categoria: 'Higiene/Limpeza', valor: 12450.0 },
-  { mes: '2026-01', categoria: 'Copa/Refeitório', valor: 8920.0 },
-  { mes: '2026-02', categoria: 'Higiene/Limpeza', valor: 11880.0 },
-  { mes: '2026-02', categoria: 'Copa/Refeitório', valor: 9100.0 },
-  { mes: '2026-03', categoria: 'Higiene/Limpeza', valor: 13200.0 },
-  { mes: '2026-03', categoria: 'Copa/Refeitório', valor: 9450.0 },
+export type Compra = {
+  id?: string;
+  mes: string;
+  categoria: string;
+  valor: number;
+  descricao?: string;
+  fornecedor?: string;
+  dataCompra?: string | null;
+};
+
+export const mockComprasMensais: Compra[] = [
+  { id: 'CMP-001', mes: '2026-01', categoria: 'Higiene/Limpeza', valor: 12450.0, descricao: 'Produtos limpeza estoque', fornecedor: 'Limpeza Delta', dataCompra: '2026-01-05' },
+  { id: 'CMP-002', mes: '2026-01', categoria: 'Copa/Refeitório', valor: 8920.0, descricao: 'Alimentos congelados', fornecedor: 'Alimentos Kappa', dataCompra: '2026-01-10' },
+  { id: 'CMP-003', mes: '2026-01', categoria: 'EPI', valor: 5600.0, descricao: 'Uniformes e luvas', fornecedor: 'Suprimentos Zeta', dataCompra: '2026-01-15' },
+  { id: 'CMP-004', mes: '2026-02', categoria: 'Higiene/Limpeza', valor: 11880.0, descricao: 'Produtos limpeza estoque', fornecedor: 'Limpeza Delta', dataCompra: '2026-02-05' },
+  { id: 'CMP-005', mes: '2026-02', categoria: 'Copa/Refeitório', valor: 9100.0, descricao: 'Alimentos congelados', fornecedor: 'Alimentos Kappa', dataCompra: '2026-02-10' },
+  { id: 'CMP-006', mes: '2026-02', categoria: 'Manutenção', valor: 4200.0, descricao: 'Peças reposição', fornecedor: 'Manutenção Epsilon', dataCompra: '2026-02-20' },
+  { id: 'CMP-007', mes: '2026-03', categoria: 'Higiene/Limpeza', valor: 13200.0, descricao: 'Produtos limpeza estoque', fornecedor: 'Limpeza Delta', dataCompra: '2026-03-05' },
+  { id: 'CMP-008', mes: '2026-03', categoria: 'Copa/Refeitório', valor: 9450.0, descricao: 'Alimentos congelados', fornecedor: 'Alimentos Kappa', dataCompra: '2026-03-10' },
+  { id: 'CMP-009', mes: '2026-03', categoria: 'EPI', valor: 6800.0, descricao: 'Botas segurança', fornecedor: 'Suprimentos Zeta', dataCompra: '2026-03-15' },
+  { id: 'CMP-010', mes: '2026-03', categoria: 'Outros', valor: 2300.0, descricao: 'Materiais diversos', fornecedor: 'Fornecedor Alfa Ltda', dataCompra: '2026-03-25' },
 ];
 
-export const mockAttosFaturamento = [
-  { data: '2026-04-01', refeicoes: 412, integrado: true, origem: 'API Attos (simulada)' },
-  { data: '2026-03-31', refeicoes: 398, integrado: true, origem: 'API Attos (simulada)' },
-  { data: '2026-03-30', refeicoes: 405, integrado: false, origem: 'Planilha (legado)' },
+export type FaturamentoAttos = {
+  id: string;
+  data: string;
+  refeicoes: number;
+  integrado: boolean;
+  origem: 'API Attos' | 'Planilha' | 'Manual' | 'Importação';
+  ultimaAlteracao: string;
+  alteradoPor: string;
+};
+
+export const mockAttosFaturamento: FaturamentoAttos[] = [
+  { id: 'FAT-001', data: '2026-04-01', refeicoes: 412, integrado: true, origem: 'API Attos', ultimaAlteracao: '2026-04-03T08:15:00', alteradoPor: 'Sistema' },
+  { id: 'FAT-002', data: '2026-03-31', refeicoes: 398, integrado: true, origem: 'API Attos', ultimaAlteracao: '2026-04-02T08:10:00', alteradoPor: 'Sistema' },
+  { id: 'FAT-003', data: '2026-03-30', refeicoes: 405, integrado: false, origem: 'Planilha', ultimaAlteracao: '2026-03-30T14:30:00', alteradoPor: 'João Silva' },
+  { id: 'FAT-004', data: '2026-03-29', refeicoes: 418, integrado: true, origem: 'API Attos', ultimaAlteracao: '2026-03-29T08:12:00', alteradoPor: 'Sistema' },
+  { id: 'FAT-005', data: '2026-03-28', refeicoes: 391, integrado: false, origem: 'Planilha', ultimaAlteracao: '2026-03-28T15:45:00', alteradoPor: 'Maria Santos' },
+];
+
+export type SatisfacaoHistorico = {
+  data: string;
+  indicador: number;
+  refeicoes: number;
+  fonte: string;
+};
+
+export const mockSatisfacaoHistorico: SatisfacaoHistorico[] = [
+  { data: '2026-04-03', indicador: 4.62, refeicoes: 412, fonte: 'Forms Attos' },
+  { data: '2026-04-02', indicador: 4.45, refeicoes: 398, fonte: 'Forms Attos' },
+  { data: '2026-04-01', indicador: 4.78, refeicoes: 405, fonte: 'Forms Attos' },
+  { data: '2026-03-31', indicador: 4.55, refeicoes: 418, fonte: 'Forms Attos' },
+  { data: '2026-03-30', indicador: 4.68, refeicoes: 391, fonte: 'Forms Attos' },
 ];
 
 export const mockSatisfacaoAttos = {
@@ -54,12 +126,27 @@ export const mockSatisfacaoAttos = {
   refeicoesContabilizadas: 412,
   ultimaSincronizacao: '2026-04-03T08:15:00',
   fonte: 'Pesquisa Attos → integração (protótipo)',
+  historico: mockSatisfacaoHistorico,
 };
 
-export const mockChamadosManusis = [
-  { id: 'MAN-4401', titulo: 'Vazamento banheiro bloco C', area: 'Facilities', vencimento: '2026-04-01', status: 'vencido' as const },
-  { id: 'MAN-4402', titulo: 'Troca de luminárias corredor 2', area: 'Manutenção', vencimento: '2026-04-05', status: 'proximo' as const },
-  { id: 'MAN-4403', titulo: 'Ajuste ar-cond. sala reuniões', area: 'Predial', vencimento: '2026-04-12', status: 'ok' as const },
+export type Chamado = {
+  id: string;
+  titulo: string;
+  area: string;
+  vencimento: string;
+  status: 'vencido' | 'proximo' | 'ok';
+  responsavel?: string;
+  dataAbertura?: string;
+  dataConclusao?: string | null;
+};
+
+export const mockChamadosManusis: Chamado[] = [
+  { id: 'MAN-4401', titulo: 'Vazamento banheiro bloco C', area: 'Facilities', vencimento: '2026-04-01', status: 'vencido', responsavel: 'João Silva', dataAbertura: '2026-03-20', dataConclusao: null },
+  { id: 'MAN-4402', titulo: 'Troca de luminárias corredor 2', area: 'Manutenção', vencimento: '2026-04-05', status: 'proximo', responsavel: 'Carlos Mendes', dataAbertura: '2026-03-25', dataConclusao: null },
+  { id: 'MAN-4403', titulo: 'Ajuste ar-cond. sala reuniões', area: 'Predial', vencimento: '2026-04-12', status: 'ok', responsavel: 'Pedro Costa', dataAbertura: '2026-03-28', dataConclusao: null },
+  { id: 'MAN-4404', titulo: 'Limpeza caixa d\'água', area: 'Facilities', vencimento: '2026-03-31', status: 'vencido', responsavel: 'João Silva', dataAbertura: '2026-03-15', dataConclusao: null },
+  { id: 'MAN-4405', titulo: 'Reparo porta entrada bloco A', area: 'Manutenção', vencimento: '2026-04-08', status: 'ok', responsavel: 'Carlos Mendes', dataAbertura: '2026-03-30', dataConclusao: null },
+  { id: 'MAN-4406', titulo: 'Manutenção sistema elétrico', area: 'Predial', vencimento: '2026-04-10', status: 'proximo', responsavel: 'Pedro Costa', dataAbertura: '2026-03-28', dataConclusao: null },
 ];
 
 export type FechamentoAttos = {

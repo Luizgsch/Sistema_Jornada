@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader } from '@/shared/ui/Card';
 import { KpiCard } from '@/shared/components/dashboard/KpiCard';
 import { CriticalActionsBar, type CriticalAction } from '@/shared/components/dashboard/CriticalActionsBar';
 import { useToast } from '@/shared/ui/Toast';
+import { ImportarPlanilhaButton } from '@/shared/ui/ImportarPlanilhaButton';
 import {
   mockNotasFiscais,
   mockConciliacaoAcessos,
@@ -10,8 +11,9 @@ import {
   mockAttosFaturamento,
   mockFechamentosAttos,
   type KanbanNfColuna,
+  type FaturamentoAttos,
 } from '@/infrastructure/mock/mockServicosGerais';
-import { GitMerge, ShoppingCart, UtensilsCrossed } from 'lucide-react';
+import { GitMerge, ShoppingCart, UtensilsCrossed, Trash2, Download, Check } from 'lucide-react';
 
 function FatBadge({ label, color }: { label: string; color: string }) {
   return (
@@ -300,36 +302,139 @@ export function SGConciliacaoView() {
 }
 
 export function SGComprasView() {
-  const totais = mockComprasMensais.reduce<Record<string, number>>((acc, r) => {
+  const { success, warning } = useToast();
+  const [compras, setCompras] = useState(mockComprasMensais);
+  const [selecionados, setSelecionados] = useState<Set<string>>(new Set());
+  const [filtroCategoria, setFiltroCategoria] = useState<string>('');
+  const [filtroMes, setFiltroMes] = useState<string>('');
+
+  const comprasFiltradas = useMemo(() => {
+    return compras.filter((c) => {
+      const passaCategoria = !filtroCategoria || c.categoria === filtroCategoria;
+      const passaMes = !filtroMes || c.mes === filtroMes;
+      return passaCategoria && passaMes;
+    });
+  }, [compras, filtroCategoria, filtroMes]);
+
+  const totais = comprasFiltradas.reduce<Record<string, number>>((acc, r) => {
     acc[r.mes] = (acc[r.mes] || 0) + r.valor;
     return acc;
   }, {});
+
+  const toggleSelecionado = (id: string | undefined) => {
+    if (!id) return;
+    const novo = new Set(selecionados);
+    if (novo.has(id)) novo.delete(id);
+    else novo.add(id);
+    setSelecionados(novo);
+  };
+
+  const deletarSelecionados = () => {
+    if (selecionados.size === 0) {
+      warning('Selecione itens');
+      return;
+    }
+    setCompras((prev) => prev.filter((c) => !selecionados.has(c.id || '')));
+    setSelecionados(new Set());
+    success(`✓ ${selecionados.size} compra(s) deletada(s)`);
+  };
+
+  const exportarDados = () => {
+    const items = comprasFiltradas;
+    const csv = ['Mês,Categoria,Valor,Fornecedor,Data', ...items.map((c) => `${c.mes},${c.categoria},${c.valor},${c.fornecedor},${c.dataCompra}`)].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `compras_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    success(`✓ ${items.length} linhas exportadas`);
+  };
+
+  const handleImportarPlanilha = useCallback((rowCount: number) => {
+    const novasCompras = Array.from({ length: rowCount }, (_, i) => ({
+      id: `CMP-${Date.now()}-${i}`,
+      mes: new Date().toISOString().substring(0, 7),
+      categoria: ['Higiene/Limpeza', 'Copa/Refeitório', 'EPI', 'Manutenção'][Math.floor(Math.random() * 4)],
+      valor: Math.random() * 15000 + 1000,
+      fornecedor: `Fornecedor ${Math.random().toString(36).substring(7)}`,
+      dataCompra: new Date().toISOString().substring(0, 10),
+    }));
+    setCompras((prev) => [...novasCompras, ...prev]);
+    success(`✓ ${rowCount} compra(s) importada(s)`);
+  }, [success]);
+
   return (
     <Card>
       <CardHeader className="border-b border-[#334155] pb-4 flex flex-row items-center gap-2">
         <ShoppingCart className="text-amber-400" size={20} />
         <div>
           <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4]">Controle de compras / insumos</h3>
-          <p className="text-sm text-zinc-500">Validação de custos recorrentes e evolução mensal.</p>
+          <p className="text-sm text-zinc-500">{compras.length} registros · Validação de custos recorrentes e evolução mensal.</p>
         </div>
       </CardHeader>
+
+      <div className="px-6 py-4 border-b border-[#334155] space-y-3">
+        <div className="flex items-center gap-2 flex-wrap">
+          <ImportarPlanilhaButton label="Importar Compras" onSuccess={handleImportarPlanilha} />
+          {selecionados.size > 0 && (
+            <div className="flex items-center gap-2 ml-auto">
+              <span className="text-xs font-semibold text-[#e7e5e4]">{selecionados.size} selecionado(s)</span>
+              <button onClick={exportarDados} className="px-3 py-1.5 bg-blue-500/10 text-blue-400 rounded-radius-m text-xs font-semibold hover:bg-blue-500/20">
+                <Download size={14} className="inline mr-1" /> Exportar
+              </button>
+              <button onClick={deletarSelecionados} className="px-3 py-1.5 bg-red-500/10 text-red-400 rounded-radius-m text-xs font-semibold hover:bg-red-500/20">
+                <Trash2 size={14} className="inline mr-1" /> Deletar
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div className="flex items-center gap-3 flex-wrap text-xs">
+          <select value={filtroCategoria} onChange={(e) => setFiltroCategoria(e.target.value)} className="px-2 py-1.5 bg-[#0f172a] border border-[#334155] rounded-radius-m text-zinc-300">
+            <option value="">Todas categorias</option>
+            <option value="Higiene/Limpeza">Higiene/Limpeza</option>
+            <option value="Copa/Refeitório">Copa/Refeitório</option>
+            <option value="EPI">EPI</option>
+            <option value="Manutenção">Manutenção</option>
+            <option value="Outros">Outros</option>
+          </select>
+          <select value={filtroMes} onChange={(e) => setFiltroMes(e.target.value)} className="px-2 py-1.5 bg-[#0f172a] border border-[#334155] rounded-radius-m text-zinc-300">
+            <option value="">Todos meses</option>
+            <option value="2026-01">Janeiro</option>
+            <option value="2026-02">Fevereiro</option>
+            <option value="2026-03">Março</option>
+          </select>
+          {(filtroCategoria || filtroMes) && (
+            <button onClick={() => { setFiltroCategoria(''); setFiltroMes(''); }} className="text-xs text-blue-400 hover:underline">
+              Limpar
+            </button>
+          )}
+        </div>
+      </div>
+
       <CardContent className="p-0">
         <table className="w-full text-sm">
-          <thead className="bg-[#0f172a] text-zinc-500 text-xs uppercase tracking-widest">
+          <thead className="bg-[#0f172a] text-zinc-500 text-xs uppercase tracking-widest sticky top-0">
             <tr>
-              <th className="py-4 px-6 border-b border-[#334155]">Mês</th>
+              <th className="py-4 px-4 border-b border-[#334155] w-10">
+                <input type="checkbox" checked={selecionados.size > 0 && selecionados.size === comprasFiltradas.length} onChange={() => setSelecionados(selecionados.size > 0 ? new Set() : new Set(comprasFiltradas.map((c) => c.id || '')))} />
+              </th>
+              <th className="py-4 px-6 border-b border-[#334155] text-left">Mês</th>
               <th className="py-4 px-6 border-b border-[#334155]">Categoria</th>
+              <th className="py-4 px-6 border-b border-[#334155]">Fornecedor</th>
               <th className="py-4 px-6 border-b border-[#334155] text-right">Valor (R$)</th>
             </tr>
           </thead>
           <tbody>
-            {mockComprasMensais.map((r, i) => (
-              <tr key={i} className="hover:bg-zinc-800/30 transition-colors">
-                <td className="py-4 px-6 border-b border-[#334155] font-mono text-xs text-zinc-600">{r.mes}</td>
-                <td className="py-4 px-6 border-b border-[#334155] text-zinc-400">{r.categoria}</td>
-                <td className="py-4 px-6 border-b border-[#334155] text-right font-bold text-[#e7e5e4]">
-                  R$ {r.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+            {comprasFiltradas.map((r) => (
+              <tr key={r.id || Math.random()} className={`hover:bg-zinc-800/30 transition-colors ${selecionados.has(r.id || '') ? 'bg-blue-500/10' : ''}`}>
+                <td className="py-3 px-4 border-b border-[#334155]">
+                  <input type="checkbox" checked={selecionados.has(r.id || '')} onChange={() => toggleSelecionado(r.id)} />
                 </td>
+                <td className="py-3 px-6 border-b border-[#334155] font-mono text-xs text-zinc-600">{r.mes}</td>
+                <td className="py-3 px-6 border-b border-[#334155] text-zinc-400 text-sm">{r.categoria}</td>
+                <td className="py-3 px-6 border-b border-[#334155] text-zinc-500 text-sm">{r.fornecedor}</td>
+                <td className="py-3 px-6 border-b border-[#334155] text-right font-bold text-[#e7e5e4]">R$ {r.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>
               </tr>
             ))}
           </tbody>
@@ -351,86 +456,344 @@ export function SGComprasView() {
 }
 
 export function SGFaturamentoAttosView() {
+  const { success, warning, error } = useToast();
+  const [dados, setDados] = useState<FaturamentoAttos[]>(mockAttosFaturamento);
+  const [selecionados, setSelecionados] = useState<Set<string>>(new Set());
+  const [editandoId, setEditandoId] = useState<string | null>(null);
+  const [editValues, setEditValues] = useState<Partial<FaturamentoAttos>>({});
+  const [filtroStatus, setFiltroStatus] = useState<'todos' | 'integrado' | 'pendente'>('todos');
+  const [filtroData, setFiltroData] = useState<{ de: string; ate: string }>({ de: '', ate: '' });
+
+  const dadosFiltrados = useMemo(() => {
+    return dados.filter((r) => {
+      const passaStatus = filtroStatus === 'todos' || (filtroStatus === 'integrado' ? r.integrado : !r.integrado);
+      const dataNum = new Date(r.data).getTime();
+      const deNum = filtroData.de ? new Date(filtroData.de).getTime() : 0;
+      const ateNum = filtroData.ate ? new Date(filtroData.ate).getTime() : Date.now();
+      const passaData = dataNum >= deNum && dataNum <= ateNum;
+      return passaStatus && passaData;
+    });
+  }, [dados, filtroStatus, filtroData]);
+
+  const iniciarEdicao = (fat: FaturamentoAttos) => {
+    setEditandoId(fat.id);
+    setEditValues(fat);
+  };
+
+  const validarDados = (val: Partial<FaturamentoAttos>): string | null => {
+    if (val.data && !/^\d{4}-\d{2}-\d{2}$/.test(val.data)) return 'Data inválida (YYYY-MM-DD)';
+    if (val.refeicoes !== undefined && (val.refeicoes < 1 || val.refeicoes > 9999)) return 'Refeições: 1-9999';
+    if (val.data && new Date(val.data) > new Date()) return 'Data não pode ser futura';
+    if (val.data && dados.some((d) => d.id !== editandoId && d.data === val.data)) return 'Data já existe';
+    return null;
+  };
+
+  const salvarEdicao = () => {
+    const err = validarDados(editValues);
+    if (err) {
+      error(err);
+      return;
+    }
+    setDados((prev) => prev.map((d) => (d.id === editandoId ? { ...d, ...editValues, ultimaAlteracao: new Date().toISOString(), alteradoPor: 'Você' } : d)));
+    setEditandoId(null);
+    success('✓ Registro atualizado');
+  };
+
+  const cancelarEdicao = () => {
+    setEditandoId(null);
+  };
+
+  const toggleSelecionado = (id: string) => {
+    const novo = new Set(selecionados);
+    if (novo.has(id)) novo.delete(id);
+    else novo.add(id);
+    setSelecionados(novo);
+  };
+
+  const selecionarTodos = () => {
+    if (selecionados.size === dadosFiltrados.length) setSelecionados(new Set());
+    else setSelecionados(new Set(dadosFiltrados.map((d) => d.id)));
+  };
+
+  const marcarComoIntegrado = () => {
+    if (selecionados.size === 0) {
+      warning('Selecione registros primeiro');
+      return;
+    }
+    setDados((prev) =>
+      prev.map((d) =>
+        selecionados.has(d.id) ? { ...d, integrado: true, ultimaAlteracao: new Date().toISOString(), alteradoPor: 'Você' } : d
+      )
+    );
+    setSelecionados(new Set());
+    success(`✓ ${selecionados.size} registros marcados como integrado`);
+  };
+
+  const deletarSelecionados = () => {
+    if (selecionados.size === 0) {
+      warning('Selecione registros primeiro');
+      return;
+    }
+    setDados((prev) => prev.filter((d) => !selecionados.has(d.id)));
+    setSelecionados(new Set());
+    success(`✓ ${selecionados.size} registros deletados`);
+  };
+
+  const exportarDados = () => {
+    const para = selecionados.size > 0 ? Array.from(selecionados) : dadosFiltrados.map((d) => d.id);
+    const items = dados.filter((d) => para.includes(d.id));
+    const csv = ['Data,Refeições,Status,Origem,Última alteração,Por', ...items.map((d) => `${d.data},${d.refeicoes},${d.integrado ? 'Integrado' : 'Pendente'},${d.origem},${d.ultimaAlteracao},${d.alteradoPor}`)].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `faturamento_attos_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    success(`✓ ${items.length} linhas exportadas`);
+  };
+
+  const handleImportarPlanilha = useCallback((rowCount: number) => {
+    const novasLinhas: FaturamentoAttos[] = Array.from({ length: rowCount }, (_, i) => ({
+      id: `FAT-${Date.now()}-${i}`,
+      data: new Date(Date.now() - (i + 1) * 86400000).toISOString().split('T')[0],
+      refeicoes: Math.floor(Math.random() * 200) + 300,
+      integrado: false,
+      origem: 'Importação',
+      ultimaAlteracao: new Date().toISOString(),
+      alteradoPor: 'Importação',
+    }));
+    setDados((prev) => [...novasLinhas, ...prev]);
+    success(`✓ ${rowCount} linhas importadas com sucesso!`);
+  }, [success]);
+
   return (
     <Card>
       <CardHeader className="border-b border-[#334155] pb-4">
-        <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4] flex items-center gap-2">
-          <UtensilsCrossed className="text-orange-400" size={20} />
-          Faturamento Attos — integração diária
-        </h3>
-        <p className="text-sm text-zinc-500">Reduz cópia manual de PDF/Excel; status de origem indicado por linha.</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4] flex items-center gap-2">
+              <UtensilsCrossed className="text-orange-400" size={20} />
+              Faturamento Attos — integração diária
+            </h3>
+            <p className="text-sm text-zinc-500 mt-1">Importar, editar e validar dados de refeições. {dados.length} registros.</p>
+          </div>
+        </div>
       </CardHeader>
+
+      {/* Toolbar: Importar + Filtros */}
+      <div className="px-6 py-4 border-b border-[#334155] space-y-3">
+        <div className="flex items-center gap-2 flex-wrap">
+          <ImportarPlanilhaButton label="Importar Planilha" modeloNome="faturamento.xlsx" onSuccess={handleImportarPlanilha} />
+          {selecionados.size > 0 && (
+            <div className="flex items-center gap-2 ml-auto text-xs text-zinc-400">
+              <span className="font-semibold text-[#e7e5e4]">{selecionados.size} selecionado(s)</span>
+              <button onClick={marcarComoIntegrado} className="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 rounded-radius-m transition-colors text-xs font-semibold">
+                <Check size={14} /> Marcar integrado
+              </button>
+              <button onClick={exportarDados} className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-radius-m transition-colors text-xs font-semibold">
+                <Download size={14} /> Exportar
+              </button>
+              <button onClick={deletarSelecionados} className="inline-flex items-center gap-1 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-radius-m transition-colors text-xs font-semibold">
+                <Trash2 size={14} /> Deletar
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Filtros */}
+        <div className="flex items-center gap-3 flex-wrap text-xs">
+          <select value={filtroStatus} onChange={(e) => setFiltroStatus(e.target.value as any)} className="px-2 py-1.5 bg-[#0f172a] border border-[#334155] rounded-radius-m text-zinc-300 text-xs">
+            <option value="todos">Todos</option>
+            <option value="integrado">Integrado</option>
+            <option value="pendente">Pendente</option>
+          </select>
+          <div className="flex items-center gap-2">
+            <span className="text-zinc-500">De:</span>
+            <input type="date" value={filtroData.de} onChange={(e) => setFiltroData({ ...filtroData, de: e.target.value })} className="px-2 py-1 bg-[#0f172a] border border-[#334155] rounded-radius-m text-zinc-300 text-xs" />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-zinc-500">Até:</span>
+            <input type="date" value={filtroData.ate} onChange={(e) => setFiltroData({ ...filtroData, ate: e.target.value })} className="px-2 py-1 bg-[#0f172a] border border-[#334155] rounded-radius-m text-zinc-300 text-xs" />
+          </div>
+          {(filtroStatus !== 'todos' || filtroData.de || filtroData.ate) && (
+            <button onClick={() => { setFiltroStatus('todos'); setFiltroData({ de: '', ate: '' }); }} className="text-xs text-blue-400 hover:underline">
+              Limpar filtros
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Tabela */}
       <CardContent className="p-0">
-        <table className="w-full text-sm">
-          <thead className="bg-[#0f172a] text-zinc-500 text-xs uppercase tracking-widest">
-            <tr>
-              <th className="py-4 px-6 border-b border-[#334155]">Data</th>
-              <th className="py-4 px-6 border-b border-[#334155] text-center">Refeições</th>
-              <th className="py-4 px-6 border-b border-[#334155]">Integrado</th>
-              <th className="py-4 px-6 border-b border-[#334155]">Origem</th>
-            </tr>
-          </thead>
-          <tbody>
-            {mockAttosFaturamento.map((r) => (
-              <tr
-                key={r.data}
-                className={`hover:bg-zinc-800/30 transition-colors ${
-                  !r.integrado ? 'border-l-4 border-l-amber-500/60 border-[#334155]' : ''
-                }`}
-              >
-                <td className="py-4 px-6 border-b border-[#334155] font-mono text-xs text-zinc-600">{r.data}</td>
-                <td className="py-4 px-6 border-b border-[#334155] text-center font-bold text-[#e7e5e4]">{r.refeicoes}</td>
-                <td className="py-4 px-6 border-b border-[#334155]">
-                  {r.integrado ? (
-                    <FatBadge label="Integrado" color="bg-emerald-500/10 text-emerald-400 border-emerald-500/20" />
-                  ) : (
-                    <FatBadge label="Pendente" color="bg-amber-500/10 text-amber-400 border-amber-500/20" />
-                  )}
-                </td>
-                <td className="py-4 px-6 border-b border-[#334155] text-xs text-zinc-600">{r.origem}</td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-[#0f172a] text-zinc-500 text-xs uppercase tracking-widest sticky top-0">
+              <tr>
+                <th className="py-4 px-4 border-b border-[#334155] w-10">
+                  <input type="checkbox" checked={selecionados.size > 0 && selecionados.size === dadosFiltrados.length} onChange={selecionarTodos} className="cursor-pointer" />
+                </th>
+                <th className="py-4 px-6 border-b border-[#334155] text-left">Data</th>
+                <th className="py-4 px-6 border-b border-[#334155] text-center">Refeições</th>
+                <th className="py-4 px-6 border-b border-[#334155]">Status</th>
+                <th className="py-4 px-6 border-b border-[#334155]">Origem</th>
+                <th className="py-4 px-6 border-b border-[#334155] text-xs">Últimas mudanças</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {dadosFiltrados.map((r) => (
+                <tr key={r.id} className={`transition-colors ${selecionados.has(r.id) ? 'bg-blue-500/10' : 'hover:bg-zinc-800/30'} ${!r.integrado ? 'border-l-4 border-l-amber-500/60 border-[#334155]' : ''}`}>
+                  <td className="py-3 px-4 border-b border-[#334155]">
+                    <input type="checkbox" checked={selecionados.has(r.id)} onChange={() => toggleSelecionado(r.id)} className="cursor-pointer" />
+                  </td>
+                  <td className="py-3 px-6 border-b border-[#334155]">
+                    {editandoId === r.id ? (
+                      <input type="date" value={editValues.data || ''} onChange={(e) => setEditValues({ ...editValues, data: e.target.value })} className="w-full px-2 py-1 bg-[#0f172a] border border-blue-500 rounded text-[#e7e5e4] text-sm" />
+                    ) : (
+                      <span onClick={() => iniciarEdicao(r)} className="font-mono text-xs text-zinc-600 cursor-pointer hover:text-blue-400 transition-colors">
+                        {r.data}
+                      </span>
+                    )}
+                  </td>
+                  <td className="py-3 px-6 border-b border-[#334155] text-center">
+                    {editandoId === r.id ? (
+                      <input type="number" min="1" max="9999" value={editValues.refeicoes || 0} onChange={(e) => setEditValues({ ...editValues, refeicoes: parseInt(e.target.value) || 0 })} className="w-20 px-2 py-1 bg-[#0f172a] border border-blue-500 rounded text-[#e7e5e4] text-sm text-center" />
+                    ) : (
+                      <span onClick={() => iniciarEdicao(r)} className="font-bold text-[#e7e5e4] cursor-pointer hover:text-blue-400 transition-colors">
+                        {r.refeicoes}
+                      </span>
+                    )}
+                  </td>
+                  <td className="py-3 px-6 border-b border-[#334155]">
+                    {editandoId === r.id ? (
+                      <select value={editValues.integrado ? 'sim' : 'nao'} onChange={(e) => setEditValues({ ...editValues, integrado: e.target.value === 'sim' })} className="px-2 py-1 bg-[#0f172a] border border-blue-500 rounded text-sm text-zinc-300">
+                        <option value="nao">Pendente</option>
+                        <option value="sim">Integrado</option>
+                      </select>
+                    ) : (
+                      <>
+                        {r.integrado ? (
+                          <FatBadge label="Integrado" color="bg-emerald-500/10 text-emerald-400 border-emerald-500/20" />
+                        ) : (
+                          <FatBadge label="Pendente" color="bg-amber-500/10 text-amber-400 border-amber-500/20" />
+                        )}
+                      </>
+                    )}
+                  </td>
+                  <td className="py-3 px-6 border-b border-[#334155] text-xs text-zinc-600">{r.origem}</td>
+                  <td className="py-3 px-6 border-b border-[#334155] text-xs text-zinc-600">
+                    {editandoId === r.id ? (
+                      <div className="flex items-center gap-2">
+                        <button onClick={salvarEdicao} className="px-2 py-1 bg-emerald-500/10 text-emerald-400 rounded text-xs hover:bg-emerald-500/20 transition-colors">
+                          ✓ Salvar
+                        </button>
+                        <button onClick={cancelarEdicao} className="px-2 py-1 bg-red-500/10 text-red-400 rounded text-xs hover:bg-red-500/20 transition-colors">
+                          ✕ Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <span className="text-zinc-500">{r.alteradoPor} • {r.ultimaAlteracao.split('T')[0]}</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+              {dadosFiltrados.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="py-8 text-center text-zinc-500 text-sm">
+                    Nenhum registro encontrado
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </CardContent>
     </Card>
   );
 }
 
 export function SGFechamentoAttosView() {
+  const { success, warning } = useToast();
+  const [fechamentos, setFechamentos] = useState(mockFechamentosAttos);
+  const [selecionados, setSelecionados] = useState<Set<string>>(new Set());
+
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'conciliado': return 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20';
-      case 'divergente': return 'bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-500/20';
-      case 'pendente': return 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/20';
-      default: return 'bg-zinc-50 dark:bg-zinc-500/10 text-zinc-700 dark:text-zinc-400 border-zinc-200 dark:border-zinc-500/20';
+      case 'conciliado': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+      case 'divergente': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+      case 'pendente': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+      default: return 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
     }
+  };
+
+  const toggleSelecionado = (id: string) => {
+    const novo = new Set(selecionados);
+    novo.has(id) ? novo.delete(id) : novo.add(id);
+    setSelecionados(novo);
+  };
+
+  const marcarConciliado = () => {
+    if (selecionados.size === 0) {
+      warning('Selecione períodos');
+      return;
+    }
+    setFechamentos((prev) => prev.map((f) => (selecionados.has(f.id) ? { ...f, status: 'conciliado' as const } : f)));
+    setSelecionados(new Set());
+    success(`✓ ${selecionados.size} período(s) conciliado(s)`);
+  };
+
+  const exportarDados = () => {
+    const items = Array.from(selecionados).map((id) => fechamentos.find((f) => f.id === id)).filter(Boolean);
+    const csv = ['Período,Acessos,Refeições,Valor,Status,Responsável', ...items.map((f: any) => `${f.periodo},${f.totalAcessos},${f.totalRefeicoes},${f.valorTotal},${f.status},${f.responsavel}`)].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `fechamento_attos_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    success(`✓ Fechamento exportado`);
   };
 
   return (
     <Card>
       <CardHeader className="border-b border-[#334155] pb-4">
         <h3 className="font-semibold text-base tracking-tighter text-[#e7e5e4]">Fechamento Attos — histórico de períodos</h3>
-        <p className="text-sm text-zinc-500">
-          Consolidação de fechamentos Attos por período com status de conciliação e responsável.
-        </p>
+        <p className="text-sm text-zinc-500">{fechamentos.length} períodos · Consolidação com status e rastreamento.</p>
       </CardHeader>
+
+      <div className="px-6 py-4 border-b border-[#334155]">
+        {selecionados.size > 0 && (
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-xs font-semibold text-[#e7e5e4]">{selecionados.size} selecionado(s)</span>
+            <button onClick={marcarConciliado} className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 rounded-radius-m text-xs font-semibold hover:bg-emerald-500/20">
+              <Check size={14} className="inline mr-1" /> Marcar conciliado
+            </button>
+            <button onClick={exportarDados} className="px-3 py-1.5 bg-blue-500/10 text-blue-400 rounded-radius-m text-xs font-semibold hover:bg-blue-500/20">
+              <Download size={14} className="inline mr-1" /> Exportar
+            </button>
+          </div>
+        )}
+      </div>
+
       <CardContent className="p-0">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="bg-zinc-900/80 border-b border-[#334155] text-zinc-400 font-semibold text-xs uppercase tracking-wider">
+            <thead className="bg-[#0f172a] border-b border-[#334155] text-zinc-400 font-semibold text-xs uppercase tracking-wider sticky top-0">
               <tr>
+                <th className="py-3 px-4 w-10">
+                  <input type="checkbox" checked={selecionados.size > 0 && selecionados.size === fechamentos.length} onChange={() => setSelecionados(selecionados.size > 0 ? new Set() : new Set(fechamentos.map((f) => f.id)))} />
+                </th>
                 <th className="py-3 px-5">Período</th>
-                <th className="py-3 px-5">Total Acessos</th>
-                <th className="py-3 px-5">Total Refeições</th>
-                <th className="py-3 px-5">Valor Total</th>
+                <th className="py-3 px-5">Acessos</th>
+                <th className="py-3 px-5">Refeições</th>
+                <th className="py-3 px-5">Valor</th>
                 <th className="py-3 px-5">Status</th>
                 <th className="py-3 px-5">Responsável</th>
               </tr>
             </thead>
             <tbody>
-              {mockFechamentosAttos.map((fechamento) => (
-                <tr key={fechamento.id} className="border-b border-[#334155] hover:bg-zinc-800/20 transition-colors">
+              {fechamentos.map((fechamento) => (
+                <tr key={fechamento.id} className={`border-b border-[#334155] hover:bg-zinc-800/20 transition-colors ${selecionados.has(fechamento.id) ? 'bg-blue-500/10' : ''}`}>
+                  <td className="py-3 px-4">
+                    <input type="checkbox" checked={selecionados.has(fechamento.id)} onChange={() => toggleSelecionado(fechamento.id)} />
+                  </td>
                   <td className="py-3 px-5 font-medium text-[#e7e5e4]">{fechamento.periodo}</td>
                   <td className="py-3 px-5 text-zinc-400">{fechamento.totalAcessos.toLocaleString('pt-BR')}</td>
                   <td className="py-3 px-5 text-zinc-400">{fechamento.totalRefeicoes.toLocaleString('pt-BR')}</td>

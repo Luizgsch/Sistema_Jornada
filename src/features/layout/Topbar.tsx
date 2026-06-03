@@ -47,8 +47,8 @@ const pageIdToProblemId: Record<string, string> = {
   'dho-lancamento-lote': 'dho-3',
   'dho-trilhas-cargo': 'dho-5',
   'dho-trilhas-movimentacoes': 'dho-4',
-  'dho-portal-gestor': 'dho-7',
-  'dho-comunicados': 'dho-6',
+  'dho-portal-gestor': 'dho-5',
+  'dho-comunicados': 'dho-7',
   'dho-consultoria': 'dho-8',
   'dho-gestor': 'dho-6',
   // SG
