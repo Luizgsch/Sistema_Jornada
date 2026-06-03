@@ -65,6 +65,42 @@ export const mockTrilhasPorCargo = [
     ],
     pendentesPosMovimentacao: 2,
   },
+  {
+    cargo: 'Designer UI/UX Pleno',
+    cursosObrigatorios: [
+      { codigo: 'DES-ADV', nome: 'Design Avançado - Responsive', cargaHoraria: 20, reciclagemMeses: 24, status: 'novo' as const },
+      { codigo: 'FIG-PRO', nome: 'Figma Profissional', cargaHoraria: 12, reciclagemMeses: 12, status: 'novo' as const },
+      { codigo: 'ACC-WEB', nome: 'Acessibilidade Web (WCAG)', cargaHoraria: 8, reciclagemMeses: 36, status: 'novo' as const },
+    ],
+    pendentesPosMovimentacao: 3,
+  },
+  {
+    cargo: 'Marketing — Growth',
+    cursosObrigatorios: [
+      { codigo: 'GROW-01', nome: 'Growth Marketing Fundamentos', cargaHoraria: 16, reciclagemMeses: 12, status: 'novo' as const },
+      { codigo: 'AB-TEST', nome: 'A/B Testing e Métricas', cargaHoraria: 12, reciclagemMeses: 6, status: 'novo' as const },
+      { codigo: 'ANA-DATA', nome: 'Analytics Avançada', cargaHoraria: 16, reciclagemMeses: 12, status: 'novo' as const },
+    ],
+    pendentesPosMovimentacao: 3,
+  },
+  {
+    cargo: 'Coordenadora de RH',
+    cursosObrigatorios: [
+      { codigo: 'COORD-RH', nome: 'Coordenação de RH - Gestão Estratégica', cargaHoraria: 24, reciclagemMeses: 36, status: 'novo' as const },
+      { codigo: 'CLT-ADV', nome: 'CLT Avançada - Rotinas Jurídicas', cargaHoraria: 16, reciclagemMeses: 24, status: 'novo' as const },
+      { codigo: 'COM-EXEC', nome: 'Comunicação Executiva', cargaHoraria: 12, reciclagemMeses: 24, status: 'novo' as const },
+    ],
+    pendentesPosMovimentacao: 3,
+  },
+  {
+    cargo: 'Operações — Matriz',
+    cursosObrigatorios: [
+      { codigo: 'OP-MAT', nome: 'Operações na Matriz', cargaHoraria: 12, reciclagemMeses: 24, status: 'novo' as const },
+      { codigo: 'SGSO', nome: 'Segurança e Saúde Ocupacional', cargaHoraria: 8, reciclagemMeses: 12, status: 'novo' as const },
+      { codigo: 'PROC-OPS', nome: 'Processos Operacionais', cargaHoraria: 16, reciclagemMeses: 12, status: 'novo' as const },
+    ],
+    pendentesPosMovimentacao: 3,
+  },
 ];
 
 export const mockSolicitacoesTreinamentoGestor = [
