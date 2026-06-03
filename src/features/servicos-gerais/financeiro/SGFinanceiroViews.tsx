@@ -125,7 +125,35 @@ export function SGNotasFiscaisView() {
   const [nfEstados, setNfEstados] = useState<Record<string, KanbanNfColuna>>(
     mockNotasFiscais.reduce((acc, nf) => ({ ...acc, [nf.id]: nf.coluna }), {})
   );
+  const [nfs, setNfs] = useState(mockNotasFiscais);
   const [draggedNf, setDraggedNf] = useState<string | null>(null);
+  const [filtroFornecedor, setFiltroFornecedor] = useState<string>('');
+  const [filtroStatus, setFiltroStatus] = useState<string>('');
+
+  const handleImportarPlanilha = useCallback((rowCount: number) => {
+    const novasNfs: typeof mockNotasFiscais = Array.from({ length: rowCount }, (_, i) => ({
+      id: `NF-${Date.now()}-${i}`,
+      fornecedor: `Fornecedor ${Math.random().toString(36).substring(7)}`,
+      valorRef: Math.random() * 20000 + 1000,
+      coluna: 'solicitar' as KanbanNfColuna,
+      diasAtraso: 0,
+      competencia: new Date().toISOString().substring(0, 7),
+      dataEmissao: new Date().toISOString().substring(0, 10),
+      dataSolicitacao: null,
+      condicaoPagamento: '30 dias',
+    }));
+    setNfs((prev) => [...novasNfs, ...prev]);
+    novasNfs.forEach((nf) => setNfEstados((prev) => ({ ...prev, [nf.id]: 'solicitar' })));
+    success(`✓ ${rowCount} NF(s) importada(s)`);
+  }, [success]);
+
+  const nfsFiltradas = useMemo(() => {
+    return nfs.filter((n) => {
+      const passaFornecedor = !filtroFornecedor || n.fornecedor.toLowerCase().includes(filtroFornecedor.toLowerCase());
+      const passaStatus = !filtroStatus || nfEstados[n.id] === filtroStatus;
+      return passaFornecedor && passaStatus;
+    });
+  }, [nfs, filtroFornecedor, filtroStatus, nfEstados]);
 
   const handleDragStart = (e: React.DragEvent, nfId: string) => {
     setDraggedNf(nfId);
@@ -141,7 +169,7 @@ export function SGNotasFiscaisView() {
     e.preventDefault();
     if (!draggedNf) return;
 
-    const nf = mockNotasFiscais.find((n) => n.id === draggedNf);
+    const nf = nfs.find((n) => n.id === draggedNf);
     if (!nf) return;
 
     const novaColuna = colId;
@@ -160,12 +188,39 @@ export function SGNotasFiscaisView() {
 
   return (
     <div className="space-y-6">
+      <div className="flex items-center gap-2 flex-wrap">
+        <ImportarPlanilhaButton label="Importar NFs" onSuccess={handleImportarPlanilha} />
+        <input
+          type="text"
+          placeholder="Filtrar fornecedor..."
+          value={filtroFornecedor}
+          onChange={(e) => setFiltroFornecedor(e.target.value)}
+          className="px-3 py-1.5 bg-[#0f172a] border border-[#334155] rounded-radius-m text-zinc-300 text-xs placeholder-zinc-600"
+        />
+        <select
+          value={filtroStatus}
+          onChange={(e) => setFiltroStatus(e.target.value)}
+          className="px-2 py-1.5 bg-[#0f172a] border border-[#334155] rounded-radius-m text-zinc-300 text-xs"
+        >
+          <option value="">Todas colunas</option>
+          <option value="solicitar">Solicitar</option>
+          <option value="aguardando">Aguardando</option>
+          <option value="recebida">Recebida</option>
+          <option value="atrasada">Atrasada</option>
+        </select>
+        {(filtroFornecedor || filtroStatus) && (
+          <button onClick={() => { setFiltroFornecedor(''); setFiltroStatus(''); }} className="text-xs text-blue-400 hover:underline">
+            Limpar
+          </button>
+        )}
+      </div>
+
       <p className="text-sm text-zinc-500 leading-relaxed">
         Arraste cards entre colunas. NFs atrasadas disparam alerta ao atingir coluna "Atrasada".
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
         {colunasNf.map((col) => {
-          const itens = mockNotasFiscais.filter((n) => nfEstados[n.id] === col.id);
+          const itens = nfsFiltradas.filter((n) => nfEstados[n.id] === col.id);
           return (
             <div
               key={col.id}
